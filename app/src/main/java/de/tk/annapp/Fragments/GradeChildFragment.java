@@ -28,11 +28,12 @@ public class GradeChildFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_gradeschild, container, false);
         TextView gradeMessage = (TextView) root.findViewById(R.id.noGrade);
         getActivity().setTitle(subject.getName());
-        if(!subject.getAllGrades().isEmpty()) {
+        try{
             gradeMessage.setVisibility(View.INVISIBLE);
             getActivity().findViewById(R.id.grade).setVisibility(View.VISIBLE);
             ((TextView) getActivity().findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
-        }
+            System.out.println("displaying grade point average");
+        }catch (Exception e){}
 
         recyclerView = root.findViewById(R.id.recyclerViewGradesId);
 
@@ -46,7 +47,8 @@ public class GradeChildFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+        //getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
     }
+
 }
 

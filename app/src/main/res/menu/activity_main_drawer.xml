@@ -43,14 +43,11 @@
         <item
             android:id="@+id/nav_loststuff"
             android:icon="@drawable/ic_loststuff"
-            android:iconTintMode="src_over"
             android:title="@string/lostStuff"
-            android:iconTint="?android:textColor"
             />
         <item
             android:id="@+id/nav_annanews"
-            android:title="@string/AnnaNews"
-            android:iconTint="?android:textColor"/>
+            android:title="@string/AnnaNews"/>
     </group>
 
     <group>
@@ -71,8 +68,7 @@
             android:iconTint="?android:textColor"/>
         <item
             android:id="@+id/nav_settings"
-            android:title="Einstellungen"
-            android:iconTint="?android:textColor"/>
+            android:title="Einstellungen"/>
     </group>
 
 

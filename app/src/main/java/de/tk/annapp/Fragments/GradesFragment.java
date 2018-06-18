@@ -208,7 +208,7 @@ public class GradesFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+        //getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
     }
 
     /*float rating = 1;
