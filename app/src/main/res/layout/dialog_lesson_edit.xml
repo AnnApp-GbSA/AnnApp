@@ -1,0 +1,96 @@
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#00000000">
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="70dp"
+            android:orientation="horizontal"
+            android:paddingBottom="10dp"
+            android:paddingTop="40dp">
+
+            <Button
+                android:id="@+id/selectionThisLesson"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginRight="3dp"
+                android:layout_weight="1"
+                android:background="?colorAccent"
+                android:text="Diese Stunde"
+                android:textColor="#fff" />
+
+            <Button
+                android:id="@+id/selectionSubject"
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="3dp"
+                android:layout_weight="1"
+                android:background="?colorAccent"
+                android:text="Fach"
+                android:textColor="#fff" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:layout_marginTop="24dp"
+            android:background="?colorPrimary"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="70dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:text="Was wollen Sie bearbeiten?"
+                android:textColor="#ffff"
+                android:textSize="25dp" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right"
+            android:layout_marginEnd="24dp"
+            android:gravity="right"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/btnCancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:clickable="true"
+                android:src="@drawable/ic_clear"
+                android:tint="@android:color/white"
+                app:layout_constraintEnd_toStartOf="@+id/btnOK"
+                app:layout_constraintHorizontal_bias="0.4"
+                app:layout_constraintStart_toEndOf="@+id/btnDeleteSubject" />
+
+        </LinearLayout>
+
+    </FrameLayout>
+</android.support.constraint.ConstraintLayout>

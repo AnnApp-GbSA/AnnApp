@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#ffb300</color>
+    <color name="colorPrimaryDark">#ff9800</color>>
+    <color name="colorAccent">#2196f3</color>
+    <color name="lausap">#b714ae</color>
+    <color name="lausapd">#3e2723</color>
+    <color name="lausapa">#14b796</color>
+    <color name="rvItemColor">#616161</color>
+
+    <color name="bg_line">#E7E7E7</color>
+    <color name="bg_color">#FF99DCD7</color>
+
+    <color name="cell_background_color">#ffffff</color>
+    <color name="cell_text_color">#1f1f1f</color>
+    <color name="header_line_color">@android:color/holo_red_light</color>
+
+    <color name="default_background_color">@color/cell_background_color</color>
+    <color name="dark_background_color">#212121</color>
+    
+    
+    <!--Color Schemes for App-->
+
+    <!-- Color Scheme 0 -->
+    <!-- AccentColor -->
+
+    <!-- Color Scheme 1 -->
+    <color name="cs1.primary">#303030</color>
+    <color name="cs1.primaryDark">#101010</color>
+    <color name="cs1.accent">#1976d2</color>
+    <color name="cs1.0">#ffab00</color>
+    <color name="cs1.1">#ffaa00</color>
+    <color name="cs1.2">#ff8400</color>
+    <color name="cs1.3">#ffec7e</color>
+    <color name="cs1.4">#d7ac00</color>
+    <color name="cs1.5">#fbc02d</color>
+    <color name="cs1.6">#ffa32b</color>
+    <color name="cs1.7">#c6a500</color>
+    <color name="cs1.8">#fbff00</color>
+    <color name="cs1.9">#ffd500</color>
+    <color name="cs1.10">#ffdd00</color>
+    <color name="cs1.11">#ff7300</color>
+    <color name="cs1.12">#766538</color>
+    <color name="cs1.13">#ab7247</color>
+    <color name="cs1.14">#ffdb4a</color>
+
+    <!-- Color Scheme 2 -->
+    <color name="cs2.primary">#303030</color>
+    <color name="cs2.primaryDark">#101010</color>
+    <color name="cs2.accent">#80d8ff</color>
+    <color name="cs2.0">#0040ff</color>
+    <color name="cs2.1">#2e2efe</color>
+    <color name="cs2.2">#0000ff</color>
+    <color name="cs2.3">#013adf</color>
+    <color name="cs2.4">#0101df</color>
+    <color name="cs2.5">#3a01df</color>
+    <color name="cs2.6">#0431bf</color>
+    <color name="cs2.7">#0404b4</color>
+    <color name="cs2.8">#08298a</color>
+    <color name="cs2.9">#08088a</color>
+    <color name="cs2.10">#0b2161</color>
+    <color name="cs2.11">#4000ff</color>
+    <color name="cs2.12">#2e64fe</color>
+    <color name="cs2.13">#0b0b3b</color>
+    <color name="cs2.14">#29088a</color>
+
+    <!-- Color Scheme 3 -->
+    <color name="cs3.primary">#303030</color>
+    <color name="cs3.primaryDark">#101010</color>
+    <color name="cs3.accent">#64dd17</color>
+    <color name="cs3.0">#1e90ff</color>
+    <color name="cs3.1">#F70303</color>
+    <color name="cs3.2">#00c853</color>
+    <color name="cs3.3">#ffc400</color>
+    <color name="cs3.4">#848484</color>
+    <color name="cs3.5">#E128CF</color>
+    <color name="cs3.6">#ff9100</color>
+    <color name="cs3.7">#006400</color>
+    <color name="cs3.8">#ff4500</color>
+    <color name="cs3.9">#0097a7</color>
+    <color name="cs3.10">#76ff03</color>
+    <color name="cs3.11">#880e4f</color>
+    <color name="cs3.12">#1a237e</color>
+    <color name="cs3.13">#795548</color>
+    <color name="cs3.14">#000000</color>
+</resources>

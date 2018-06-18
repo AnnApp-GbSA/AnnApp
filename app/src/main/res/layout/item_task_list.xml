@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:appNs="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <Button
+        android:layout_width="24dp"
+        android:layout_height="1dp"
+        android:id="@+id/space"
+        android:background="@android:color/transparent"/>
+
+    <android.support.v7.widget.CardView
+
+        android:id="@+id/cardViewTask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="8dp"
+        android:padding="8dp"
+        appNs:cardCornerRadius="8dp"
+        appNs:cardElevation="5dp">
+
+        <android.support.constraint.ConstraintLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp">
+
+            <TextView
+                android:id="@+id/item_task_subject"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:clickable="false"
+                android:textAlignment="viewStart"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                appNs:layout_constraintBottom_toBottomOf="parent"
+                appNs:layout_constraintStart_toStartOf="parent"
+                appNs:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.constraint.ConstraintLayout
+                android:id="@+id/relativeLayout_item_task_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                appNs:layout_constraintBottom_toBottomOf="parent"
+                appNs:layout_constraintEnd_toEndOf="parent"
+                appNs:layout_constraintStart_toStartOf="parent"
+                appNs:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/item_task_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:clickable="false"
+                    android:text="MO"
+                    android:textAlignment="viewStart"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
+                    appNs:layout_constraintBottom_toBottomOf="parent"
+                    appNs:layout_constraintStart_toStartOf="parent"
+                    appNs:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/item_task_task"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:text="blablablablablablablablablablablablablablablablablabla"
+                    android:textSize="16sp"
+                    appNs:layout_constraintBottom_toBottomOf="parent"
+                    appNs:layout_constraintEnd_toStartOf="@+id/item_task_kind"
+                    appNs:layout_constraintStart_toEndOf="@+id/item_task_date"
+                    appNs:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/item_task_kind"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:text="HA"
+                    android:textSize="20sp"
+                    appNs:layout_constraintBottom_toBottomOf="parent"
+                    appNs:layout_constraintEnd_toStartOf="@+id/button_item_task_delete"
+                    appNs:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/button_item_task_delete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="btnEdit"
+                    android:src="@drawable/ic_delete"
+                    android:tint="@color/rvItemColor"
+                    appNs:layout_constraintBottom_toBottomOf="parent"
+                    appNs:layout_constraintEnd_toStartOf="@+id/button_item_task_edit"
+                    appNs:layout_constraintTop_toTopOf="parent" />
+
+                <ImageButton
+                    android:id="@+id/button_item_task_edit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="8dp"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="btnEdit"
+                    android:src="@drawable/ic_edit"
+                    android:tint="@color/rvItemColor"
+                    appNs:layout_constraintBottom_toBottomOf="parent"
+                    appNs:layout_constraintEnd_toEndOf="parent"
+                    appNs:layout_constraintTop_toTopOf="parent" />
+
+            </android.support.constraint.ConstraintLayout>
+
+        </android.support.constraint.ConstraintLayout>
+    </android.support.v7.widget.CardView>
+</LinearLayout>

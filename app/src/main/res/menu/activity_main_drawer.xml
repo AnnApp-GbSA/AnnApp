@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <group
+        android:id="@+id/topGroup"
+        android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_myday"
+            android:icon="@drawable/ic_myday"
+            android:title="@string/Home"
+            android:iconTint="?android:textColor"/>
+        <item
+            android:id="@+id/nav_timetable"
+            android:icon="@drawable/ic_timetable"
+            android:title="@string/timeTable"
+            android:iconTint="?android:textColor"/>
+        <item
+            android:id="@+id/nav_grades"
+            android:icon="@drawable/ic_grade"
+            android:title="@string/grades"
+            android:iconTint="?android:textColor"/>
+        <item
+            android:id="@+id/nav_tasks"
+            android:icon="@drawable/ic_task"
+            android:title="@string/tasks"
+            android:iconTint="?android:textColor" />
+        <item
+            android:id="@+id/nav_calendar"
+            android:icon="@drawable/ic_calendar"
+            android:title="@string/schoolCalendar"
+            android:iconTint="?android:textColor" />
+        <item
+            android:id="@+id/nav_privattuition"
+            android:icon="@drawable/ic_privattuition"
+            android:title="@string/privateTuition"
+            android:iconTint="?android:textColor"/>
+        <item
+            android:id="@+id/nav_saleofschoolsupplies"
+            android:icon="@drawable/ic_saleofschoolsupplies"
+            android:title="@string/saleOfSchoolSupplies"
+            android:iconTint="?android:textColor"/>
+        <item
+            android:id="@+id/nav_loststuff"
+            android:icon="@drawable/ic_loststuff"
+            android:iconTintMode="src_over"
+            android:title="@string/lostStuff"
+            android:iconTint="?android:textColor"
+            />
+        <item
+            android:id="@+id/nav_annanews"
+            android:title="@string/AnnaNews"
+            android:iconTint="?android:textColor"/>
+    </group>
+
+    <group>
+
+        <item
+            android:id="@+id/nav_share"
+            android:title="Teilen"
+            android:iconTint="?android:textColor"/>
+    </group>
+
+    <group
+        android:id="@+id/bottomGroup"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/nav_feedback"
+            android:title="Feedback"
+            android:iconTint="?android:textColor"/>
+        <item
+            android:id="@+id/nav_settings"
+            android:title="Einstellungen"
+            android:iconTint="?"/>
+    </group>
+
+
+</menu>

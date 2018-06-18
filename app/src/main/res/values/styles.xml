@@ -1,0 +1,174 @@
+<resources>
+
+    <style name="BasicTheme" parent="Theme.AppCompat.Light.NoActionBar">
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+
+    </style>
+
+    <!-- Base application theme. -->
+    <style name="AppThemeDefault" parent="BasicTheme">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">@color/colorPrimary</item>
+        <item name="subject1">@color/colorPrimary</item>
+        <item name="subject2">@color/colorPrimary</item>
+        <item name="subject3">@color/colorPrimary</item>
+        <item name="subject4">@color/colorPrimary</item>
+        <item name="subject5">@color/colorPrimary</item>
+        <item name="subject6">@color/colorPrimary</item>
+        <item name="subject7">@color/colorPrimary</item>
+        <item name="subject8">@color/colorPrimary</item>
+        <item name="subject9">@color/colorPrimary</item>
+        <item name="subject10">@color/colorPrimary</item>
+        <item name="subject11">@color/colorPrimary</item>
+        <item name="subject12">@color/colorPrimary</item>
+        <item name="subject13">@color/colorPrimary</item>
+        <item name="subject14">@color/colorPrimary</item>
+    </style>
+
+    <style name="AppThemeUglyForTesting" parent="BasicTheme">
+        <item name="colorPrimary">@color/lausap</item>
+        <item name="colorPrimaryDark">@color/lausapd</item>
+        <item name="colorAccent">@color/lausapa</item>
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">@color/lausapa</item>
+        <item name="subject1">@color/lausapa</item>
+        <item name="subject2">@color/lausapa</item>
+        <item name="subject3">@color/lausapa</item>
+        <item name="subject4">@color/lausapa</item>
+        <item name="subject5">@color/lausapa</item>
+        <item name="subject6">@color/lausapa</item>
+        <item name="subject7">@color/lausapa</item>
+        <item name="subject8">@color/lausapa</item>
+        <item name="subject9">@color/lausapa</item>
+        <item name="subject10">@color/lausapa</item>
+        <item name="subject11">@color/lausapa</item>
+        <item name="subject12">@color/lausapa</item>
+        <item name="subject13">@color/lausapa</item>
+        <item name="subject14">@color/lausapa</item>
+    </style>
+
+    <style name="AppThemeOrange" parent="BasicTheme">
+        <item name="colorPrimary">@color/cs1.primary</item>
+        <item name="colorPrimaryDark">@color/cs1.primaryDark</item>
+        <item name="colorAccent">@color/cs1.accent</item>
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">@color/cs1.0</item>
+        <item name="subject1">@color/cs1.1</item>
+        <item name="subject2">@color/cs1.2</item>
+        <item name="subject3">@color/cs1.3</item>
+        <item name="subject4">@color/cs1.4</item>
+        <item name="subject5">@color/cs1.5</item>
+        <item name="subject6">@color/cs1.6</item>
+        <item name="subject7">@color/cs1.7</item>
+        <item name="subject8">@color/cs1.8</item>
+        <item name="subject9">@color/cs1.9</item>
+        <item name="subject10">@color/cs1.10</item>
+        <item name="subject11">@color/cs1.11</item>
+        <item name="subject12">@color/cs1.12</item>
+        <item name="subject13">@color/cs1.13</item>
+        <item name="subject14">@color/cs1.14</item>
+    </style>
+
+    <style name="AppThemeBlue" parent="BasicTheme">
+        <item name="colorPrimary">@color/cs2.primary</item>
+        <item name="colorPrimaryDark">@color/cs2.primaryDark</item>
+        <item name="colorAccent">@color/cs2.accent</item>
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">@color/cs2.0</item>
+        <item name="subject1">@color/cs2.1</item>
+        <item name="subject2">@color/cs2.2</item>
+        <item name="subject3">@color/cs2.3</item>
+        <item name="subject4">@color/cs2.4</item>
+        <item name="subject5">@color/cs2.5</item>
+        <item name="subject6">@color/cs2.6</item>
+        <item name="subject7">@color/cs2.7</item>
+        <item name="subject8">@color/cs2.8</item>
+        <item name="subject9">@color/cs2.9</item>
+        <item name="subject10">@color/cs2.10</item>
+        <item name="subject11">@color/cs2.11</item>
+        <item name="subject12">@color/cs2.12</item>
+        <item name="subject13">@color/cs2.13</item>
+        <item name="subject14">@color/cs2.14</item>
+    </style>
+
+    <style name="AppThemeColorful" parent="BasicTheme">
+        <item name="colorPrimary">@color/cs3.primary</item>
+        <item name="colorPrimaryDark">@color/cs3.primaryDark</item>
+        <item name="colorAccent">@color/cs3.accent</item>
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">@color/cs3.0</item>
+        <item name="subject1">@color/cs3.1</item>
+        <item name="subject2">@color/cs3.2</item>
+        <item name="subject3">@color/cs3.3</item>
+        <item name="subject4">@color/cs3.4</item>
+        <item name="subject5">@color/cs3.5</item>
+        <item name="subject6">@color/cs3.6</item>
+        <item name="subject7">@color/cs3.7</item>
+        <item name="subject8">@color/cs3.8</item>
+        <item name="subject9">@color/cs3.9</item>
+        <item name="subject10">@color/cs3.10</item>
+        <item name="subject11">@color/cs3.11</item>
+        <item name="subject12">@color/cs3.12</item>
+        <item name="subject13">@color/cs3.13</item>
+        <item name="subject14">@color/cs3.14</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:backgroundTint">@color/dark_background_color</item>
+        <item name="android:popupBackground">@color/dark_background_color</item>
+        <item name="android:textColorHint">#9e9e9e</item>
+        <item name="android:calendarTextColor">#ffffff</item>
+        <item name="android:editTextColor">#ffffff</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
+
+    <style name="Tim" parent="BasicTheme">
+        <item name="colorPrimary">#0277bd</item>
+        <item name="colorPrimaryDark">#0d47a1</item>
+        <item name="colorAccent">#80d8ff</item>
+        <!--<item name="backgroundColor">@color/default_background_color</item>
+        <item name="defaultTextColor">#000000</item>
+        <item name="textHintColor">#424242</item>-->
+        <item name="colorTimetableHeader">#616161</item>
+        <item name="subject0">#2962ff</item>
+        <item name="subject1">#448aff</item>
+        <item name="subject2">#0d47a1</item>
+        <item name="subject3">#42a5f5</item>
+        <item name="subject4">#1e88e5</item>
+        <item name="subject5">#00b0ff</item>
+        <item name="subject6">#80d8ff</item>
+        <item name="subject7">#0277bd</item>
+        <item name="subject8">#81d4fa</item>
+        <item name="subject9">#40c4ff</item>
+        <item name="subject10">#00e5ff</item>
+        <item name="subject11">#18ffff</item>
+        <item name="subject12">#00bcd4</item>
+        <item name="subject13">#4dd0e1</item>
+        <item name="subject14">#80deea</item>
+    </style>
+
+
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    
+    <style name="NewDialog">
+        <!--item name="android:windowFrame">@null</item-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--item name="android:windowIsFloating">true</item-->
+        <!--item name="android:windowContentOverlay">@null</item-->
+        <!--item name="android:windowTitleStyle">@null</item-->
+        <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
+        <!--item name="android:windowSoftInputMode">stateUnspecified|adjustPan</item-->
+        <item name="android:windowCloseOnTouchOutside">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
+        <!--item name="android:background">@android:color/transparent</item-->
+    </style>
+
+</resources>

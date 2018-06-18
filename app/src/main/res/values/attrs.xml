@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="colorTimetableHeader" format="color"/>
+    <attr name="subject0" format="color"/>
+    <attr name="subject1" format="color"/>
+    <attr name="subject2" format="color"/>
+    <attr name="subject3" format="color"/>
+    <attr name="subject4" format="color"/>
+    <attr name="subject5" format="color"/>
+    <attr name="subject6" format="color"/>
+    <attr name="subject7" format="color"/>
+    <attr name="subject8" format="color"/>
+    <attr name="subject9" format="color"/>
+    <attr name="subject10" format="color"/>
+    <attr name="subject11" format="color"/>
+    <attr name="subject12" format="color"/>
+    <attr name="subject13" format="color"/>
+    <attr name="subject14" format="color"/>
+
+</resources>
