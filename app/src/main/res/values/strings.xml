@@ -32,6 +32,8 @@
     <string name="addTask">Aufgabe Hinzufügen</string>
     <string name="addGradeMessage">Bitte fügen sie eine neue Note hinzu!</string>
 
+    <string name="WerMichFindetGriegtNen">Leuchtkeks</string>
+
     <string-array name="day_names">
         <item>Montag</item>
         <item>Dienstag</item>
