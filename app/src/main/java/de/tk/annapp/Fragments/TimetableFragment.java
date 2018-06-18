@@ -61,7 +61,7 @@ public class TimetableFragment extends Fragment {
     boolean dividers;
 
     Subject lastSubject;
-    Subject uglyAsHellWayToCreateAOtherCoiseOption = new Subject("neues Fach", 0, null, null);
+    Subject uglyAsHellWayToCreateAOtherCoiseOption = new Subject("-", 0, null, null);
 
     //private AbstractTableAdapter mTableViewAdapter;
     //private TableView mTableView;
@@ -79,6 +79,7 @@ public class TimetableFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        uglyAsHellWayToCreateAOtherCoiseOption.setName(getString(R.string.newSubject));
         //setRowSize();
         //initData();
     }
@@ -86,7 +87,7 @@ public class TimetableFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
-        getActivity().setTitle("Stundenplan");
+        getActivity().setTitle(getString(R.string.timetable));
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
         subjectManager = SubjectManager.getInstance();
 
@@ -100,7 +101,7 @@ public class TimetableFragment extends Fragment {
 
         SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-        dividers = sp.getBoolean("timetableDividers", false);
+        dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);
 
         HorizontalScrollView sv = root.findViewById(R.id.background);
 
@@ -122,8 +123,8 @@ public class TimetableFragment extends Fragment {
 
         int u;
         System.out.println(subjectManager.getLongestDaysLessons());
-        if((int) getActivity().getPreferences(MODE_PRIVATE).getInt("maxlessons", 11) > subjectManager.getLongestDaysLessons())
-            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt("maxlessons", 11);
+        if((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11) > subjectManager.getLongestDaysLessons())
+            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11);
         else
             u = subjectManager.getLongestDaysLessons();
 
@@ -134,36 +135,36 @@ public class TimetableFragment extends Fragment {
 
             if (i == 0) {
 
-                Button b = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0));
+                Button b = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0));
                 tableRow.addView(b);
                 tableRow.addView(getSpaceButton());
 
 
                 int f = 0;
                 for (int d = 0; d < 5; d++) {
-                    Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0));
+                    Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0));
 
                     switch (f) {
                         case (0):
-                            btn.setText("Montag");
+                            btn.setText(R.string.monday);
                             break;
                         case (1):
-                            btn.setText("Dienstag");
+                            btn.setText(R.string.tuesday);
                             break;
                         case (2):
-                            btn.setText("Mittwoch");
+                            btn.setText(R.string.wednesday);
                             break;
                         case (3):
-                            btn.setText("Donnerstag");
+                            btn.setText(R.string.thursday);
                             break;
                         case (4):
-                            btn.setText("Freitag");
+                            btn.setText(R.string.friday);
                             break;
                         case (5):
-                            btn.setText("Samstag");
+                            btn.setText(R.string.saturday);
                             break;
                         case (6):
-                            btn.setText("Sonntag");
+                            btn.setText(R.string.sunday);
                             break;
                         default:
                             btn.setText("Unnamed Day");
@@ -179,8 +180,8 @@ public class TimetableFragment extends Fragment {
                 }
             } else {
                 //add row header
-                Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0));
-                btn.setText(i + ". Stunde");
+                Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0));
+                btn.setText(i + ". "+getString(R.string.lesson));
                 tableRow.addView(btn);
                 tableRow.addView(getSpaceButton());
 
@@ -354,7 +355,7 @@ public class TimetableFragment extends Fragment {
         btnRoomHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog("Raum", "Raum muss nur eingetragen werden falls er sich von dem für das Fach als Standard eingestellten Raum unterscheiden sollte.", 0);
+                createAlertDialog(getString(R.string.room), getString(R.string.room_warning), 0);
             }
         });
 
@@ -436,7 +437,7 @@ public class TimetableFragment extends Fragment {
 
                 if (subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount() - 1) { //Neues Subject
                     if (nameEdittext.getText().toString().equals("")) {
-                        createAlertDialog("Fehler im Namen", "Der Name darf nicht leer sein", 0);
+                        createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_empty), 0);
                         return;
                     }
                     oCSubject = new Subject(nameEdittext.getText().toString(),
@@ -444,7 +445,7 @@ public class TimetableFragment extends Fragment {
                             teacherEdittext.getText().toString(),
                             roomInput.getText().toString());
                     if (subjectManager.getSubjects().contains(oCSubject)) {
-                        createAlertDialog("Fehler im Namen", "Es existiert bereits ein Fach mit dem Namen \"" + oCSubject.getName() + "\"", 0);
+                        createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_dup) + oCSubject.getName() + "\"", 0);
                         return;
                     }
                     subjectManager.addSubject(oCSubject);
@@ -454,7 +455,7 @@ public class TimetableFragment extends Fragment {
                     oCSubject = selectedsubject;
                 } else {
                     if (nameEdittext.getText().toString().equals("")) {
-                        createAlertDialog("Fehler im Namen", "Der Name darf nicht leer sein", 0);
+                        createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_empty), 0);
                         return;
                     }
                     selectedsubject.setName(nameEdittext.getText().toString());
@@ -652,13 +653,13 @@ public class TimetableFragment extends Fragment {
         String message = "";
         switch (i) {
             case 0:
-                message = "Wollen Sie diese Stunde wirklich löschen?";
+                message = getString(R.string.delete_warning_1);
                 break;
             case 1:
-                message = "Wollen Sie wirklich alle " + lesson.getSubject().getName() + "stunden löschen?";
+                message = getString(R.string.delete_warning_2_1) + lesson.getSubject().getName() + getString(R.string.delete_warning_2_2);
                 break;
             case 2:
-                message = "Wollen Sie wirklich das gesamte Fach löschen?\nDies inkludiert sowohl alle Stunden, als auch sämtliche Noten und Aufgaben!";
+                message = getString(R.string.delete_warning_3);
                 break;
         }
         AlertDialog.Builder builder;

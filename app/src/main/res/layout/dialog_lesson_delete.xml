@@ -32,7 +32,7 @@
                 android:layout_marginRight="4dp"
                 android:layout_weight="1"
                 android:background="?colorAccent"
-                android:text="Diese Stunde"
+                android:text="@string/this_lesson"
                 android:textColor="#fff" />
 
             <Button
@@ -44,7 +44,7 @@
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
                 android:background="?colorAccent"
-                android:text="Alle LateinStunden"
+                android:text="@string/short_blindtext"
                 android:textColor="#fff" />
 
             <Button
@@ -55,7 +55,7 @@
                 android:layout_marginLeft="4dp"
                 android:layout_weight="1"
                 android:background="?colorAccent"
-                android:text="Fach"
+                android:text="@string/subject"
                 android:textColor="#fff" />
         </LinearLayout>
 

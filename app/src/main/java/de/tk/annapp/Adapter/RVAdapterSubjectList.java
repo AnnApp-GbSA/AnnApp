@@ -48,7 +48,7 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
             public void onClick(View view) {
                 Bundle args = new Bundle();
                 TextView subjectTextName = view.findViewById(R.id.item_subject_name);
-                args.putSerializable("subject", subjects.get(position));
+                args.putSerializable(context.getString(R.string.bundlekey_subject), subjects.get(position));
                 ((MainActivity) context).setFragment(GradeChildFragment.TAG,args);
             }
         });

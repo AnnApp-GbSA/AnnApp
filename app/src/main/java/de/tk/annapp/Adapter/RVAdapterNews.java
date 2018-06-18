@@ -68,8 +68,8 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
             public void onClick(View v) {
 
                 Intent intent = new Intent(context, NewsDetailActivity.class);
-                intent.putExtra("news", news);
-                intent.putExtra("colorSchemePosition", ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0));
+                intent.putExtra(context.getString(R.string.bundlekey_news), news);
+                intent.putExtra(context.getString(R.string.bundleKey_colorThemePosition), ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0));
 
                 context.startActivity(intent);
             }

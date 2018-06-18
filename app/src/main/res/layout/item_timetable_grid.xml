@@ -7,7 +7,7 @@
         android:id="@+id/item_timetable_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Loading..."
+        android:text="@string/loading"
         android:textAlignment="center"
         android:textSize="20dp"/>
 

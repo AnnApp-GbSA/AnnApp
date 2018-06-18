@@ -1,17 +1,12 @@
 package de.tk.annapp;
 
-import android.graphics.Color;
-import android.os.Build;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.util.TypedValue;
-import android.view.Window;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 public class NewsDetailActivity extends AppCompatActivity {
@@ -30,8 +25,7 @@ public class NewsDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         this.setTheme(R.style.AppThemeColorful);
-        System.out.println("colorSchemePosition: "+bundle.getInt("colorSchemePosition"));
-        switch (bundle.getInt("colorSchemePosition")){
+        switch (bundle.getInt(getString(R.string.bundleKey_colorThemePosition))){
             case 0:
                 //TODO nur zum Anzeigen
                 //setTheme(R.style.Tim);
@@ -65,7 +59,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
 
 
-        news = (News) bundle.getSerializable("news");
+        news = (News) bundle.getSerializable(getString(R.string.bundlekey_news));
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         toolbar.setTitleTextColor(getColor(android.R.color.white));

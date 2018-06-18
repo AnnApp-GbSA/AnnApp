@@ -110,7 +110,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             holder.subjectTxt.setVisibility(View.GONE);
             holder.space.setVisibility(View.VISIBLE);
         }
-        holder.dateTxt.setText(Util.getDateString(tasks.get(position).getDue())); //When the Task is due
+        holder.dateTxt.setText(Util.getDateString(tasks.get(position).getDue(), context)); //When the Task is due
         holder.taskTxt.setText(tasks.get(position).getTask());
         holder.kindTxt.setText(tasks.get(position).getKind());
 
@@ -191,9 +191,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         else
             duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};*/
 
-        duedates = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};
+        duedates = new String[]{context.getString(R.string.nextLesson), context.getString(R.string.next2Lesson), context.getString(R.string.tomorrow), context.getString(R.string.nextWeek), Util.getFullDate(task.getDue()), context.getString(R.string.chooseDate)};
 
-        String[] kinds = new String[]{"Hausaufgabe", "Schulaufgabe", "Notiz"};
+        String[] kinds = new String[]{context.getString(R.string.homework), context.getString(R.string.exam), context.getString(R.string.note)};
 
         final EditText taskInput = (EditText) mView.findViewById(R.id.taskInput);
         taskInput.setText(String.valueOf(task.getTask()));
@@ -201,16 +201,15 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         final Spinner kindSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_kind);
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, kinds);
         kindSelection.setAdapter(adapterKind);
-        switch (task.getKind()) {
-            case "HA":
-                kindSelection.setSelection(0);
-                break;
-            case "SA":
-                kindSelection.setSelection(1);
-                break;
-            case "No":
-                kindSelection.setSelection(2);
-                break;
+        if (task.getKind().equals(context.getString(R.string.homework_short))) {
+            kindSelection.setSelection(0);
+
+        } else if (task.getKind().equals(context.getString(R.string.exam_short))) {
+            kindSelection.setSelection(1);
+
+        } else if (task.getKind().equals(context.getString(R.string.note_short))) {
+            kindSelection.setSelection(2);
+
         }
 
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.timeInput);
@@ -280,18 +279,15 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         }
 
                         String shortKind;//TODO change this... somehow
-                        switch ((String) kindSelection.getSelectedItem()) {
-                            case "Hausaufgabe":
-                                shortKind = "HA";
-                                break;
-                            case "Schulaufgabe":
-                                shortKind = "SA";
-                                break;
-                            case "Notiz":
-                                shortKind = "No";
-                                break;
-                            default:
-                                shortKind = "Error!!!";
+                        String s = (String) kindSelection.getSelectedItem();
+                        if (s.equals(context.getString(R.string.homework))) {
+                            shortKind = context.getString(R.string.homework_short);
+                        } else if (s.equals(context.getString(R.string.exam))) {
+                            shortKind = context.getString(R.string.exam_short);
+                        } else if (s.equals(context.getString(R.string.note))) {
+                            shortKind = context.getString(R.string.note_short);
+                        } else {
+                            shortKind = context.getString(R.string.error);
                         }
 
                         task.setDue(due);

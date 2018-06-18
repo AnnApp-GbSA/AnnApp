@@ -14,7 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Note"
+            android:hint="@string/grade"
             android:inputType="number"/>
 
         <RadioGroup
@@ -30,14 +30,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="mündlich"/>
+                android:text="@string/oral"/>
 
             <RadioButton
                 android:id="@+id/isWritten"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="schriftlich"/>
+                android:text="@string/written"/>
 
         </RadioGroup>
 
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="#00000000"
-            android:text="erweitert"
+            android:text="@string/expand"
             android:textColor="?colorAccent" />
 
         <LinearLayout
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Notiz"
+                android:hint="@string/note"
                 android:inputType="textPersonName"/>
 
             <RelativeLayout
@@ -74,7 +74,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Wertung"
+                    android:hint="@string/raiting"
                     android:inputType="numberDecimal"/>
 
                 <ImageView
@@ -85,7 +85,7 @@
                     android:layout_centerVertical="true"
                     android:layout_margin="5dp"
                     android:src="@drawable/ic_help"
-                    android:text="Button" />
+                    android:text="@string/short_blindtext" />
             </RelativeLayout>
         </LinearLayout>
 

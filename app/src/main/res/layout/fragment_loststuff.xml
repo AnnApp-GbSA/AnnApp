@@ -8,7 +8,7 @@
         android:id="@+id/textView8"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Verlorene Sachen" />
+        android:text="@string/lostStuff" />
 
     <EditText
         android:id="@+id/lessonSubject"
@@ -16,11 +16,11 @@
         android:layout_height="wrap_content"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Name" />
+        android:text="@string/name" />
 
     <Button
         android:id="@+id/btn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Button" />
+        android:text="@string/short_blindtext" />
 </LinearLayout>

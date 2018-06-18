@@ -8,7 +8,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Allgemein"
+        android:text="@string/general"
         android:textColor="?colorAccent"
         android:textSize="20dp" />
 
@@ -28,7 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="Schulbeginn:"/>
+                android:text="@string/schoolstart"/>
 
             <Button
                 android:id="@+id/btnSchoolStart"
@@ -39,7 +39,7 @@
                 android:background="@android:color/transparent"
                 android:gravity="right"
                 android:paddingRight="8dp"
-                android:text="8:00"
+                android:text="@string/short_blindtext"
                 android:textColor="?colorAccent"
                 android:textSize="20dp" />
 
@@ -55,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="Pausenlänge (min):"/>
+                android:text="@string/settings_break_lenght"/>
 
             <EditText
                 android:id="@+id/breakTime"
@@ -65,7 +65,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="right"
-                android:hint="Pausenlänge (min)"
+                android:hint="@string/settings_break_lenght"
                 android:inputType="number"/>
         </LinearLayout>
 
@@ -79,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="Stundenlänge (min):"
+                android:text="@string/settings_lesson_lenght"
                 android:textAllCaps="false"/>
 
             <EditText
@@ -90,7 +90,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="right"
-                android:hint="Stundenlänge (min)"
+                android:hint="@string/settings_lesson_lenght"
                 android:inputType="number"/>
         </LinearLayout>
     </LinearLayout>
@@ -106,7 +106,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stundenplan"
+        android:text="@string/timetable"
         android:textColor="?colorAccent"
         android:textSize="20dp" />
 
@@ -120,7 +120,7 @@
             android:id="@+id/dividersSwitch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Teiler im Stundenplan anzeigen"/>
+            android:text="@string/settings_timetable_gaps"/>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -133,7 +133,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="Maximale Stundenanzahl:"/>
+                android:text="@string/settings_max_lessons"/>
 
             <EditText
                 android:id="@+id/maxLesson"
@@ -143,7 +143,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="right"
-                android:hint="max. Stundenanzahl"
+                android:hint="@string/settings_max_lessons"
                 android:inputType="number"/>
         </LinearLayout>
 
@@ -156,7 +156,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Farbschema:"/>
+                android:text="@string/colorTheme"/>
 
             <Spinner
                 android:id="@+id/colorSpinner"

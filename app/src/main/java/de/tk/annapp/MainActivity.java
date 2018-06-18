@@ -13,8 +13,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.Serializable;
-
 import de.tk.annapp.Fragments.*;
 
 public class MainActivity extends AppCompatActivity
@@ -30,7 +28,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //setTheme(R.style.AppTheme_green);
-        switch (getPreferences(MODE_PRIVATE).getInt("colorSchemePosition",0)){
+        switch (getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition),0)){
             case 0:
                 //TODO nur zum Anzeigen
                 //setTheme(R.style.Tim);
@@ -64,7 +62,7 @@ public class MainActivity extends AppCompatActivity
 
         /*Default Fragment:*/
         if (savedInstanceState != null)
-            setFragment(savedInstanceState.getString("fragmentTag",HomeFragment.TAG));
+            setFragment(savedInstanceState.getString(getString(R.string.bundlekey_fragmentTag),HomeFragment.TAG));
         else
             setFragment(HomeFragment.TAG);
 
@@ -75,7 +73,7 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Fragment myFragment = getFragmentManager().findFragmentByTag("GradeChildFragment");
+        Fragment myFragment = getFragmentManager().findFragmentByTag(GradeChildFragment.class.getSimpleName());
         if (myFragment != null && myFragment.isVisible()) {
 
             Fragment fragment = new GradesFragment();
@@ -203,7 +201,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
         currentFragmentTag = tag;
         return true;
@@ -212,6 +210,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("fragmentTag",currentFragmentTag );
+        outState.putSerializable(getString(R.string.bundlekey_fragmentTag),currentFragmentTag );
     }
 }
