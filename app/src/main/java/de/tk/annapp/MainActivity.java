@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.io.Serializable;
 
@@ -164,6 +165,8 @@ public class MainActivity extends AppCompatActivity
         if (tag==null) return false;
         if(tag.equals(currentFragmentTag)) return true;
 
+        findViewById(R.id.grade).setVisibility(View.GONE);
+
         Fragment fragment = null;
         switch (tag){
             case HomeFragment.TAG:
@@ -203,8 +206,9 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
+                //.addToBackStack(null)
                 .commit();
+
         currentFragmentTag = tag;
         return true;
     }
