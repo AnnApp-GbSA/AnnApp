@@ -39,6 +39,8 @@ public class AnnanewsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+
         getActivity().setTitle("AnnaNews");
         root = inflater.inflate(R.layout.fragment_annanews, container, false);
         RecyclerView rv = root.findViewById(R.id.rv_news);

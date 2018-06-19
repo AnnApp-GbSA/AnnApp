@@ -25,6 +25,8 @@ public class LostStuffFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+
         getActivity().setTitle(getString(R.string.lostStuff));
         root = inflater.inflate(R.layout.fragment_loststuff, container, false);
 

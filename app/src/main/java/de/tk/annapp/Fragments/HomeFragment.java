@@ -50,6 +50,8 @@ public class HomeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+
         getActivity().setTitle(getString(R.string.Home));
         root = inflater.inflate(R.layout.fragment_home, container, false);
 
@@ -70,7 +72,7 @@ public class HomeFragment extends Fragment {
 
         setTimeTable();
         System.out.println("HomeCreated");
-        Util.createPushNotification(this.getContext(), 0, "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add));
+        Util.createPushNotification(this.getContext(), 0, "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add/*, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add)*/);
 
 
         return root;

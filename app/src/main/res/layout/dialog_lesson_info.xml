@@ -21,7 +21,8 @@
             android:paddingBottom="10dp"
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingTop="30dp">
+            android:paddingTop="30dp"
+            android:background="?android:colorBackground">
 
             <TextView
                 android:id="@+id/teacherTxt"

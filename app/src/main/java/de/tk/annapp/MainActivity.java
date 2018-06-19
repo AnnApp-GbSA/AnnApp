@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity
             case 0:
                 //TODO nur zum Anzeigen
                 //setTheme(R.style.Tim);
+                setTheme(R.style.AppThemeColorful);
                 break;
             case 1:
                 setTheme(R.style.AppThemeOrange);
@@ -165,8 +166,6 @@ public class MainActivity extends AppCompatActivity
         if (tag==null) return false;
         if(tag.equals(currentFragmentTag)) return true;
 
-        findViewById(R.id.grade).setVisibility(View.GONE);
-
         Fragment fragment = null;
         switch (tag){
             case HomeFragment.TAG:
@@ -206,7 +205,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                //.addToBackStack(null)
+                .addToBackStack(null)
                 .commit();
 
         currentFragmentTag = tag;

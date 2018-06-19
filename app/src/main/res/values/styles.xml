@@ -124,10 +124,11 @@
         <item name="android:popupBackground">@color/dark_background_color</item>
         <item name="android:textColorHint">#9e9e9e</item>
         <item name="android:calendarTextColor">#ffffff</item>
-
         <item name="android:editTextColor">#ffffff</item>
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:colorBackground">@color/dark_background_color</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+
 
     </style>
 
@@ -171,5 +172,7 @@
     <style name="SwitchTextAppearanceBlack" parent="@android:style/TextAppearance.Holo.Small">
         <item name="android:textColor">@android:color/black</item>
     </style>
+
+
 
 </resources>

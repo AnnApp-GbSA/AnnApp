@@ -51,6 +51,8 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+
         getActivity().setTitle(R.string.settings);
         root = inflater.inflate(R.layout.fragment_settings, container, false);
 

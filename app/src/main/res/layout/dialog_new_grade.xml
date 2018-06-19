@@ -10,7 +10,8 @@
         android:layout_height="match_parent"
         android:layout_marginTop="24dp"
         android:orientation="vertical"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?android:colorBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +28,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:backgroundTint="@android:color/white"/>
+                android:backgroundTint="?android:textColor"/>
         </LinearLayout>
 
         <EditText
@@ -50,14 +51,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="mündlich"/>
+                android:text="mündlich"
+                android:textColor="?android:textColor"/>
 
             <RadioButton
                 android:id="@+id/isWritten"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="schriftlich"/>
+                android:text="schriftlich"
+                android:textColor="?android:textColor"/>
 
         </RadioGroup>
 

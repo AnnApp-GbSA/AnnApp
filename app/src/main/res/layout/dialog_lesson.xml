@@ -81,14 +81,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="2:1"/>
+                    android:text="2:1"
+                    android:textColor="?android:textColor"/>
 
                 <android.support.v7.widget.AppCompatRadioButton
                     android:id="@+id/rating_1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="1:1"/>
+                    android:text="1:1"
+                    android:textColor="?android:textColor"/>
             </RadioGroup>
 
             <RelativeLayout

@@ -22,7 +22,8 @@
             android:layout_marginTop="70dp"
             android:orientation="horizontal"
             android:paddingBottom="10dp"
-            android:paddingTop="40dp">
+            android:paddingTop="40dp"
+            android:background="?android:colorBackground">
 
             <Button
                 android:id="@+id/selectionThisLesson"

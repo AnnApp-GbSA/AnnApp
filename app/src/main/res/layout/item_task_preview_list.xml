@@ -21,7 +21,8 @@
         android:layout_margin="8dp"
         android:padding="8dp"
         appNs:cardCornerRadius="8dp"
-        appNs:cardElevation="5dp">
+        appNs:cardElevation="5dp"
+        appNs:cardBackgroundColor="?android:colorBackground">
 
         <RelativeLayout
 

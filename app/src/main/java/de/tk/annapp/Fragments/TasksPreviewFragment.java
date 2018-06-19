@@ -47,6 +47,9 @@ public class TasksPreviewFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+        getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
         subjectManager = SubjectManager.getInstance();

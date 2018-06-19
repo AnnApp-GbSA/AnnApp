@@ -9,7 +9,8 @@
             android:id="@+id/nav_myday"
             android:icon="@drawable/ic_myday"
             android:title="@string/Home"
-            android:iconTint="?android:textColor"/>
+            android:iconTint="?android:textColor"
+            />
         <item
             android:id="@+id/nav_timetable"
             android:icon="@drawable/ic_timetable"

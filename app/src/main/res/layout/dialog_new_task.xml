@@ -10,11 +10,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="24dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="?android:colorBackground">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,18 +29,18 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"
-                android:popupBackground="?colorPrimary"
+                android:backgroundTint="@android:color/white"
+                android:popupBackground="?android:popupBackground"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:backgroundTint="@android:color/white"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
         <Spinner
             android:id="@+id/spinner_task_input_kind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:popupBackground="@color/default_background_color"/>
+            android:popupBackground="?android:popupBackground" />
 
         <EditText
             android:id="@+id/spinner_task_input_task"
@@ -46,13 +48,13 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="Aufgabe"
-            android:inputType="text"
-            />
+            android:inputType="text" />
 
         <Spinner
             android:id="@+id/spinner_task_input_time"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:popupBackground="?android:popupBackground"/>
 
 
     </LinearLayout>
