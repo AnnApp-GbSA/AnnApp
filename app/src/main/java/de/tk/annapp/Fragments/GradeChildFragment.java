@@ -24,7 +24,7 @@ public class GradeChildFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
-        Subject subject = (Subject) args.get("subject");
+        Subject subject = (Subject) args.get(getString(R.string.bundlekey_subject));
         root = inflater.inflate(R.layout.fragment_gradeschild, container, false);
         TextView gradeMessage = (TextView) root.findViewById(R.id.noGrade);
         getActivity().setTitle(subject.getName());

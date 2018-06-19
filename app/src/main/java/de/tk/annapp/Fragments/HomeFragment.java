@@ -156,7 +156,7 @@ public class HomeFragment extends Fragment {
         } else {
 
             TextView tv = new TextView(this.getContext());
-            tv.setText("Heute hast Du keine Schule!");
+            tv.setText(R.string.noSchoolToday);
             tv.setPadding(0, 50, 0, 0);
             tv.setGravity(View.TEXT_ALIGNMENT_CENTER);
             tv.setTextColor(getResources().getColor(R.color.colorAccent));
@@ -209,8 +209,6 @@ public class HomeFragment extends Fragment {
         int index = subjectManager.getSubjects().indexOf(subject);
         for (int i; index > 14; index = index - 14) {
         }
-
-        int colorSchemePosition = getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
 
         color = new Util().getSubjectColor(getContext(), subject);
 

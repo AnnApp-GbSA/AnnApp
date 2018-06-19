@@ -60,7 +60,7 @@ public class SettingsFragment extends Fragment {
 
         //Setting Switch to actual setting
         SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
-        Boolean dividers = sp.getBoolean("timetableDividers", false);
+        Boolean dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);
         timetableDividersSwitch.setChecked(dividers);
 
 
@@ -70,13 +70,13 @@ public class SettingsFragment extends Fragment {
 
                 SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
                 SharedPreferences.Editor myPrefEditor = myPrefs.edit();
-                myPrefEditor.putBoolean("timetableDividers", b);
+                myPrefEditor.putBoolean(getString(R.string.key_timetableGaps), b);
                 myPrefEditor.commit();
 
 
                 SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-                Boolean dividers = sp.getBoolean("timetableDividers", false);
+                Boolean dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);
             }
         });
 
@@ -117,7 +117,7 @@ public class SettingsFragment extends Fragment {
 
         EditText breakTime = root.findViewById(R.id.breakTime);
 
-        breakTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt("breakTime", 30)));
+        breakTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_breakTime), 30)));
 
         breakTime.addTextChangedListener(new TextWatcher() {
             @Override
@@ -134,13 +134,13 @@ public class SettingsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty())
                     return;
-                getActivity().getPreferences(MODE_PRIVATE).edit().putInt("breakTime", Integer.valueOf(s.toString())).commit();
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_breakTime), Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
             }
         });
 
         EditText lessonTime = root.findViewById(R.id.lessonTime);
-        lessonTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt("lessonTime", 45)));
+        lessonTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_lessonTime), 45)));
 
         lessonTime.addTextChangedListener(new TextWatcher() {
             @Override
@@ -157,7 +157,7 @@ public class SettingsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty())
                     return;
-                getActivity().getPreferences(MODE_PRIVATE).edit().putInt("lessonTime", Integer.valueOf(s.toString())).commit();
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_lessonTime), Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
             }
         });
@@ -166,7 +166,7 @@ public class SettingsFragment extends Fragment {
         //Timetable max Lessons stuff
         EditText maxLessons = (EditText) root.findViewById(R.id.maxLesson);
 
-        maxLessons.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt("maxlessons", 11)));
+        maxLessons.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11)));
 
         maxLessons.addTextChangedListener(new TextWatcher() {
             @Override
@@ -182,7 +182,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty())
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt("maxlessons", Integer.valueOf(s.toString())).commit();
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_maxLesson), Integer.valueOf(s.toString())).commit();
             }
         });
 
@@ -200,8 +200,8 @@ public class SettingsFragment extends Fragment {
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0) != position) {
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt("colorSchemePosition", position).commit();
+                if (getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0) != position) {
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.bundleKey_colorThemePosition), position).commit();
                     /*getActivity().finish();
                     final Intent intent = getActivity().getIntent();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -215,7 +215,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        int colorSchemePosition = (int) getActivity().getPreferences(MODE_PRIVATE).getInt("colorSchemePosition", 0);
+        int colorSchemePosition = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0);
         spinner.setSelection(colorSchemePosition);
 
 
@@ -229,9 +229,9 @@ public class SettingsFragment extends Fragment {
         s.add(1);
         s.add(3);
 
-        int schoolstart = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("schoolstart", 480);
-        int lessonLength = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("lessonTime", 45);
-        int breakLength = getActivity().getPreferences(Context.MODE_PRIVATE).getInt("breakTime", 15);
+        int schoolstart = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480);
+        int lessonLength = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.key_lessonTime), 45);
+        int breakLength = getActivity().getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.key_breakTime), 15);
 
 
         SchoolLessonSystem schoolLessonSystem = new SchoolLessonSystem(schoolstart, lessonLength, breakLength, s);

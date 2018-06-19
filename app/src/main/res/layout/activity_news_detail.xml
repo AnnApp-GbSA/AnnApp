@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="8dp"
-                android:text="TextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\nTextView\n"
+                android:text="@string/long_blindtext"
                 android:textSize="18sp" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>

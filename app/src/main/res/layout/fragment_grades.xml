@@ -31,7 +31,7 @@
             android:id="@+id/missingSubjectsWarning"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Fügen Sie bitte zuerst ein Fach hinzu bevor Sie Noten eintragen!"
+            android:text="@string/warning_add_subject_before_grades"
             android:visibility="gone" />
 
         <android.support.v7.widget.RecyclerView

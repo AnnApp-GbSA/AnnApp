@@ -96,15 +96,15 @@ public class TasksPreviewFragment extends Fragment {
 
         View mView = View.inflate(this.getContext(), R.layout.dialog_new_task, null); //TODO EInes der Layouts elemenieren
 
-        String[] duedates = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", "Datum auswählen"};
+        String[] duedates = new String[]{getString(R.string.nextLesson), getString(R.string.next2Lesson), getString(R.string.tomorrow), getString(R.string.nextWeek), getString(R.string.chooseDate)};
 
-        String[] kinds = new String[]{"Hausaufgabe", "Schulaufgabe", "Notiz"};
+        String[] kinds = new String[]{getString(R.string.homework), getString(R.string.exam), getString(R.string.note)};
 
         final EditText task = (EditText) mView.findViewById(R.id.spinner_task_input_task);
         final ArrayList<Subject> subjects = subjectManager.getSubjects();
 
         if (subjects.isEmpty()) {
-            createAlertDialog(getString(R.string.warning), "Bitte fügen Sie zuerst ein neues Fach hinzu!", android.R.drawable.ic_dialog_alert);
+            createAlertDialog(getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert);
             return;
         }
 
@@ -118,17 +118,18 @@ public class TasksPreviewFragment extends Fragment {
         timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if (((String) timeSelection.getItemAtPosition(i)).equals("Datum auswählen")) {
+                if (((String) timeSelection.getItemAtPosition(i)).equals(getString(R.string.chooseDate))) {
                     timeSelection.setSelection(0);
                     Calendar date = Calendar.getInstance();
-                    if (((String) timeSelection.getItemAtPosition(i - 1)).matches("\\d*\\.\\d*\\.\\d*")) {
+                    //TODO Has to be addapted to other notations
+                    if (((String) timeSelection.getItemAtPosition(i - 1)).matches(getString(R.string.dateFormat_pattern))) {
                         date = Util.getCalendarFromFullString(((String) timeSelection.getItemAtPosition(i - 1)));
                     }
                     DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
 
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                            String[] pos = new String[]{"Nächste Stunde", "Übernächste Stunde", "Morgen", "Nächste Woche", dayOfMonth + "." + (monthOfYear+1) + "." + year, "Datum auswählen"};
+                            String[] pos = new String[]{getString(R.string.nextLesson), getString(R.string.next2Lesson), getString(R.string.tomorrow), getString(R.string.nextWeek), dayOfMonth + "." + (monthOfYear+1) + "." + year, getString(R.string.chooseDate)};
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(getContext(), simple_spinner_dropdown_item, pos);
                             timeSelection.setAdapter(adapterTime);
                             timeSelection.setSelection(4);
@@ -136,7 +137,7 @@ public class TasksPreviewFragment extends Fragment {
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
                             getContext(), onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.setTitle("Datum auswählen");
+                    datePickerDialog.setTitle(getString(R.string.chooseDate));
                     datePickerDialog.setCanceledOnTouchOutside(false);
                     datePickerDialog.show();
                 }
@@ -179,31 +180,31 @@ public class TasksPreviewFragment extends Fragment {
                 Calendar now = Calendar.getInstance();
 
                 SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
-                if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
+                if (timeSelection.getSelectedItem().toString().equals(getString(R.string.nextLesson))) {
                     due = subject.getNextLessonAfter(due,sls);
-                } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
+                } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.next2Lesson))) {
                     due = subject.getNextLessonAfter(subject.getNextLessonAfter(due,sls),sls);
-                } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
+                } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.tomorrow))) {
                     due.add(Calendar.DAY_OF_YEAR, 1);
-                } else if (timeSelection.getSelectedItem().toString().equals("Nächste Woche")) {
+                } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.nextWeek))) {
                     due.add(Calendar.WEEK_OF_YEAR, 1);
-                } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
+                } else if (timeSelection.getSelectedItem().toString().matches(getString(R.string.dateFormat_pattern))) {
                     due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
                 } else {
-                    createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                    createAlertDialog(/*getString(R.string.warning)*/getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert);
                     return;
                 }
 
                 String shortKind;
-                if (kindSelection.getSelectedItem().toString().equals("Hausaufgabe")) {
-                    shortKind = "HA";
-                } else if (kindSelection.getSelectedItem().toString().equals("Schulaufgabe")) {
-                    shortKind = "SA";
-                } else if (kindSelection.getSelectedItem().toString().equals("Notiz")) {
-                    shortKind = "No";
+                if (kindSelection.getSelectedItem().toString().equals(getString(R.string.homework))) {
+                    shortKind = getString(R.string.homework_short);
+                } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.exam))) {
+                    shortKind = getString(R.string.exam_short);
+                } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.note))) {
+                    shortKind = getString(R.string.note_short);
                 } else {
                     shortKind = "";
-                    createAlertDialog(getString(R.string.warning), "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                    createAlertDialog(getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert);
                 }
                 Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);
                 subject.addTask(newTask);

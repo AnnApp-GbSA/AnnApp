@@ -53,9 +53,9 @@ public class SubjectManager {
             Set s = new HashSet<Integer>();
             s.add(2);
             s.add(4);
-            int schoolstart = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("schoolstart", 480);
-            int lessonTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("lessonTime", 45);
-            int breakTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt("breaktTime", 15);
+            int schoolstart = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_schoolstart), 480);
+            int lessonTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_lessonTime), 45);
+            int breakTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_breakTime), 15);
             setSchoolLessonSystem(new SchoolLessonSystem(schoolstart, lessonTime, breakTime, s));
         }
         this.schoolLessonSystem =schoolLessonSystem;

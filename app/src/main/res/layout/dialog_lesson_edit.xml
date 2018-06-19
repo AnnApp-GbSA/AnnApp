@@ -33,7 +33,7 @@
                 android:layout_marginRight="3dp"
                 android:layout_weight="1"
                 android:background="?colorAccent"
-                android:text="Diese Stunde"
+                android:text="@string/this_lesson"
                 android:textColor="#fff" />
 
             <Button
@@ -44,7 +44,7 @@
                 android:layout_marginLeft="3dp"
                 android:layout_weight="1"
                 android:background="?colorAccent"
-                android:text="Fach"
+                android:text="@string/subject"
                 android:textColor="#fff" />
         </LinearLayout>
 
@@ -63,7 +63,7 @@
                 android:layout_height="70dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:text="Was wollen Sie bearbeiten?"
+                android:text="@string/what_edit"
                 android:textColor="#ffff"
                 android:textSize="25dp" />
 

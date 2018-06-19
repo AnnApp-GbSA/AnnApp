@@ -47,8 +47,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Aufgabe"
-            android:inputType="text" />
+            android:hint="@string/task"
+            android:inputType="text"/>
 
         <Spinner
             android:id="@+id/spinner_task_input_time"

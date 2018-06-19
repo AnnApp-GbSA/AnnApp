@@ -41,6 +41,7 @@ public class CalendarFragment extends Fragment {
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
 
         getActivity().setTitle("Kalender");
+        getActivity().setTitle(getString(R.string.calendar));
         root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         calendarView = root.findViewById(R.id.calendarView);

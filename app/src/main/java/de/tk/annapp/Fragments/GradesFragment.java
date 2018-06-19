@@ -64,7 +64,7 @@ public class GradesFragment extends Fragment {
             public void onClick(View view) {
 
                 if (subjectManager.getSubjects().isEmpty()) {
-                    createAlertDialog(getContext().getString(R.string.warning), "Bitte fügen Sie ein Fach hinzu!", android.R.drawable.ic_dialog_alert);
+                    createAlertDialog(getContext().getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert);
                 } else
                     createInputDialog();
             }
@@ -183,7 +183,7 @@ public class GradesFragment extends Fragment {
                     isWrittenBool = false;
 
                 if(gradeInput.getText().toString().isEmpty()){
-                    createAlertDialog("Error!", "Please fill in all needed information", 0);
+                    createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0);
                     return;
                 }
 

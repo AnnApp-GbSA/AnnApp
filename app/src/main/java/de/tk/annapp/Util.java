@@ -40,31 +40,31 @@ public class Util {
         return ((float) ((int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp))) / pow;
     }
 
-    public static String getDateString(Calendar date) {
+    public static String getDateString(Calendar date, Context context) {
         Calendar now = Calendar.getInstance();
         if (now.get(Calendar.YEAR) != date.get(Calendar.YEAR))
-            return new SimpleDateFormat("dd.MM.yyyy").format(date.getTime());
+            return new SimpleDateFormat(context.getString(R.string.dateFormat_long)).format(date.getTime());
         else if (now.get(Calendar.WEEK_OF_YEAR) != date.get(Calendar.WEEK_OF_YEAR))
-            return new SimpleDateFormat("dd.MM").format(date.getTime());
-        return getWeekDayShort(date);
+            return new SimpleDateFormat(context.getString(R.string.dateFormat_short)).format(date.getTime());
+        return getWeekDayShort(date, context);
     }
 
-    public static String getWeekDayShort(Calendar date) {
+    public static String getWeekDayShort(Calendar date, Context context) {
         switch (date.get(Calendar.DAY_OF_WEEK)) {
             case Calendar.MONDAY:
-                return "MO";
+                return context.getString(R.string.monday_short);
             case Calendar.TUESDAY:
-                return "Di";
+                return context.getString(R.string.tuesday_short);
             case Calendar.WEDNESDAY:
-                return "Mi";
+                return context.getString(R.string.wednesday_short);
             case Calendar.THURSDAY:
-                return "Do";
+                return context.getString(R.string.thursday_short);
             case Calendar.FRIDAY:
-                return "Fr";
+                return context.getString(R.string.friday_short);
             case Calendar.SATURDAY:
-                return "Sa";
+                return context.getString(R.string.saturday_short);
             case Calendar.SUNDAY:
-                return "So";
+                return context.getString(R.string.sunday_short);
             default:
                 return "Error:getWeekDayShort";
         }

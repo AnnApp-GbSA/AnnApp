@@ -28,7 +28,7 @@ public class FeedbackFragment extends Fragment {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
 
-        getActivity().setTitle("Feedback");
+        getActivity().setTitle(getString(R.string.feedback));
         root = inflater.inflate(R.layout.fragment_feedback, container, false);
 
         Button btnSend = (Button) root.findViewById(R.id.btnSend);
@@ -64,9 +64,9 @@ public class FeedbackFragment extends Fragment {
             startActivity(Intent.createChooser(i, "send mail"));
         } catch (android.content.ActivityNotFoundException e){
             //TODO make it a StringRessource
-            Toast.makeText(this.getContext(), "No mail App found!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getContext(), R.string.noMailApp, Toast.LENGTH_SHORT).show();
         } catch (Exception e){
-            Toast.makeText(this.getContext(), "Unexpected Error" + e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(this.getContext(), getString(R.string.error) + e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
     }

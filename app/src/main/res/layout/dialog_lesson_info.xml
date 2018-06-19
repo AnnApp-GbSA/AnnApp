@@ -32,7 +32,7 @@
                 android:layout_marginTop="50dp"
                 android:paddingBottom="3dp"
                 android:paddingTop="3dp"
-                android:text="Lehrer:"
+                android:text="@string/teacher"
                 android:textColor="?colorAccent"
                 android:visibility="visible"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -52,7 +52,7 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:paddingTop="3dp"
-                android:text="Teacher"
+                android:text="@string/teacher"
                 android:textColor="#ffff"
                 android:textSize="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +67,7 @@
                 android:layout_marginTop="8dp"
                 android:paddingBottom="3dp"
                 android:paddingTop="3dp"
-                android:text="Raum:"
+                android:text="@string/room"
                 android:textColor="?colorAccent"
                 android:visibility="visible"
                 app:layout_constraintEnd_toStartOf="@+id/roomView"
@@ -86,7 +86,7 @@
                 android:paddingLeft="3dp"
                 android:paddingRight="3dp"
                 android:paddingTop="3dp"
-                android:text="Room"
+                android:text="@string/room"
                 android:textColor="#ffff"
                 android:textSize="15dp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -110,8 +110,9 @@
                 android:layout_height="70dp"
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
-                android:text="Fach:"
+                android:text="@string/short_blindtext"
                 android:textSize="25dp" />
+            <!--War mal "Fach:"-->
 
         </LinearLayout>
 

@@ -45,7 +45,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left"
             android:background="#00000000"
-            android:text="erweitert"
+            android:text="@string/expand"
             android:textColor="?colorAccent"
             android:visibility="gone" />
 
@@ -65,7 +65,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Name"
+                    android:hint="@string/name"
                     android:inputType="textShortMessage"/>
 
             </RelativeLayout>
@@ -102,7 +102,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="Lehrer"
+                    android:hint="@string/teacher"
                     android:inputType="textShortMessage"/>
 
             </RelativeLayout>
@@ -117,7 +117,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-                android:hint="Raum"
+                android:hint="@string/room"
                 android:inputType="textShortMessage"/>
 
             <ImageView
@@ -128,7 +128,7 @@
                 android:layout_centerVertical="true"
                 android:layout_margin="5dp"
                 android:src="@drawable/ic_help"
-                android:text="Button" />
+                android:text="@string/short_blindtext" />
         </RelativeLayout>
     </LinearLayout>
 
