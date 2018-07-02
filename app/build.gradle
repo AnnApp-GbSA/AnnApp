@@ -39,6 +39,7 @@ dependencies {
     compile 'com.evrencoskun.library:tableview:0.8.6'
     compile 'com.android.support:recyclerview-v7:27.+'
     compile 'com.android.support:design:27.+'
+    compile 'com.github.sundeepk:compact-calendar-view:3.0.0'
 
     //testCompile 'junit:junit:4.12' Das macht mir nur Probleme
 }
