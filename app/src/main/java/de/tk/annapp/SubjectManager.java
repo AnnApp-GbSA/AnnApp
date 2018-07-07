@@ -245,6 +245,8 @@ public class SubjectManager {
     }
 
     public Drawable getFromURl(String url){
+        if(url == null)
+            return null;
         Drawable d = Drawable.createFromPath(context.getFilesDir().getAbsolutePath()+"/newsimage"+String.valueOf(url.hashCode()));
         if (d==null)
             System.out.println("Missing Image: \""+url+"\" ("+String.valueOf(url.hashCode())+")");

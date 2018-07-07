@@ -1,14 +1,10 @@
 package de.tk.annapp;
 
-import android.app.Activity;
-import android.app.Application;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -19,14 +15,15 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.TypedValue;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
-import static android.content.Context.MODE_PRIVATE;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 //Utility Class
 public class Util {
@@ -105,6 +102,11 @@ public class Util {
         return null;
     }
 
+    public static void createPushNotification(Date date, Context context, int ID, String title, String subject, int smallIcon) {
+
+
+
+    }
 
     public static void createPushNotification(Context context, int ID, String title, String subject, int smallIcon/*, Bitmap largeIcon*/) {
 
@@ -117,7 +119,7 @@ public class Util {
             NotificationCompat.Builder mBuilder;
 
             /**Creates an explicit intent for an Activity in your app**/
-            Intent resultIntent = new Intent(context , MainActivity.class);
+            Intent resultIntent = new Intent(context, MainActivity.class);
             resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
@@ -134,8 +136,7 @@ public class Util {
 
             mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
 
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O)
-            {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_HIGH;
                 NotificationChannel notificationChannel = new NotificationChannel(String.valueOf(ID), "NOTIFICATION_CHANNEL_NAME", importance);
                 notificationChannel.enableLights(true);

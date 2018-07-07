@@ -12,18 +12,19 @@ import de.tk.annapp.R;
  * Created by Tobi on 20.09.2017.
  */
 
-public class PrivateTuitionFragment extends Fragment  {
+public class RepresentationPlan extends Fragment {
     View root;
 
-    public static final String TAG = "TuitionFragment";
+    public static final String TAG = "RepresentationPlanFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
 
-        getActivity().setTitle(getString(R.string.privateTuition));
-        root = inflater.inflate(R.layout.fragment_privatetuition, container, false);
+        getActivity().setTitle(getString(R.string.representationPlan));
+        root = inflater.inflate(R.layout.fragment_representationplan, container, false);
         return root;
     }
 }
+

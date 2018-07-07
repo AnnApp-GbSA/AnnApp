@@ -27,26 +27,26 @@
     <!-- Color Scheme 1 -->
     <color name="cs1.primary">#303030</color>
     <color name="cs1.primaryDark">#101010</color>
-    <color name="cs1.accent">#1976d2</color>
+    <color name="cs1.accent">#ef6c00</color>
     <color name="cs1.0">#ffab00</color>
     <color name="cs1.1">#ffaa00</color>
     <color name="cs1.2">#ff8400</color>
-    <color name="cs1.3">#ffec7e</color>
+    <color name="cs1.3">#ffd740</color>
     <color name="cs1.4">#d7ac00</color>
     <color name="cs1.5">#fbc02d</color>
     <color name="cs1.6">#ffa32b</color>
     <color name="cs1.7">#c6a500</color>
-    <color name="cs1.8">#fbff00</color>
+    <color name="cs1.8">#ffea00</color>
     <color name="cs1.9">#ffd500</color>
     <color name="cs1.10">#ffdd00</color>
-    <color name="cs1.11">#ff7300</color>
+    <color name="cs1.11">#ffab00</color>
     <color name="cs1.12">#766538</color>
     <color name="cs1.13">#ab7247</color>
     <color name="cs1.14">#ffdb4a</color>
 
     <!-- Color Scheme 2 -->
-    <color name="cs2.primary">#303030</color>
-    <color name="cs2.primaryDark">#101010</color>
+    <color name="cs2.primary">#0091ea</color>
+    <color name="cs2.primaryDark">#1565c0</color>
     <color name="cs2.accent">#80d8ff</color>
     <color name="cs2.0">#0040ff</color>
     <color name="cs2.1">#2e2efe</color>

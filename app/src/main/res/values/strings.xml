@@ -13,10 +13,8 @@
     <string name="warning">Achtung</string>
     <string name="warningMessage">Bitte füllen Sie alle notwendigen Felder aus!</string>
     <string name="grades">Noten</string>
-    <string name="lostStuff">Verlorene Sachen</string>
+    <string name="representationPlan">Vertretungsplan</string>
     <string name="Home">Home</string>
-    <string name="privateTuition">Nachhilfe</string>
-    <string name="saleOfSchoolSupplies">Schulsachenverkauf</string>
     <string name="tasks">Aufgaben</string>
     <string name="ratingList">"Wertung: "</string>
     <string name="editGrade">Note bearbeiten -</string>

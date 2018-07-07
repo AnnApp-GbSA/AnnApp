@@ -99,7 +99,7 @@ public class TasksFragment extends Fragment {
 
         final BottomSheetDialog bsd = new BottomSheetDialog(this.getContext(),R.style.NewDialog);
 
-        View mView = View.inflate(this.getContext(), R.layout.dialog_new_task, null); //TODO EInes der Layouts elemenieren
+        View mView = View.inflate(this.getContext(), R.layout.dialog_new_task, null); //TODO Eines der Layouts elemenieren
 
         String[] duedates = new String[]{getString(R.string.nextLesson), getString(R.string.next2Lesson), getString(R.string.tomorrow), getString(R.string.nextWeek), getString(R.string.chooseDate)};
 
@@ -114,7 +114,7 @@ public class TasksFragment extends Fragment {
         }
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_subject);
-        ArrayAdapter<Subject> adapterSubject = new ArrayAdapter<>(getContext(), R.layout.spinner_item, subjects);
+        ArrayAdapter<Subject> adapterSubject = new ArrayAdapter<>(getContext(), R.layout.white_spinner_item, subjects);
         subjectSelection.setAdapter(adapterSubject);
 
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_time);

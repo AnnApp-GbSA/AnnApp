@@ -156,9 +156,9 @@ public class GradesFragment extends Fragment {
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
 
-        //TODO SpinnerColor
+
         Context wrappedContext = new ContextThemeWrapper(getContext(), R.style.BasicTheme);
-        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(wrappedContext, R.layout.spinner_item, subjectManager.getSubjects());
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(wrappedContext, R.layout.white_spinner_item, subjectManager.getSubjects());
 
         adapter.setDropDownViewTheme(getActivity().getTheme());
 

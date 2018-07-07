@@ -32,19 +32,9 @@
             android:title="@string/schoolCalendar"
             android:iconTint="?android:textColor" />
         <item
-            android:id="@+id/nav_privattuition"
-            android:icon="@drawable/ic_privattuition"
-            android:title="@string/privateTuition"
-            android:iconTint="?android:textColor"/>
-        <item
-            android:id="@+id/nav_saleofschoolsupplies"
-            android:icon="@drawable/ic_saleofschoolsupplies"
-            android:title="@string/saleOfSchoolSupplies"
-            android:iconTint="?android:textColor"/>
-        <item
-            android:id="@+id/nav_loststuff"
+            android:id="@+id/nav_representationplan"
             android:icon="@drawable/ic_loststuff"
-            android:title="@string/lostStuff"
+            android:title="@string/representationPlan"
             />
         <item
             android:id="@+id/nav_annanews"

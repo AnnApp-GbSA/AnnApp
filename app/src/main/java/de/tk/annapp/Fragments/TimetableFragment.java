@@ -126,14 +126,14 @@ public class TimetableFragment extends Fragment {
 
         int u;
         System.out.println(subjectManager.getLongestDaysLessons());
-        if((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11) > subjectManager.getLongestDaysLessons())
+        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11) > subjectManager.getLongestDaysLessons())
             u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11);
         else
             u = subjectManager.getLongestDaysLessons();
 
         for (int i = 0; i < u; i++) {
             TableRow tableRow = new TableRow(this.getContext());
-            tableRow.setPadding(0,0,0,spacing);
+            tableRow.setPadding(0, 0, 0, spacing);
 
 
             if (i == 0) {
@@ -176,7 +176,6 @@ public class TimetableFragment extends Fragment {
                     f++;
 
 
-
                     tableRow.addView(btn);
                     tableRow.addView(getSpaceButton());
 
@@ -184,7 +183,7 @@ public class TimetableFragment extends Fragment {
             } else {
                 //add row header
                 Button btn = getHeaderButton((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0));
-                btn.setText(i + ". "+getString(R.string.lesson));
+                btn.setText(i + ". " + getString(R.string.lesson));
                 tableRow.addView(btn);
                 tableRow.addView(getSpaceButton());
 
@@ -226,7 +225,7 @@ public class TimetableFragment extends Fragment {
 
     }
 
-    TextView getSpaceButton(){
+    TextView getSpaceButton() {
         TextView btn = new TextView(this.getContext());
         btn.setWidth(spacing);
         btn.setMinWidth(spacing);
@@ -281,12 +280,14 @@ public class TimetableFragment extends Fragment {
 
     Button getEmptyCellButton(String position) {
         Button btn = new Button(this.getContext());
+        TypedValue a = new TypedValue();
 
         //general Settings for empty cells
 
-        if (dividers)
-            btn.setBackgroundColor(getResources().getColor(R.color.default_background_color));
-        else
+        if (dividers) {
+            getContext().getTheme().resolveAttribute(android.R.attr.colorBackground, a, true);
+            btn.setBackgroundColor(a.data);
+        } else
             btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
         btn.setTag(position);
@@ -351,8 +352,6 @@ public class TimetableFragment extends Fragment {
         final EditText teacherEdittext = mView.findViewById(R.id.teacherInput);
 
         final EditText nameEdittext = mView.findViewById(R.id.subjectNameInput);
-
-
 
 
         btnRoomHelp.setOnClickListener(new View.OnClickListener() {
@@ -703,7 +702,7 @@ public class TimetableFragment extends Fragment {
 
     }
 
-    private void setMargins (View view, int left, int top, int right, int bottom) {
+    private void setMargins(View view, int left, int top, int right, int bottom) {
         if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
             ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
             p.setMargins(left, top, right, bottom);

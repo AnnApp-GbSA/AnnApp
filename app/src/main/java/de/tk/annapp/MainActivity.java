@@ -2,8 +2,10 @@ package de.tk.annapp;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.app.IntentService;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -12,7 +14,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
+
+import java.util.Date;
 
 import de.tk.annapp.Fragments.*;
 
@@ -33,7 +36,7 @@ public class MainActivity extends AppCompatActivity
             case 0:
                 //TODO nur zum Anzeigen
                 //setTheme(R.style.Tim);
-                setTheme(R.style.AppThemeColorful);
+                //setTheme(R.style.AppThemeColorful);
                 break;
             case 1:
                 setTheme(R.style.AppThemeOrange);
@@ -44,6 +47,14 @@ public class MainActivity extends AppCompatActivity
             case 3:
                 setTheme(R.style.AppThemeColorful);
         }
+
+        Date d = new Date();
+        d.setMinutes(d.getMinutes()+1);
+
+        System.out.println(d);
+
+        new Util().createPushNotification(d, getApplicationContext(), 0, "test", "test", R.drawable.ic_add);
+
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -70,6 +81,8 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
     @Override
@@ -128,12 +141,8 @@ public class MainActivity extends AppCompatActivity
             setFragment(TasksFragment.TAG);
         } else if (id == R.id.nav_calendar) {
             setFragment(CalendarFragment.TAG);
-        } else if (id == R.id.nav_privattuition) {
-            setFragment(PrivateTuitionFragment.TAG);
-        } else if (id == R.id.nav_saleofschoolsupplies) {
-            setFragment(SaleOfSchoolSuppliesFragment.TAG);
-        } else if (id == R.id.nav_loststuff) {
-            setFragment(LostStuffFragment.TAG);
+        } else if (id == R.id.nav_representationplan) {
+            setFragment(RepresentationPlan.TAG);
         } else if (id == R.id.nav_annanews) {
             setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
@@ -178,12 +187,8 @@ public class MainActivity extends AppCompatActivity
                 fragment = new TasksFragment(); break;
             case CalendarFragment.TAG:
                 fragment = new CalendarFragment(); break;
-            case PrivateTuitionFragment.TAG:
-                fragment = new PrivateTuitionFragment();break;
-            case SaleOfSchoolSuppliesFragment.TAG:
-                fragment = new SaleOfSchoolSuppliesFragment(); break;
-            case LostStuffFragment.TAG:
-                fragment = new LostStuffFragment(); break;
+            case RepresentationPlan.TAG:
+                fragment = new RepresentationPlan(); break;
             case AnnanewsFragment.TAG:
                 fragment = new AnnanewsFragment(); break;
             case SettingsFragment.TAG:
