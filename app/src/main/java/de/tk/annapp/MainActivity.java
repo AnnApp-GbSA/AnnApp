@@ -73,15 +73,19 @@ public class MainActivity extends AppCompatActivity
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        /*Default Fragment:*/
-        if (savedInstanceState != null)
-            setFragment(savedInstanceState.getString(getString(R.string.bundlekey_fragmentTag),HomeFragment.TAG));
-        else
-            setFragment(HomeFragment.TAG);
-
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        if(getSharedPreferences("prefs",MODE_PRIVATE).getBoolean("firstLaunch",true)){
+            setFragment(TutorialFragment.TAG);
+        }else {
+
+            /*Default Fragment:*/
+            if (savedInstanceState != null)
+                setFragment(savedInstanceState.getString("fragmentTag", HomeFragment.TAG));
+            else
+                setFragment(HomeFragment.TAG);
+        }
 
     }
 
@@ -195,6 +199,8 @@ public class MainActivity extends AppCompatActivity
                 fragment = new SettingsFragment(); break;
             case FeedbackFragment.TAG:
                 fragment = new FeedbackFragment(); break;
+            case TutorialFragment.TAG:
+                fragment = new TutorialFragment(); break;
         }
 
         if (fragment == null) {
