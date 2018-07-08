@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fabAddCalendar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="24dp"
+        android:layout_marginEnd="24dp"
+        android:clickable="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_add" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:background="?colorPrimaryDark" />
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="?colorPrimaryDark" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,7 +32,7 @@
         android:orientation="horizontal">
 
         <Button
-            android:id="@+id/button"
+            android:id="@+id/monthBack"
             android:layout_width="70dp"
             android:layout_height="25dp"
             android:layout_marginLeft="10dp"
@@ -37,7 +51,7 @@
             android:gravity="center"/>
 
         <Button
-            android:id="@+id/button2"
+            android:id="@+id/monthForward"
             android:layout_width="70dp"
             android:layout_height="25dp"
             android:layout_marginRight="10dp"
@@ -71,7 +85,14 @@
     <TextView
         android:id="@+id/dateInformation"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:gravity="center"/>
 
+    <TextView
+        android:id="@+id/Event"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""/>
 
 </LinearLayout>
+</android.support.constraint.ConstraintLayout>

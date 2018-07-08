@@ -68,12 +68,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             pos++;
             s.setPosition(pos);
             for (Task t : s.getAllTasksSorted()) {
-                /*if (t.getDue().before(yesterday)) { The deletingstuff has to happen somewhere else
+
+                tasks.add(t); /*if (t.getDue().before(yesterday)) { The deletingstuff has to happen somewhere else
                     askDelete(t);
                     Toast.makeText(context,"Old Tasks were deleted",Toast.LENGTH_SHORT).show();
                     continue;
                 }*/
-                tasks.add(t);
                 pos++;
             }
         }

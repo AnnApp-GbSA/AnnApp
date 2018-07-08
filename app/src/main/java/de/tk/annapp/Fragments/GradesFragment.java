@@ -49,6 +49,8 @@ public class GradesFragment extends Fragment {
 
         root = inflater.inflate(R.layout.fragment_grades, container, false);
 
+        getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
+
         //Get Singelton subjectManager
         subjectManager = SubjectManager.getInstance();
 

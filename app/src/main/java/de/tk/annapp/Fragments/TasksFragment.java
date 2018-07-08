@@ -49,6 +49,7 @@ public class TasksFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.tasks));
         root = inflater.inflate(R.layout.fragment_tasks, container, false);

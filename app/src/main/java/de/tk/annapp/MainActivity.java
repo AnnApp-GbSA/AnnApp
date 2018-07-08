@@ -141,9 +141,9 @@ public class MainActivity extends AppCompatActivity
             setFragment(TasksFragment.TAG);
         } else if (id == R.id.nav_calendar) {
             setFragment(CalendarFragment.TAG);
-        } else if (id == R.id.nav_representationplan) {
+        } /*else if (id == R.id.nav_representationplan) {
             setFragment(RepresentationPlan.TAG);
-        } else if (id == R.id.nav_annanews) {
+        }*/ else if (id == R.id.nav_annanews) {
             setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
             setFragment(SettingsFragment.TAG);

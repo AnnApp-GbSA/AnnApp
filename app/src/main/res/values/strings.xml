@@ -81,6 +81,8 @@
     <string name="warning_add_subject_before_grades">Fügen Sie bitte zuerst ein Fach hinzu bevor Sie Noten eintragen!</string>
     <string name="task">Aufgabe</string>
     <string name="grade">Note</string>
+    <string name="description">Beschreibung</string>
+    <string name="addEvent">Event hinzufügen</string>
     <string name="oral">mündlich</string>
     <string name="written">schriftlich</string>
     <string name="expand">erweitert</string>
@@ -143,6 +145,7 @@
     <string name="feedback">Feedback</string>
     <string name="noMailApp">No mail App found!</string>
     <string name="error">Unexpected Error</string>
-    <string name="calendar">Kalender</string>
+    <string name="calendar">Schulkalender</string>
     <string name="ok">OK</string>
+    <string name="noEventMessage">Kein Event an diesem Tag</string>
 </resources>
