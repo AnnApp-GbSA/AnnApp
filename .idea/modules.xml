@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AnnApp.iml" filepath="$PROJECT_DIR$/AnnApp.iml" />
       <module fileurl="file://$PROJECT_DIR$/AnnApp-GbSA.iml" filepath="$PROJECT_DIR$/AnnApp-GbSA.iml" />
       <module fileurl="file://$PROJECT_DIR$/AnnApp-master.iml" filepath="$PROJECT_DIR$/AnnApp-master.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
