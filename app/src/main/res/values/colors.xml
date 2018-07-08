@@ -8,6 +8,9 @@
     <color name="lausapa">#14b796</color>
     <color name="rvItemColor">#616161</color>
 
+    <color name= "colorTransparentWhite">#91ffffff</color>
+    <color name = "colorWhite">#ffffff</color>
+
     <color name="bg_line">#E7E7E7</color>
     <color name="bg_color">#FF99DCD7</color>
 
