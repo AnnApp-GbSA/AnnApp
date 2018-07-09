@@ -55,10 +55,12 @@ public class TutorialFragment extends Fragment{
         nextButton = root.findViewById(R.id.tutorial_nextButton);
         backButton = root.findViewById(R.id.tutorial_backButton);
 
-        SharedPreferences myPrefs = this.getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
-        SharedPreferences.Editor myPrefEditor = myPrefs.edit();
-        myPrefEditor.putBoolean("firstLaunch", false);
-        myPrefEditor.apply();
+
+
+//        SharedPreferences myPrefs = this.getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+//        SharedPreferences.Editor myPrefEditor = myPrefs.edit();
+//        myPrefEditor.putBoolean("firstLaunch", false);
+//        myPrefEditor.apply();
         startTutorial();
 
         return root;
@@ -97,6 +99,7 @@ public class TutorialFragment extends Fragment{
                 }
                 else if(currentPageCount+1 == dots.length){
                     // Insert the fragment by replacing any existing fragment
+                    getActivity().getPreferences(Context.MODE_PRIVATE).edit().putBoolean("firstLaunch", false).commit();
                     FragmentManager fragmentManager = getFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.content_frame, new HomeFragment())

@@ -76,7 +76,7 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        if(getSharedPreferences("prefs",MODE_PRIVATE).getBoolean("firstLaunch",true)){
+        if(getPreferences(MODE_PRIVATE).getBoolean("firstLaunch", true)){
             setFragment(TutorialFragment.TAG);
         }else {
 

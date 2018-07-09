@@ -13,6 +13,7 @@ import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -43,6 +44,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import de.tk.annapp.Grade;
@@ -202,7 +204,8 @@ public class CalendarFragment extends Fragment {
                     return;
                 }
 
-                Event ev1 = new Event(Color.RED, clicked, startDateInput.getText().toString() + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
+
+                Event ev1 = new Event(Color.YELLOW, clicked, startDateInput.getText().toString() + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
                 compactCalendarView.addEvent(ev1);
                 events.add(ev1);
 
@@ -278,12 +281,17 @@ public class CalendarFragment extends Fragment {
 
     private boolean eventInformation(){
         TextView event = (TextView) root.findViewById(R.id.Event);
+        LinearLayout eventList = (LinearLayout) root.findViewById(R.id.eventList);
         String text = "";
         if(eventsThisDay.isEmpty()){
+            event.setVisibility(View.VISIBLE);
             event.setText(R.string.noEventMessage);
             return false;
         }
+        event.setVisibility(View.GONE);
         for(int x = 0; x < eventsThisDay.size(); x++){
+            View eventView = LayoutInflater.from(this.getContext()).inflate(
+                    R.layout.event_layout, null);
             String[] split = eventsThisDay.get(x).getData().toString().split(Pattern.quote("°"));
             String startDate = split[0];
             String endDate = split[1];
@@ -291,7 +299,7 @@ public class CalendarFragment extends Fragment {
             String endTime = split[3];
             String location = split[4];
             String summary = split[5];
-            if(summary != null && summary != "null"){
+            /*if(summary != null && summary != "null"){
                 text = text + "Beschreibung: " + summary + "\n";
             }else{
                 text = text + "Beschreibung:\n";
@@ -310,9 +318,27 @@ public class CalendarFragment extends Fragment {
                 text = text + "Ort: " + location + "\n\n";
             }else{
                 text = text + "Ort:\n\n";
-            }
+            }*/
+
+            TextView startTimeTxt = eventView.findViewById(R.id.startTime);
+            startTimeTxt.setText("Beginn: " + startTime);
+
+            TextView endTimeTxt = eventView.findViewById(R.id.endTime);
+            endTimeTxt.setText("Ende: " + endTime);
+
+            TextView locationTxt = eventView.findViewById(R.id.location);
+            locationTxt.setText("Ort: " + location);
+
+            TextView descriptionTxt = eventView.findViewById(R.id.description);
+            descriptionTxt.setText(summary);
+
+            TextView color = eventView.findViewById(R.id.colorMarker);
+            color.setBackgroundColor(eventsThisDay.get(x).getColor());
+
+
+            eventList.addView(eventView);
         }
-        event.setText(text);
+        //event.setText(text);
         return true;
     }
 

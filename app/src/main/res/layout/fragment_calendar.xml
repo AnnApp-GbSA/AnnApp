@@ -88,11 +88,27 @@
         android:layout_height="wrap_content"
         android:gravity="center"/>
 
-    <TextView
+        <TextView
         android:id="@+id/Event"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text=""/>
 
-</LinearLayout>
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/eventList"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+        </ScrollView>
+
+        <include
+            layout="@layout/event_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
