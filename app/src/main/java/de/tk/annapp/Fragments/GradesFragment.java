@@ -86,29 +86,6 @@ public class GradesFragment extends Fragment {
         return root;
     }
 
-/*
-    private void addTestGrades(){
-        subjectManager.addSubject("Mathe", 2);
-        subjectManager.addSubject("Deutsch", 2);
-
-        subjectManager.getSubjectByName("Deutsch").addGrade(3, true, 1, "grrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr");
-
-        Subject mathe = subjectManager.getSubjectByName("Mathe");
-        System.out.println(mathe.name);
-
-        mathe.addGrade(4, true, 2, "KLAUSUR");
-        mathe.addGrade(3, true, 1, "weffffffffffffffffffffffffffffffffffffffffff");
-
-        System.out.println(mathe.getGradePointAverage());
-
-        mathe.addGrade(1, false , 3, "wfeqqqqqtttttttttttttttttttttttt");
-        mathe.addGrade(2, false, 1, "gggggggggggggggggggggggggggggggggggggggggggggggggggggggg");
-
-        System.out.println(mathe.getGradePointAverage());
-
-        System.out.println("" + subjectManager.getWholeGradeAverage());
-    }*/
-
     public void createInputDialog() {
 
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());

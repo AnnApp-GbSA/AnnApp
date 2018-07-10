@@ -2,8 +2,10 @@ package de.tk.annapp.Adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Build;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -21,6 +23,9 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.util.ArrayList;
 
+import de.tk.annapp.Fragments.GradeChildFragment;
+import de.tk.annapp.MainActivity;
+import de.tk.annapp.NewsDetailActivity;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
@@ -243,7 +248,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     public void delete(Grade grade){
         int formerIndex = grades.indexOf(grade);
         grade.getSubject().removeGrade(grade);
-        if(grades.contains(grade))//TODO Could be redundant due to...
+        if(grades.contains(grade))
             grades.remove(grade);
         notifyItemRemoved(formerIndex);
         subjectManager.save();

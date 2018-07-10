@@ -94,18 +94,7 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         Fragment myFragment = getFragmentManager().findFragmentByTag(GradeChildFragment.class.getSimpleName());
         if (myFragment != null && myFragment.isVisible()) {
-
-            Fragment fragment = new GradesFragment();
-
-            Bundle args = new Bundle();
-            fragment.setArguments(args);
-
-            // Insert the fragment by replacing any existing fragment
-            FragmentManager fragmentManager = getFragmentManager();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.content_frame, fragment)
-                    .commit();
-
+            setFragment(GradesFragment.TAG);
             drawer.closeDrawer(GravityCompat.START);
         }
         else if (drawer.isDrawerOpen(GravityCompat.START)) {

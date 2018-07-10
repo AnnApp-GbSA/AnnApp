@@ -43,7 +43,7 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
         holder.cardView.setCardBackgroundColor(Util.getSubjectColor(context, subjects.get(position)));
         holder.nameTxt.setTextColor(context.getColor(android.R.color.white));
         holder.gradeTxt.setTextColor(context.getColor(android.R.color.white));
-        holder.rl.setOnClickListener(new View.OnClickListener() {
+        holder.constraintLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Bundle args = new Bundle();
@@ -65,14 +65,14 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
         CardView cardView;
         TextView nameTxt;
         TextView gradeTxt;
-        ConstraintLayout rl;
+        ConstraintLayout constraintLayout;
 
         public RecyclerVH(View itemView){
             super(itemView);
 
             cardView = itemView.findViewById(R.id.cardView);
 
-            rl = itemView.findViewById(R.id.itme_subject_rl_woat_ever);
+            constraintLayout = itemView.findViewById(R.id.itme_subject_rl_woat_ever);
             nameTxt = itemView.findViewById(R.id.item_subject_name);
             gradeTxt = itemView.findViewById(R.id.item_subject_grade);
         }

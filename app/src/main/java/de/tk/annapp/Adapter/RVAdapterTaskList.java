@@ -78,7 +78,16 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             }
         }
 
-        if (tasks.isEmpty()) {//TODO Default if nothing is added
+        for (Task t : tasks){
+            if(t.getDate().getTimeInMillis() < System.currentTimeMillis() + 518400000){
+                Task task = t;
+                tasks.remove(t);
+                tasks.add(task); //TODO Test
+            }
+
+
+        }
+        if (tasks.isEmpty()) {// Default if nothing is added
             //tasks.add(new Task(null, null, null, null, context.getString(R.string.insertTask)));
         }
     }
@@ -95,7 +104,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     @Override
     public void onBindViewHolder(RecyclerVHTask holder, int position) {
-        //TODO: Change Task to "Mo", "Di", ..., if it is in less than one week
         if (tasks.get(position) == null) {
             holder.content.setVisibility(View.GONE);
             holder.subjectTxt.setVisibility(View.VISIBLE);
@@ -297,7 +305,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         int altindex = tasks.indexOf(task);
                         constructor();
                         int newindex = tasks.indexOf(task);
-                        notifyItemMoved(altindex, newindex);//TODO Testing this movement
+                        notifyItemMoved(altindex, newindex);
 
                         subjectManager.save();
                     }

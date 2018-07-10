@@ -42,7 +42,6 @@ public class AnnanewsFragment extends Fragment {
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
 
-        getActivity().setTitle("AnnaNews");
         getActivity().setTitle(getString(R.string.AnnaNews));
         root = inflater.inflate(R.layout.fragment_annanews, container, false);
         RecyclerView rv = root.findViewById(R.id.rv_news);
