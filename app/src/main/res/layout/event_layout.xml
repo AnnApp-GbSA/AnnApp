@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/constraintLayout"
+    android:id="@+id/relativeLayout_item_event_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -13,6 +13,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="4dp"
         android:textColor="@android:color/transparent"
+        app:layout_constraintEnd_toStartOf="@id/startTime"
         app:layout_constraintBottom_toBottomOf="@+id/location"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,7 +24,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Beginn: 8:00"
+        android:text="Beginn: 08:00 Uhr"
         app:layout_constraintStart_toEndOf="@+id/colorMarker"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,7 +34,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:text="Ende: 13:00"
+        android:text="Ende: 13:00 Uhr"
         app:layout_constraintStart_toEndOf="@+id/colorMarker"
         app:layout_constraintTop_toBottomOf="@+id/startTime" />
 
@@ -59,8 +60,24 @@
         android:text="Beschreibung:\nSchule"
         app:layout_constraintBottom_toBottomOf="@+id/location"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/location"
+        app:layout_constraintStart_toEndOf="@+id/startTime"
         app:layout_constraintTop_toTopOf="parent"
         android:textSize="18sp"/>
 
+    <ImageButton
+        android:id="@+id/item_event_button_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="24dp"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/edit"
+        android:tint="@color/rvItemColor"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="@id/description"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/description"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_delete" />
+
 </android.support.constraint.ConstraintLayout>
+

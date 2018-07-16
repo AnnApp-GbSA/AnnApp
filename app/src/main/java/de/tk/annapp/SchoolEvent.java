@@ -1,16 +1,16 @@
 package de.tk.annapp;
 
-public class SchoolEvent {
-    long startTime;
-    long endTime;
-    String location;
-    String summary;
+import java.io.Serializable;
 
-    public SchoolEvent(long startTime, long endTime, String location, String summary){
+public class SchoolEvent implements Serializable {
+    long startTime;
+    String data;
+    int color;
+
+    public SchoolEvent(int color, long startTime, String data){
         this.startTime = startTime;
-        this.endTime = endTime;
-        this.location = location;
-        this.summary = summary;
+        this.data = data;
+        this.color = color;
     }
 
     public long getStartTime() {
@@ -21,27 +21,11 @@ public class SchoolEvent {
         this.startTime = startTime;
     }
 
-    public long getEndTime() {
-        return endTime;
-    }
+    public String getData(){return data;}
 
-    public void setEndTime(long endTime) {
-        this.endTime = endTime;
-    }
+    public void setData(String data){this.data = data;}
 
-    public String getLocation() {
-        return location;
-    }
+    public int getColor(){return color;}
 
-    public void setLocation(String location) {
-        this.location = location;
-    }
-
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
+    public void setColor(int color){this.color = color;}
 }

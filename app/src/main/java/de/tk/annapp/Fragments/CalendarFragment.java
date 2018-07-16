@@ -1,12 +1,16 @@
 package de.tk.annapp.Fragments;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.usage.UsageEvents;
+import android.arch.lifecycle.Lifecycle;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.DashPathEffect;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.net.ParseException;
@@ -14,22 +18,22 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.service.autofill.FillEventHistory;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.EventLog;
 import android.util.Log;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.ImageView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RadioButton;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,14 +46,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import java.util.Random;
 import java.util.regex.Pattern;
 
-import de.tk.annapp.Grade;
 import de.tk.annapp.R;
-import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
 
 /**
@@ -61,7 +63,9 @@ public class CalendarFragment extends Fragment {
     public static final String TAG = "CalendarFragment";
     CompactCalendarView compactCalendarView;
     ArrayList<Event> events = new ArrayList<>();
+    ArrayList<Event> ownEvents = new ArrayList<>();
     ArrayList<Event> eventsThisDay = new ArrayList<>();
+    private SubjectManager subjectManager;
     long clicked = System.currentTimeMillis();
     String urlLink = "https://calendar.google.com/calendar/ical/o5bthi1gtvamdjhed61rot1e74%40group.calendar.google.com/public/basic.ics";
     String urlLink2 = "https://calendar.google.com/calendar/embed?src=o5bthi1gtvamdjhed61rot1e74@group.calendar.google.com&ctz=Europe/Berlin&pli=1";
@@ -71,11 +75,12 @@ public class CalendarFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.calendar));
         root = inflater.inflate(R.layout.fragment_calendar, container, false);
+
+        subjectManager = SubjectManager.getInstance();
 
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
         ((Button)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
@@ -94,9 +99,14 @@ public class CalendarFragment extends Fragment {
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
 
+        eventsThisDay.clear();
+        events.clear();
+
         new getCalendarData().execute((Void) null);
 
-        eventsThisDay.clear();
+        events.addAll(subjectManager.getEvents());
+        ownEvents.addAll(subjectManager.getOwnEvents());
+
         monthIndication.setText(dateFormatMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
         dateInformation.setText(MillisInDate(System.currentTimeMillis()));
         dateClicked(System.currentTimeMillis());
@@ -151,7 +161,11 @@ public class CalendarFragment extends Fragment {
                 createInputDialog();
             }
         });
+
         return root;
+    }
+
+    private void refresh(){
     }
 
     private void  onSyncWithCalendar(){
@@ -164,7 +178,7 @@ public class CalendarFragment extends Fragment {
         View mView = View.inflate(this.getContext(), R.layout.dialog_new_event, null);
 
         final EditText eventInput = (EditText) mView.findViewById(R.id.eventInput);
-        final EditText startDateInput = (EditText) mView.findViewById(R.id.startDateInput);
+        final Button btnStartDateInput = (Button) mView.findViewById(R.id.startDateInput);
         final EditText endDateInput = (EditText) mView.findViewById(R.id.endDateInput);
         final EditText endTimeInput = (EditText) mView.findViewById(R.id.endTimeInput);
         final EditText startTimeInput = (EditText) mView.findViewById(R.id.startTimeInput);
@@ -174,7 +188,31 @@ public class CalendarFragment extends Fragment {
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        startDateInput.setText(MillisInDate(clicked));
+        btnStartDateInput.setText(MillisInDate(clicked));
+        Date start = new Date(clicked);
+
+        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+                start.setYear(year - 1900);
+                start.setMonth(monthOfYear);
+                start.setDate(dayOfMonth);
+                btnStartDateInput.setText(MillisInDate(start.getTime()));
+            }
+        };
+        btnStartDateInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(clicked));
+                String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(clicked));
+                String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(clicked));
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getContext(), onDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                datePickerDialog.setTitle(getString(R.string.chooseDate));
+                datePickerDialog.setCanceledOnTouchOutside(false);
+                datePickerDialog.show();
+            }
+        });
 
         btnExtra.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,15 +237,17 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View view){
 
-                if(eventInput.getText().toString().isEmpty() || startDateInput.getText().toString().isEmpty()){
+                if(eventInput.getText().toString().isEmpty() /*|| startDateInput.getText().toString().isEmpty()*/){
                     createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0);
                     return;
                 }
-
-
-                Event ev1 = new Event(Color.YELLOW, clicked, startDateInput.getText().toString() + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
+                Event ev1 = new Event(Color.RED, start.getTime(), start + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
                 compactCalendarView.addEvent(ev1);
                 events.add(ev1);
+                ownEvents.add(ev1);
+                subjectManager.addOwnEvent(ev1);
+                subjectManager.addEvent(ev1);
+                subjectManager.save();
 
                 bsd.cancel();
             }
@@ -282,7 +322,7 @@ public class CalendarFragment extends Fragment {
     private boolean eventInformation(){
         TextView event = (TextView) root.findViewById(R.id.Event);
         LinearLayout eventList = (LinearLayout) root.findViewById(R.id.eventList);
-        String text = "";
+        eventList.removeAllViews();
         if(eventsThisDay.isEmpty()){
             event.setVisibility(View.VISIBLE);
             event.setText(R.string.noEventMessage);
@@ -299,26 +339,6 @@ public class CalendarFragment extends Fragment {
             String endTime = split[3];
             String location = split[4];
             String summary = split[5];
-            /*if(summary != null && summary != "null"){
-                text = text + "Beschreibung: " + summary + "\n";
-            }else{
-                text = text + "Beschreibung:\n";
-            }
-            if(startTime != null && startTime != "null"){
-                text = text + "Anfang: " + startTime + "\n";
-            }else{
-                text = text + "Anfang:\n";
-            }
-            if(endTime != null && endTime != "null"){
-                text = text + "Ende: " + endTime + "\n";
-            }else{
-                text = text + "Ende:\n";
-            }
-            if(location != null && location != "null"){
-                text = text + "Ort: " + location + "\n\n";
-            }else{
-                text = text + "Ort:\n\n";
-            }*/
 
             TextView startTimeTxt = eventView.findViewById(R.id.startTime);
             startTimeTxt.setText("Beginn: " + startTime);
@@ -335,11 +355,67 @@ public class CalendarFragment extends Fragment {
             TextView color = eventView.findViewById(R.id.colorMarker);
             color.setBackgroundColor(eventsThisDay.get(x).getColor());
 
-
+            ImageButton deleteButton = eventView.findViewById(R.id.item_event_button_delete);
+            int i;
+            int y;
+            int z = -1;
+            for(i = 0; i < ownEvents.size(); i++){
+                if(eventsThisDay.get(x).equals(ownEvents.get(i))){
+                    deleteButton.setVisibility(View.VISIBLE);
+                    for(y = 0; y < events.size(); y++){
+                        if(eventsThisDay.get(x).equals(events.get(y))){
+                            z = y;
+                        }
+                    }
+                }
+            }
+            int posEv1 = z;
+            int posEv2 = i;
+            deleteButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    askDelete(posEv1, posEv2);
+                }
+            });
             eventList.addView(eventView);
         }
-        //event.setText(text);
         return true;
+    }
+
+    private void askDelete(int pos1, int pos2){
+        final AlertDialog.Builder builder;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+        } else {
+            builder = new AlertDialog.Builder(this.getContext());
+        }
+        builder.setTitle(R.string.deleteQuestion)
+                .setMessage(this.getContext().getString(R.string.deleteQuestionMessageEvent))
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        delete(events.get(pos1 - 1), ownEvents.get(pos2 - 1));
+                    }
+                })
+                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        //I think - do Nothing - but if you want
+                    }
+                })
+                .setIcon(android.R.drawable.ic_delete)
+                .show();
+    }
+
+    private void delete(Event ev1, Event ev2){
+        System.out.println("ev bef: " + events.size());
+        subjectManager.removeEvent(ev1);
+        subjectManager.removeOwnEvent(ev2);
+        events.remove(ev1);
+        ownEvents.remove(ev2);
+        subjectManager.save();
+        System.out.println("ev in subj: " + subjectManager.getEvents());
+        System.out.println("ev in own subj: " + subjectManager.getOwnEvents());
+        System.out.println("ev: " + events.size());
+        System.out.println("own ev: " + ownEvents);
     }
 
     private void dateClicked(Date date){
@@ -372,6 +448,8 @@ public class CalendarFragment extends Fragment {
                         eventsToAdd){
                     events.add(ev);
                 }
+                subjectManager.addEventList(eventsToAdd);
+                subjectManager.save();
             } catch (Exception e){}
 
             return null;
@@ -406,6 +484,8 @@ public class CalendarFragment extends Fragment {
 
                 long startDate = -1;
                 long endDate = -1;
+                int startMonth = -1;
+                int endMonth = -1;
                 String startTime = null;
                 String endTime = null;
                 String location = null;
@@ -416,6 +496,8 @@ public class CalendarFragment extends Fragment {
                     if (s.startsWith("BEGIN:VEVENT")) {
                         startDate = -1;
                         endDate = -1;
+                        startMonth = -1;
+                        endMonth = -1;
                         startTime = null;
                         endTime = null;
                         location = null;
@@ -424,15 +506,23 @@ public class CalendarFragment extends Fragment {
                         String x = s.replace("DTSTART:", "");
                         try {
                             int year = Integer.valueOf(x.substring(0, 4));
-                            int month = Integer.valueOf(x.substring(4, 6));
+                            startMonth = Integer.valueOf(x.substring(4, 6));
                             int day = Integer.valueOf(x.substring(6, 8));
-                            String date = day + "." + month + "." + year;
+                            String date = day + "." + startMonth + "." + year;
                             startDate = timeInMillis(date);
                         } catch (Exception e) {}
                         try {
                             String minutes = x.substring(11, 13);
-                            String hours = x.substring(9, 11);
-                            startTime = hours + ":" + minutes + " Uhr";
+                            int hours = Integer.valueOf(x.substring(9, 11));
+                            if(startMonth > 3 && startMonth < 11){
+                                startTime = (hours + 2) + ":" + minutes + " Uhr";
+                            }
+                            else if(startMonth > 10 || startMonth < 4){
+                                startTime = (hours + 1) + ":" + minutes + " Uhr";
+                            }
+                            else{
+                                System.out.println("Fehler bei Berechnung der Startzeit");
+                            }
                         } catch (Exception e) {}
                     } else if (s.startsWith("DTSTART;VALUE=DATE:")) {
                         String x = s.replace("DTSTART;VALUE=DATE:", "");
@@ -447,15 +537,23 @@ public class CalendarFragment extends Fragment {
                         String x = s.replace("DTEND:", "");
                         try {
                             int year = Integer.valueOf(x.substring(0, 4));
-                            int month = Integer.valueOf(x.substring(4, 6));
+                            endMonth = Integer.valueOf(x.substring(4, 6));
                             int day = Integer.valueOf(x.substring(6, 8));
-                            String date = day + "." + month + "." + year;
+                            String date = day + "." + endMonth + "." + year;
                             endDate = timeInMillis(date);
                         } catch (Exception e) {}
                         try {
                             String minutes = x.substring(11, 13);
-                            String hours = x.substring(9, 11);
-                            endTime = hours + ":" + minutes + ":" + " Uhr";
+                            int hours = Integer.valueOf(x.substring(9, 11));
+                            if(endMonth > 3 && endMonth < 11){
+                                endTime = (hours + 2) + ":" + minutes + " Uhr";
+                            }
+                            else if(endMonth > 10 || endMonth < 4){
+                                endTime = (hours + 1) + ":" + minutes + " Uhr";
+                            }
+                            else{
+                                System.out.println("Fehler bei Berechnung der Endzeit");
+                            }
                         } catch (Exception e) {}
                     } else if (s.startsWith("DTEND;VALUE=DATE:")) {
                         String x = s.replace("DTEND;VALUE=DATE:", "");

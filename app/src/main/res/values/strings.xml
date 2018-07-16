@@ -23,6 +23,7 @@
     <string name="deleteQuestion">Löschen?</string>
     <string name="deleteQuestionMessage">Wollen Sie diese Note wirklich löschen?</string>
     <string name="deleteQuestionMessageTask">Wollen Sie diese Aufgabe wirklich löschen?</string>
+    <string name="deleteQuestionMessageEvent">Wollen Sie dieses Event wirklich löschen?</string>
     <string name="shareAnnApp">AnnAppp teilen...</string>
     <string name="subjectName">Name des Fachs</string>
     <string name="ratingOfSubject">Wertung des Fachs</string>

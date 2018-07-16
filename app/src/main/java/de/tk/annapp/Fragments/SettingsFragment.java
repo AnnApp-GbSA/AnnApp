@@ -102,7 +102,7 @@ public class SettingsFragment extends Fragment {
                 System.out.println(minute);
                 int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480) / 60);
 
-                TimePickerDialog tpd = new TimePickerDialog(getContext(), R.style.TimePickerTheme, onTimeSetListener, hourOfDay, minute, true);
+                TimePickerDialog tpd = new TimePickerDialog(getContext(), R.style.TimePickerTheme, onTimeSetListener, hourOfDay, minute, true); //TODO: fix crah
 
                 tpd.show();
             }

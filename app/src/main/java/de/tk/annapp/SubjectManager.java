@@ -4,6 +4,7 @@ package de.tk.annapp;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
@@ -35,6 +36,10 @@ public class SubjectManager {
     ArrayList<Subject> subjects = new ArrayList<Subject>();
     ArrayList<News> news = new ArrayList<>();
     Day[] days;
+    ArrayList<Event> events = new ArrayList<>();
+    ArrayList<Event> ownEvents = new ArrayList<>();
+    ArrayList<SchoolEvent> schoolEvents = new ArrayList<>();
+    ArrayList<SchoolEvent> ownSchoolEvents = new ArrayList<>();
 
     private SubjectManager(){
         System.out.println("Create SubjectManager...");
@@ -60,7 +65,7 @@ public class SubjectManager {
             int breakTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_breakTime), 15);
             setSchoolLessonSystem(new SchoolLessonSystem(schoolstart, lessonTime, breakTime, s));
         }
-        this.schoolLessonSystem =schoolLessonSystem;
+        this.schoolLessonSystem = schoolLessonSystem;
     }
 
     public void setFilename(String filename){
@@ -79,6 +84,30 @@ public class SubjectManager {
 
     public ArrayList<News> getNews() {
         return news;
+    }
+
+    public ArrayList<Event> getEvents(){return events;}
+
+    public void removeEvent(Event event){
+        events.remove(event);
+    }
+
+    public void addEvent(Event ev){
+        events.add(ev);
+    }
+
+    public void addEventList(ArrayList<Event> ev){
+        events.addAll(ev);
+    }
+
+    public ArrayList<Event> getOwnEvents(){return ownEvents;}
+
+    public void removeOwnEvent(Event event){
+        ownEvents.remove(event);
+    }
+
+    public void addOwnEvent(Event ev){
+        ownEvents.add(ev);
     }
 
     public void removeSubject(Subject subject){
@@ -104,8 +133,6 @@ public class SubjectManager {
         }
 
         wholeGradeAverage /= (subjects.size() - emptySubjects);
-        System.out.println(wholeGradeAverage);
-        System.out.println("size: " + subjects.size());
         return  Util.round(wholeGradeAverage, 2);
     }
 
@@ -134,25 +161,55 @@ public class SubjectManager {
         return i;
     }
 
+    private void afterLoad(){
+        for(SchoolEvent ev:
+                schoolEvents){
+            events.add(new Event(ev.getColor(), ev.getStartTime(), ev.getData()));
+        }
+        for(SchoolEvent ev:
+                ownSchoolEvents){
+            ownEvents.add(new Event(ev.getColor(), ev.getStartTime(), ev.getData()));
+        }
+    }
+
+    private void prepSave(){
+        schoolEvents.clear();
+        ownSchoolEvents.clear();
+        for(Event ev:
+                events){
+            schoolEvents.add(new SchoolEvent(ev.getColor(), ev.getTimeInMillis(), ev.getData().toString()));
+        }
+        for(Event ev:
+                ownEvents){
+            ownSchoolEvents.add(new SchoolEvent(ev.getColor(), ev.getTimeInMillis(), ev.getData().toString()));
+        }
+    }
+
     public void load() {
         try {
             ObjectInputStream ois = new ObjectInputStream(context.openFileInput("AnnApp"));
             subjects = (ArrayList<Subject>) ois.readObject();
             days = (Day[]) ois.readObject();
             news = (ArrayList<News>) ois.readObject();
+            schoolEvents = (ArrayList<SchoolEvent>) ois.readObject();
+            ownSchoolEvents = (ArrayList<SchoolEvent>) ois.readObject();
             ois.close();
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
         }
+        afterLoad();
     }
 
     public void save(){
+        prepSave();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", MODE_PRIVATE));
             oos.writeObject(subjects);
             oos.writeObject(days);
             oos.writeObject(news);
+            oos.writeObject(schoolEvents);
+            oos.writeObject(ownSchoolEvents);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();

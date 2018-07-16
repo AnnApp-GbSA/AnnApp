@@ -274,29 +274,6 @@ public class TasksFragment extends Fragment {
                 bsd.show();
     }
 
-    public void createInputDialogCalendar() {
-        /*AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
-
-        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input_calendar, null);
-
-        final CalendarView calendar = (CalendarView) mView.findViewById(R.id.calendarViewTasks);
-
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                selectedDate = new Date(i, i1, i2);
-            }
-        });
-
-        ad      .setTitle("Datum auswählen")
-                .setView(mView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
-                .show();*/
-    }
 
     void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;

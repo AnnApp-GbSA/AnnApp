@@ -61,21 +61,20 @@
             android:rotation="180" />
     </LinearLayout>
 
-    <com.github.sundeepk.compactcalendarview.CompactCalendarView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/compactcalendar_view"
-        android:layout_width="fill_parent"
-        android:paddingRight="10dp"
-        android:paddingLeft="10dp"
-        android:layout_height="250dp"
-        app:compactCalendarTargetHeight="250dp"
-        app:compactCalendarTextSize="12sp"
-        app:compactCalendarBackgroundColor="?colorPrimaryDark"
-        app:compactCalendarTextColor="@android:color/white"
-        app:compactCalendarCurrentSelectedDayBackgroundColor="?colorAccent"
-        app:compactCalendarCurrentDayBackgroundColor="?colorPrimary"
-        app:compactCalendarMultiEventIndicatorColor="#fff"
-        />
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/compactcalendar_view"
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="visible"
+            app:compactCalendarBackgroundColor="?colorPrimaryDark"
+            app:compactCalendarCurrentDayBackgroundColor="?colorPrimary"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="?colorAccent"
+            app:compactCalendarMultiEventIndicatorColor="#fff"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextColor="@android:color/white"
+            app:compactCalendarTextSize="12sp" />
 
     <ImageView
         android:layout_width="match_parent"
@@ -89,10 +88,10 @@
         android:gravity="center"/>
 
         <TextView
-        android:id="@+id/Event"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text=""/>
+            android:id="@+id/Event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""/>
 
         <ScrollView
             android:layout_width="match_parent"
