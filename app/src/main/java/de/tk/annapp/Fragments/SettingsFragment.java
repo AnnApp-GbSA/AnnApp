@@ -159,7 +159,7 @@ public class SettingsFragment extends Fragment {
         //Timetable max Lessons stuff
         EditText maxLessons = (EditText) root.findViewById(R.id.maxLesson);
 
-        maxLessons.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11)));
+        maxLessons.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson) , 11) - 1));
 
         maxLessons.addTextChangedListener(new TextWatcher() {
             @Override
@@ -175,7 +175,7 @@ public class SettingsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 if (!s.toString().isEmpty())
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_maxLesson), Integer.valueOf(s.toString())).commit();
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_maxLesson), Integer.valueOf(s.toString()) + 1).commit();
             }
         });
 

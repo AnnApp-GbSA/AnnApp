@@ -3,7 +3,6 @@ package de.tk.annapp.Adapter;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.view.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,23 +20,25 @@ public class SliderAdapter extends PagerAdapter {
 
     public SliderAdapter(Context c){
         this.c = c;
+
+        slide_headings = c.getResources().getStringArray(R.array.slide_headings);
+        slide_description = c.getResources().getStringArray(R.array.slide_description);
     }
 
     //Arrays
     public int[] slide_images = {
-            R.mipmap.tutorial_button,
-            R.mipmap.tutorial_homescreen
+            R.mipmap.tutorial_home,
+            R.mipmap.tutorial_timetable,
+            R.mipmap.tutorial_grade,
+            R.mipmap.tutorial_tasks,
+            R.mipmap.tutorial_home,
+            R.mipmap.tutorial_home,
+            R.mipmap.tut_news
     };
 
-    public String[] slide_headings = {
-        "Note Einfügen",
-        "Home Screen",
-    };
+    public String[] slide_headings;
 
-    public String[] slide_description = {
-            "Unter dem Reiter Noten können sie alle ihre Noten für jedes einzelen Fach eintragen. Klicken sie hierzu auf den Kopf im rechten unterem Eck. Geben sie alle notwendigen Informationen bezüglich der Note an und drücken sie auf den OK Knopf",
-            "Auf dem Home Screen kann der tägliche Stundenplan auuf der linken Seite eingesehen werden und auf der rechten Seite noch zu erledigende Aufgaben.",
-    };
+    public String[] slide_description;
 
     @Override
     public int getCount() {
@@ -64,8 +65,7 @@ public class SliderAdapter extends PagerAdapter {
 
         header.setText(slide_headings[position]);
         description.setText(slide_description[position]);
-        Drawable drawable = c.getDrawable(slide_images[position]);
-        image.setImageDrawable(drawable);
+        image.setImageResource(slide_images[position]);
 
         container.addView(view);
 

@@ -41,6 +41,35 @@
         <item>Freitag</item>
     </string-array>
 
+    <string-array name="slide_headings">
+        <item>Home</item>
+        <item>Stundenplan</item>
+        <item>Noten</item>
+        <item>Aufgaben</item>
+        <item>Schulkalender</item>
+        <item>Vertretungsplan</item>
+        <item>AnnaNews</item>
+    </string-array>
+
+    <string-array name="slide_description">
+        <item>Auf dem Home Screen kannst du deinen täglichen Stundenplan auf der linken Seite sehen.
+Auf der rechten Seite siehst du deine noch zu erledigenden Aufgaben.</item>
+        <item>Im Stundenplan kannst du alle deine Fächer und Stunden eintragen.
+Halte eine Stunde kurz gedrückt, damit sich das Menü zum Stunden einfügen öffnet.
+Hier kannst du ein neues Fach erstellen, indem du neues Fach auswählt und die nötigen Informationen einträgst oder ein bereits bestehendes Fach in die Stunde einfügen.
+Beim drücken einer Stunde, siehst du dein Lehrer und dein Raum, hier kannst du auch das Fach bearbeiten oder löschen.</item>
+        <item>Unter Noten kannst du deine Noten für jedes Fach eintragen.
+Der Notendurchschnitt wird rechts oben in der Ecke angezeigt.
+Um eine Note einzufügen, drücke den Button rechts unten in der Ecke.
+Wähle das Fach aus und gebe deine Note an.</item>
+        <item>Hier kannst du z.B. Hausaufgaben, Referate oder Schulaufgabentermine einfügen.
+Benutze den Button im Eck und wähle Fach, Typus und Termin er Aufgabe aus.
+</item>
+        <item>Schulkalender</item>
+        <item>Vertretungsplan</item>
+        <item>AnnaNews</item>
+    </string-array>
+
     <string-array name="school_hours">
         <item>8.00-8.45</item>
         <item>8.45-9.30</item>
