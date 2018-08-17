@@ -12,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity
     private Bundle currentFragmentBundle = null;
 
     private NavigationView navigationView = null;
+
+    private int backPressedCount = 0;
 
 
 
@@ -80,6 +83,17 @@ public class MainActivity extends AppCompatActivity
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        getSupportFragmentManager().addOnBackStackChangedListener(new android.support.v4.app.FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+
+                FragmentManager fm = getFragmentManager();
+
+
+            }
+        });
+
+
         if(getPreferences(MODE_PRIVATE).getBoolean("firstLaunch", true)){
             setFragment(TutorialFragment.TAG);
         }else {
@@ -108,34 +122,15 @@ public class MainActivity extends AppCompatActivity
              super.onBackPressed();
         }*/
 
+        FragmentManager fm = getFragmentManager();
         //Fragment myFragment = getFragmentManager().findFragmentByTag(prevFragmentTag);
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
-        }else if(prevFragmentTag != null) {
+        }else if(fm.getBackStackEntryCount() > 1) {
 
-            switch (prevFragmentTag){
-                case HomeFragment.TAG:
-                    navigationView.getMenu().getItem(0).setChecked(true); break;
-                case TimetableFragment.TAG:
-                    navigationView.getMenu().getItem(1).setChecked(true); break;
-                case GradesFragment.TAG:
-                    navigationView.getMenu().getItem(2).setChecked(true); break;
-                case CalendarFragment.TAG:
-                    navigationView.getMenu().getItem(4).setChecked(true); break;
-                case AnnanewsFragment.TAG:
-                    navigationView.getMenu().getItem(6).setChecked(true); break;
-                case FeedbackFragment.TAG:
-                    navigationView.getMenu().getItem(8).setChecked(true); break;
-                case SettingsFragment.TAG:
-                    navigationView.getMenu().getItem(9).setChecked(true); break;
-                case TasksFragment.TAG:
-                    navigationView.getMenu().getItem(3).setChecked(true); break;
-                case GradeChildFragment.TAG:
-                    navigationView.getMenu().getItem(2).setChecked(true); break;
-            }
+            fm.popBackStack();
 
-            setFragment(prevFragmentTag);
-
+            selectNavigationDrawerItem(fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName());
             drawer.closeDrawer(GravityCompat.START);
         }else {
             super.onBackPressed();
@@ -161,6 +156,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+
+        backPressedCount = 0;
 
         if (id == R.id.nav_myday) {
             setFragment(HomeFragment.TAG);
@@ -235,8 +232,6 @@ public class MainActivity extends AppCompatActivity
             return false;
         }
 
-        if(getFragmentManager().getBackStackEntryCount() > 1)
-        prevFragmentTag = getFragmentManager().getBackStackEntryAt(getFragmentManager().getBackStackEntryCount() - 1).getName();
         fragment.setArguments(bundle);
 
         // Insert the fragment by replacing any existing fragment
@@ -254,5 +249,30 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(getString(R.string.bundlekey_fragmentTag),currentFragmentTag );
+    }
+
+    private void selectNavigationDrawerItem(String tag){
+
+        switch (tag){
+            case HomeFragment.TAG:
+                navigationView.getMenu().getItem(0).setChecked(true); break;
+            case TimetableFragment.TAG:
+                navigationView.getMenu().getItem(1).setChecked(true); break;
+            case GradesFragment.TAG:
+                navigationView.getMenu().getItem(2).setChecked(true); break;
+            case CalendarFragment.TAG:
+                navigationView.getMenu().getItem(4).setChecked(true); break;
+            case AnnanewsFragment.TAG:
+                navigationView.getMenu().getItem(6).setChecked(true); break;
+            case FeedbackFragment.TAG:
+                navigationView.getMenu().getItem(8).setChecked(true); break;
+            case SettingsFragment.TAG:
+                navigationView.getMenu().getItem(9).setChecked(true); break;
+            case TasksFragment.TAG:
+                navigationView.getMenu().getItem(3).setChecked(true); break;
+            case GradeChildFragment.TAG:
+                navigationView.getMenu().getItem(2).setChecked(true); break;
+        }
+
     }
 }
