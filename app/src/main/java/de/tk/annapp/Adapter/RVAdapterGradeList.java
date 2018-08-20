@@ -184,7 +184,6 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 grade.setNote(note.getText().toString());
                 notifyItemChanged(grades.indexOf(grade));
 
-                subjectManager.save();
                 ((TextView)((Activity)context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
 
                 adTrueDialog.cancel();
@@ -298,7 +297,6 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         if(grades.contains(grade))
             grades.remove(grade);
         notifyItemRemoved(formerIndex);
-        subjectManager.save();
         ((TextView)((Activity)context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
         if(grades.isEmpty()){
             gradeMessage.setVisibility(View.VISIBLE);

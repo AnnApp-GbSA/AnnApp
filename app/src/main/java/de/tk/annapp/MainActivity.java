@@ -260,4 +260,16 @@ public class MainActivity extends AppCompatActivity
         }
 
     }
+
+    @Override
+    protected void onStop() {
+        subjectManager.save();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        subjectManager.save();
+        super.onDestroy();
+    }
 }

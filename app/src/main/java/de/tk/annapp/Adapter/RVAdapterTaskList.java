@@ -307,8 +307,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         constructor();
                         int newindex = tasks.indexOf(task);
                         notifyItemMoved(altindex, newindex);
-
-                        subjectManager.save();
                     }
                 })
                 .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
@@ -377,8 +375,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         tasks.remove(task);
         notifyItemRemoved(index);
-
-        subjectManager.save();
 
         if (tasks.isEmpty()) {
             taskMessage.setVisibility(View.VISIBLE);

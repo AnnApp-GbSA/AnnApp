@@ -216,7 +216,6 @@ public class TasksFragment extends Fragment {
                 subject.addTask(newTask);
                 ((RVAdapterTaskList) recyclerView.getAdapter()).addTask(newTask);
                 root.findViewById(R.id.noTask).setVisibility(View.GONE);
-                subjectManager.save();
                 bsd.cancel();
             }
         });

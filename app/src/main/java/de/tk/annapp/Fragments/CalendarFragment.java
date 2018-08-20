@@ -247,7 +247,6 @@ public class CalendarFragment extends Fragment {
                 ownEvents.add(ev1);
                 subjectManager.addOwnEvent(ev1);
                 subjectManager.addEvent(ev1);
-                subjectManager.save();
 
                 bsd.cancel();
             }
@@ -411,7 +410,6 @@ public class CalendarFragment extends Fragment {
         subjectManager.removeOwnEvent(ev2);
         events.remove(ev1);
         ownEvents.remove(ev2);
-        subjectManager.save();
         System.out.println("ev in subj: " + subjectManager.getEvents());
         System.out.println("ev in own subj: " + subjectManager.getOwnEvents());
         System.out.println("ev: " + events.size());
@@ -449,7 +447,6 @@ public class CalendarFragment extends Fragment {
                     events.add(ev);
                 }
                 subjectManager.addEventList(eventsToAdd);
-                subjectManager.save();
             } catch (Exception e){}
 
             return null;
