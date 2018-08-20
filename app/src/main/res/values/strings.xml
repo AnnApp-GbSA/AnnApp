@@ -17,7 +17,7 @@
     <string name="Home">Home</string>
     <string name="tasks">Aufgaben</string>
     <string name="ratingList">"Wertung: "</string>
-    <string name="editGrade">Note bearbeiten -</string>
+    <string name="editGrade">Note bearbeiten</string>
     <string name="editTask">Aufgabe bearbeiten -</string>
     <string name="cancel">Abbrechen</string>
     <string name="deleteQuestion">Löschen?</string>
@@ -90,6 +90,7 @@ Benutze den Button im Eck und wähle Fach, Typus und Termin er Aufgabe aus.
         <item>Blautöne</item>
         <item>Bunt</item>
     </string-array>
+
     <string name="key_schoolstart" translatable="false">schoolstart</string>
     <string name="schoolCalendar">Schulkalender</string>
     <string name="AnnaNews">AnnaNews</string>

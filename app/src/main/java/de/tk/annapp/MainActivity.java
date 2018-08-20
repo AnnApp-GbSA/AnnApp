@@ -31,10 +31,6 @@ public class MainActivity extends AppCompatActivity
 
     private NavigationView navigationView = null;
 
-    private int backPressedCount = 0;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,25 +70,15 @@ public class MainActivity extends AppCompatActivity
 
         subjectManager.load();
 
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        getSupportFragmentManager().addOnBackStackChangedListener(new android.support.v4.app.FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-
-                FragmentManager fm = getFragmentManager();
-
-
-            }
-        });
-
 
         if(getPreferences(MODE_PRIVATE).getBoolean("firstLaunch", true)){
             setFragment(TutorialFragment.TAG);
@@ -130,7 +116,8 @@ public class MainActivity extends AppCompatActivity
 
             fm.popBackStack();
 
-            selectNavigationDrawerItem(fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName());
+            currentFragmentTag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 2).getName();
+            selectNavigationDrawerItem(currentFragmentTag);
             drawer.closeDrawer(GravityCompat.START);
         }else {
             super.onBackPressed();
@@ -156,8 +143,6 @@ public class MainActivity extends AppCompatActivity
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
-
-        backPressedCount = 0;
 
         if (id == R.id.nav_myday) {
             setFragment(HomeFragment.TAG);

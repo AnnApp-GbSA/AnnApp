@@ -326,4 +326,12 @@ public class SubjectManager {
         return d;
     }
 
+    public Subject getSubjectByName(String subjectName){
+        for (Subject s: subjects) {
+            if(s.getName().equals(subjectName))
+                return s;
+        }
+
+        return null;
+    }
 }

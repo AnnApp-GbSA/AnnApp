@@ -2,12 +2,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="#00000000">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="?android:colorBackground"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:textColor="?android:textColor"
+            android:id="@+id/grade_edit_title"
+            android:textStyle="bold"
+            android:textSize="20sp"
+            android:padding="8dp"/>
 
         <EditText
             android:id="@+id/gradeInput"
@@ -15,7 +27,8 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/grade"
-            android:inputType="number"/>
+            android:inputType="number"
+            android:layout_marginStart="5dp"/>
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -30,14 +43,16 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/oral"/>
+                android:text="@string/oral"
+                android:textColor="?android:textColor" />
 
             <RadioButton
                 android:id="@+id/isWritten"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/written"/>
+                android:text="@string/written"
+                android:textColor="?android:textColor" />
 
         </RadioGroup>
 
@@ -63,7 +78,7 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/note"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName" />
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -75,7 +90,7 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/raiting"
-                    android:inputType="numberDecimal"/>
+                    android:inputType="numberDecimal" />
 
                 <ImageView
                     android:id="@+id/btnRoomHelp"
@@ -86,8 +101,43 @@
                     android:layout_margin="5dp"
                     android:src="@drawable/ic_help"
                     android:text="@string/short_blindtext" />
+
             </RelativeLayout>
+
         </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end">
+
+            <Button
+                android:id="@+id/grade_edit_cancel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="end"
+                android:layout_toStartOf="@+id/grade_edit_ok"
+                android:background="@android:color/transparent"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:text="@string/cancel"
+                android:textColor="?colorAccent" />
+
+            <Button
+                android:id="@+id/grade_edit_ok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentTop="true"
+                android:layout_gravity="end"
+                android:background="@android:color/transparent"
+                android:paddingEnd="5dp"
+                android:paddingStart="5dp"
+                android:text="@string/ok"
+                android:textColor="?colorAccent" />
+
+        </RelativeLayout>
 
     </LinearLayout>
 </FrameLayout>

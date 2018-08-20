@@ -113,6 +113,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         //View mView = getLayoutInflater().inflate(R.layout.fragment_grade_input, null);
         View mView = View.inflate(context, R.layout.dialog_edit_grade, null);
 
+        final TextView gradeEditTitle = mView.findViewById(R.id.grade_edit_title);
+        gradeEditTitle.setText(context.getString(R.string.editGrade));
+
         final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
         gradeInput.setText(String.valueOf(grade.getGrade()));
 
@@ -121,6 +124,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
         final EditText note = (EditText) mView.findViewById(R.id.note);
         note.setText(grade.getNote());
+
+        final Button btnCancel = mView.findViewById(R.id.grade_edit_cancel);
+        final Button btnOk = mView.findViewById(R.id.grade_edit_ok);
 
         final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
@@ -145,6 +151,46 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                adTrueDialog.cancel();
+            }
+        });
+
+        btnOk.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                float rating = 1;
+
+                //testing which button is active for decision whether your Grade is written or whether it's not
+                if(isWritten.isChecked())
+                    isWrittenBool = true;
+                else if(isNotWritten.isChecked())
+                    isWrittenBool = false;
+
+                if(gradeInput.getText().toString().isEmpty()){
+                    createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                    return;
+                }
+
+                if(!ratingInput.getText().toString().isEmpty())
+                    rating = Float.parseFloat(ratingInput.getText().toString());
+
+                grade.setGrade(Integer.valueOf(gradeInput.getText().toString()));
+                grade.setIswritten(isWrittenBool);
+                grade.setRating(rating);
+                grade.setNote(note.getText().toString());
+                notifyItemChanged(grades.indexOf(grade));
+
+                subjectManager.save();
+                ((TextView)((Activity)context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
+
+                adTrueDialog.cancel();
+            }
+        });
+
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -157,9 +203,10 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
 
 
-        ad      .setTitle(context.getString(R.string.editGrade) + subject.getName())
-                .setView(mView)
-                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+        ad
+                //.setTitle(context.getString(R.string.editGrade) + subject.getName())
+                .setView(mView);
+                /*.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -180,8 +227,8 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                             rating = Float.parseFloat(ratingInput.getText().toString());
 
 
-                        /*Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
-                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());*/
+                        Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
+                        subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
 
                         grade.setGrade(Integer.valueOf(gradeInput.getText().toString()));
                         grade.setIswritten(isWrittenBool);
@@ -199,7 +246,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                         //Do nothing
 
                     }
-                });
+                })*/;
 
                 adTrueDialog = ad.show();
     }
