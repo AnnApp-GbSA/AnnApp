@@ -30,6 +30,7 @@
     <string name="addSubject">Fach Hinzufügen</string>
     <string name="addTask">Aufgabe Hinzufügen</string>
     <string name="addGradeMessage">Bitte fügen sie eine neue Note hinzu!</string>
+    <string name="noConnection">Aktualisieren fehlgeschlagen</string>
 
     <string name="WerMichFindetGriegtNen">Leuchtkeks</string>
 

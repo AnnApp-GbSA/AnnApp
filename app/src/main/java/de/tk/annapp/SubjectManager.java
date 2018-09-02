@@ -190,25 +190,19 @@ public class SubjectManager {
             subjects = (ArrayList<Subject>) ois.readObject();
             days = (Day[]) ois.readObject();
             news = (ArrayList<News>) ois.readObject();
-            schoolEvents = (ArrayList<SchoolEvent>) ois.readObject();
-            ownSchoolEvents = (ArrayList<SchoolEvent>) ois.readObject();
             ois.close();
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
         }
-        afterLoad();
     }
 
     public void save(){
-        prepSave();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", MODE_PRIVATE));
             oos.writeObject(subjects);
             oos.writeObject(days);
             oos.writeObject(news);
-            oos.writeObject(schoolEvents);
-            oos.writeObject(ownSchoolEvents);
             oos.close();
         } catch (IOException e) {
             e.printStackTrace();

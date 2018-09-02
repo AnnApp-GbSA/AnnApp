@@ -15,15 +15,21 @@ import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.TypedValue;
 
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //Utility Class
 public class Util {
@@ -232,5 +238,30 @@ public class Util {
 
         x = BitmapFactory.decodeStream(input);
         return new BitmapDrawable(x);
+    }
+
+    public Object load(Context context, String key) {
+        System.out.println("load---------------- " + key);
+        try {
+            ObjectInputStream ois = new ObjectInputStream(context.openFileInput(key));
+            Object o = ois.readObject();
+            ois.close();
+            return o;
+        } catch (Exception e) {
+            System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public void save(Context context, Object object, String key){
+        System.out.println("save---------------- " + key);
+        try {
+            ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput(key, MODE_PRIVATE));
+            oos.writeObject(object);
+            oos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
