@@ -79,6 +79,7 @@ public class SubjectManager {
             return;
         subjects.add(subject);
         sortSubjects();
+        save();
     }
 
     public ArrayList<News> getNews() {
@@ -228,6 +229,7 @@ public class SubjectManager {
         }
         System.out.println("InSubMan");
         days[day].setLesson(lesson);
+        save();
     }
 
     public void deleteLesson(Lesson lesson){
@@ -318,12 +320,4 @@ public class SubjectManager {
         return d;
     }
 
-    public Subject getSubjectByName(String subjectName){
-        for (Subject s: subjects) {
-            if(s.getName().equals(subjectName))
-                return s;
-        }
-
-        return null;
-    }
 }

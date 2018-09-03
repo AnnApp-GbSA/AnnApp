@@ -8,6 +8,7 @@
 
     <string name="settings">Einstellungen</string>
     <string name="rating">Wertung</string>
+    <string name="noConnection">Keine Verbindung</string>
     <string name="ratingExplanation">Die Wertung ist der Betrag, der das Verhältnis zu den anderen Noten des selben Types bestimmt.  z.B.: Wertung: 2 Die Note wird doppelt so stark einberechnet wie andere Noten. Wertung: 0,5 Die Note wird halb so stark einberechnet wie andere Noten.</string>
     <string name="addGrade">Note hinzufügen</string>
     <string name="warning">Achtung</string>
@@ -17,7 +18,7 @@
     <string name="Home">Home</string>
     <string name="tasks">Aufgaben</string>
     <string name="ratingList">"Wertung: "</string>
-    <string name="editGrade">Note bearbeiten</string>
+    <string name="editGrade">Note bearbeiten -</string>
     <string name="editTask">Aufgabe bearbeiten -</string>
     <string name="cancel">Abbrechen</string>
     <string name="deleteQuestion">Löschen?</string>
@@ -30,7 +31,6 @@
     <string name="addSubject">Fach Hinzufügen</string>
     <string name="addTask">Aufgabe Hinzufügen</string>
     <string name="addGradeMessage">Bitte fügen sie eine neue Note hinzu!</string>
-    <string name="noConnection">Aktualisieren fehlgeschlagen</string>
 
     <string name="WerMichFindetGriegtNen">Leuchtkeks</string>
 
@@ -40,35 +40,6 @@
         <item>Mittwoch</item>
         <item>Donnerstag</item>
         <item>Freitag</item>
-    </string-array>
-
-    <string-array name="slide_headings">
-        <item>Home</item>
-        <item>Stundenplan</item>
-        <item>Noten</item>
-        <item>Aufgaben</item>
-        <item>Schulkalender</item>
-        <item>Vertretungsplan</item>
-        <item>AnnaNews</item>
-    </string-array>
-
-    <string-array name="slide_description">
-        <item>Auf dem Home Screen kannst du deinen täglichen Stundenplan auf der linken Seite sehen.
-Auf der rechten Seite siehst du deine noch zu erledigenden Aufgaben.</item>
-        <item>Im Stundenplan kannst du alle deine Fächer und Stunden eintragen.
-Halte eine Stunde kurz gedrückt, damit sich das Menü zum Stunden einfügen öffnet.
-Hier kannst du ein neues Fach erstellen, indem du neues Fach auswählt und die nötigen Informationen einträgst oder ein bereits bestehendes Fach in die Stunde einfügen.
-Beim drücken einer Stunde, siehst du dein Lehrer und dein Raum, hier kannst du auch das Fach bearbeiten oder löschen.</item>
-        <item>Unter Noten kannst du deine Noten für jedes Fach eintragen.
-Der Notendurchschnitt wird rechts oben in der Ecke angezeigt.
-Um eine Note einzufügen, drücke den Button rechts unten in der Ecke.
-Wähle das Fach aus und gebe deine Note an.</item>
-        <item>Hier kannst du z.B. Hausaufgaben, Referate oder Schulaufgabentermine einfügen.
-Benutze den Button im Eck und wähle Fach, Typus und Termin er Aufgabe aus.
-</item>
-        <item>Schulkalender</item>
-        <item>Vertretungsplan</item>
-        <item>AnnaNews</item>
     </string-array>
 
     <string-array name="school_hours">
@@ -91,7 +62,6 @@ Benutze den Button im Eck und wähle Fach, Typus und Termin er Aufgabe aus.
         <item>Blautöne</item>
         <item>Bunt</item>
     </string-array>
-
     <string name="key_schoolstart" translatable="false">schoolstart</string>
     <string name="schoolCalendar">Schulkalender</string>
     <string name="AnnaNews">AnnaNews</string>

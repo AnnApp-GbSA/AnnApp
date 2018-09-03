@@ -680,15 +680,18 @@ public class TimetableFragment extends Fragment {
                         switch (i) {
                             case 0:
                                 subjectManager.deleteLesson(lesson);
+                                subjectManager.save();
                                 initializeTableView();
                                 break;
                             case 1:
                                 subjectManager.deleteAllLessons(lesson);
+                                subjectManager.save();
                                 initializeTableView();
                                 break;
                             case 2:
                                 subjectManager.deleteAllLessons(lesson);
                                 subjectManager.deleteSubject(lesson.getSubject());
+                                subjectManager.save();
                                 initializeTableView();
                                 break;
                         }

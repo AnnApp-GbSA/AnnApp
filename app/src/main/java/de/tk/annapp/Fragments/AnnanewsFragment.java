@@ -95,6 +95,7 @@ public class AnnanewsFragment extends Fragment {
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
+                Toast.makeText(getContext(), R.string.noConnection, Toast.LENGTH_SHORT).show();
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "Error", e);
             }

@@ -1,15 +1,10 @@
 package de.tk.annapp.Fragments;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.usage.UsageEvents;
-import android.arch.lifecycle.Lifecycle;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -17,18 +12,12 @@ import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.service.autofill.FillEventHistory;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.EventLog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -46,13 +35,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.regex.Pattern;
 
+import de.tk.annapp.CustomEvent;
 import de.tk.annapp.R;
-import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Util;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -65,7 +54,6 @@ public class CalendarFragment extends Fragment {
     ArrayList<Event> events = new ArrayList<>();
     ArrayList<Event> ownEvents = new ArrayList<>();
     ArrayList<Event> eventsThisDay = new ArrayList<>();
-    private SubjectManager subjectManager;
     long clicked = System.currentTimeMillis();
     String urlLink = "https://calendar.google.com/calendar/ical/o5bthi1gtvamdjhed61rot1e74%40group.calendar.google.com/public/basic.ics";
     String urlLink2 = "https://calendar.google.com/calendar/embed?src=o5bthi1gtvamdjhed61rot1e74@group.calendar.google.com&ctz=Europe/Berlin&pli=1";
@@ -80,7 +68,27 @@ public class CalendarFragment extends Fragment {
         getActivity().setTitle(getString(R.string.calendar));
         root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
-        subjectManager = SubjectManager.getInstance();
+        ArrayList<CustomEvent> eventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(getContext(), "events");
+        if(eventsPuffer == null)
+            eventsPuffer = new ArrayList<>();
+        for(CustomEvent ce :
+                eventsPuffer){
+            if(!events.contains(ce)){
+                events.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
+            }
+        }
+
+        ArrayList<CustomEvent> ownEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(getContext(), "ownEvents");
+        if(ownEventsPuffer == null)
+            ownEventsPuffer = new ArrayList<>();
+        for(CustomEvent ce :
+                ownEventsPuffer){
+            if(!ownEvents.contains(ce)){
+                ownEvents.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
+            }
+        }
+
+        System.out.println("events: " + events);
 
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
         ((Button)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
@@ -98,14 +106,11 @@ public class CalendarFragment extends Fragment {
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
+        compactCalendarView.addEvents(events);
 
         eventsThisDay.clear();
-        events.clear();
 
         new getCalendarData().execute((Void) null);
-
-        events.addAll(subjectManager.getEvents());
-        ownEvents.addAll(subjectManager.getOwnEvents());
 
         monthIndication.setText(dateFormatMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
         dateInformation.setText(MillisInDate(System.currentTimeMillis()));
@@ -163,9 +168,6 @@ public class CalendarFragment extends Fragment {
         });
 
         return root;
-    }
-
-    private void refresh(){
     }
 
     private void  onSyncWithCalendar(){
@@ -237,7 +239,7 @@ public class CalendarFragment extends Fragment {
             @Override
             public void onClick(View view){
 
-                if(eventInput.getText().toString().isEmpty() /*|| startDateInput.getText().toString().isEmpty()*/){
+                if(eventInput.getText().toString().isEmpty()){
                     createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0);
                     return;
                 }
@@ -245,8 +247,10 @@ public class CalendarFragment extends Fragment {
                 compactCalendarView.addEvent(ev1);
                 events.add(ev1);
                 ownEvents.add(ev1);
-                subjectManager.addOwnEvent(ev1);
-                subjectManager.addEvent(ev1);
+                save(ownEvents,true);
+                save(events, false);
+                refresh();
+                dateClicked(clicked);
 
                 bsd.cancel();
             }
@@ -318,7 +322,7 @@ public class CalendarFragment extends Fragment {
         return day + ". " + month;
     }
 
-    private boolean eventInformation(){
+    private boolean refresh(){
         TextView event = (TextView) root.findViewById(R.id.Event);
         LinearLayout eventList = (LinearLayout) root.findViewById(R.id.eventList);
         eventList.removeAllViews();
@@ -369,11 +373,10 @@ public class CalendarFragment extends Fragment {
                 }
             }
             int posEv1 = z;
-            int posEv2 = i;
             deleteButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    askDelete(posEv1, posEv2);
+                    askDelete(posEv1);
                 }
             });
             eventList.addView(eventView);
@@ -381,7 +384,7 @@ public class CalendarFragment extends Fragment {
         return true;
     }
 
-    private void askDelete(int pos1, int pos2){
+    private void askDelete(int pos1){
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
@@ -392,7 +395,7 @@ public class CalendarFragment extends Fragment {
                 .setMessage(this.getContext().getString(R.string.deleteQuestionMessageEvent))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
-                        delete(events.get(pos1 - 1), ownEvents.get(pos2 - 1));
+                        delete(events.get(pos1));
                     }
                 })
                 .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
@@ -404,16 +407,36 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    private void delete(Event ev1, Event ev2){
-        System.out.println("ev bef: " + events.size());
-        subjectManager.removeEvent(ev1);
-        subjectManager.removeOwnEvent(ev2);
+    private void save(ArrayList<Event> ev, boolean own){
+        ArrayList<CustomEvent> customEvents = new ArrayList<>();
+        for(Event event:
+             ev){
+            customEvents.add(new CustomEvent(event.getColor(), event.getTimeInMillis(), event.getData()));
+        }
+        if(own){
+            (new Util()).save(getContext(), customEvents, "ownEvents");
+        }
+        else {
+            (new Util()).save(getContext(), customEvents, "events");
+        }
+    }
+
+    private void delete(Event ev1){
         events.remove(ev1);
-        ownEvents.remove(ev2);
-        System.out.println("ev in subj: " + subjectManager.getEvents());
-        System.out.println("ev in own subj: " + subjectManager.getOwnEvents());
-        System.out.println("ev: " + events.size());
-        System.out.println("own ev: " + ownEvents);
+        ArrayList<Event> oEvents = new ArrayList<>();
+        oEvents.addAll(ownEvents);
+        ownEvents.clear();
+        for(Event e:
+             oEvents){
+            if(events.contains(e)){
+                ownEvents.add(e);
+            }
+        }
+        eventsThisDay.remove(ev1);
+        save(events, false);
+        save(ownEvents, true);
+        compactCalendarView.removeEvent(ev1);
+        refresh();
     }
 
     private void dateClicked(Date date){
@@ -422,16 +445,24 @@ public class CalendarFragment extends Fragment {
                 eventsThisDay.add(events.get(x));
             }
         }
-        eventInformation();
+        refresh();
     }
 
     private void dateClicked(long date){
         for(int x = 0; x < events.size(); x++){
-            if(date <= events.get(x).getTimeInMillis() && (date + 86400000L) > events.get(x).getTimeInMillis()) {
-                eventsThisDay.add(events.get(x));
+            if(date <= events.get(x).getTimeInMillis() && (date + 86400000L) > events.get(x).getTimeInMillis()){
+                boolean already = false;
+                for(int y = 0; y < eventsThisDay.size(); y++){
+                    if(eventsThisDay.get(y).equals(events.get(x))){
+                        already = true;
+                    }
+                }
+                if(!already) {
+                    eventsThisDay.add(events.get(x));
+                }
             }
         }
-        eventInformation();
+        refresh();
     }
 
     private class getCalendarData extends AsyncTask<Void, Void, Boolean> {
@@ -441,12 +472,17 @@ public class CalendarFragment extends Fragment {
             ArrayList<Event> eventsToAdd = new ArrayList<>();
             try {
                 eventsToAdd.addAll(getEvents());
+                for(int x = 0; x < eventsToAdd.size(); x++){
+                    if(events.contains(eventsToAdd.get(x))){
+                        eventsToAdd.remove(x);
+                    }
+                }
                 compactCalendarView.addEvents(eventsToAdd);
                 for(Event ev :
                         eventsToAdd){
                     events.add(ev);
                 }
-                subjectManager.addEventList(eventsToAdd);
+                save(events, false);
             } catch (Exception e){}
 
             return null;

@@ -89,5 +89,4 @@
         appNs:layout_constraintTop_toTopOf="parent"
         appNs:srcCompat="@drawable/ic_edit" />
 
-
 </android.support.constraint.ConstraintLayout>
