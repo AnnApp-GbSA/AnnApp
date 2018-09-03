@@ -110,6 +110,7 @@ public class AnnanewsFragment extends Fragment {
             mSwipeLayout.setRefreshing(false);
         }
     }
+    //TODO: Delete this Todo
 
     private String xmlcut(String content, String startTag, String endTag){
         return content.substring(0,content.indexOf(startTag))+content.substring(content.indexOf(endTag,content.indexOf(startTag))+endTag.length(),content.length());
