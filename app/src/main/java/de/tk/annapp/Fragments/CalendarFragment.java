@@ -37,6 +37,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Random;
 import java.util.regex.Pattern;
 
 import de.tk.annapp.CustomEvent;
@@ -250,7 +251,12 @@ public class CalendarFragment extends Fragment {
                     createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0);
                     return;
                 }
-                Event ev1 = new Event(Color.RED, start.getTime(), start + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
+
+                Random rnd = new Random();
+                int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+
+
+                Event ev1 = new Event(color, start.getTime(), start + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
                 compactCalendarView.addEvent(ev1);
                 events.add(ev1);
                 ownEvents.add(ev1);
