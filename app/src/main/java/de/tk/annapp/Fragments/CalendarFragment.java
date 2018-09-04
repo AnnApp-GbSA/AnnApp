@@ -106,6 +106,13 @@ public class CalendarFragment extends Fragment {
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
+
+
+        /*for (Event e :
+                events) {
+            System.out.println(e.getData());
+        }*/
+
         compactCalendarView.addEvents(events);
 
         eventsThisDay.clear();
@@ -477,12 +484,19 @@ public class CalendarFragment extends Fragment {
                         eventsToAdd.remove(x);
                     }
                 }
-                compactCalendarView.addEvents(eventsToAdd);
+                //compactCalendarView.addEvents(eventsToAdd);
                 for(Event ev :
                         eventsToAdd){
-                    events.add(ev);
+                    if (!events.contains(ev)) {
+                        events.add(ev);
+                    }
                 }
+
+                compactCalendarView.removeAllEvents();
+                compactCalendarView.addEvents(events);
+
                 save(events, false);
+
             } catch (Exception e){}
 
             return null;
