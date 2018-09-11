@@ -20,7 +20,7 @@
             android:id="@+id/background"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="#1b1b1b"
+            android:background="?android:colorBackground"
             android:scrollbars="none">
 
 

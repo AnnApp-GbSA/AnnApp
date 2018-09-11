@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 
 import de.tk.annapp.Lesson;
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
@@ -64,12 +65,7 @@ public class HomeFragment extends Fragment {
 
         fragment = root.findViewById(R.id.fragment);
 
-        fragment.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getFragmentManager().beginTransaction().replace(R.id.content_frame, new TasksFragment()).commit();
-            }
-        });
+
 
         setTimeTable();
         System.out.println("HomeCreated");
@@ -192,7 +188,7 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, new TimetableFragment()).commit();
+                ((MainActivity) getContext()).setFragment(TimetableFragment.TAG);
             }
         });
 
@@ -237,7 +233,7 @@ public class HomeFragment extends Fragment {
         cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getFragmentManager().beginTransaction().replace(R.id.content_frame, new TimetableFragment()).commit();
+                ((MainActivity) getContext()).setFragment(TimetableFragment.TAG);
             }
         });
 
@@ -258,8 +254,7 @@ public class HomeFragment extends Fragment {
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentManager fragmentManager = getFragmentManager();
-                fragmentManager.beginTransaction().replace(R.id.content_frame, new TimetableFragment()).commit();
+                ((MainActivity) getContext()).setFragment(TimetableFragment.TAG);
             }
         });
         return btn;

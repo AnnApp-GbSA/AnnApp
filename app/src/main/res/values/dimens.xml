@@ -16,6 +16,7 @@
     <dimen name="md_column_header_text_size">13sp</dimen>
     <dimen name="md_column_header_gap_size">28dp</dimen>
 
+    <dimen name="marginBottom">8dp</dimen>
 
     <!-- Overriding the default values of the tableView -->
     <dimen name="default_row_header_width">55dp</dimen>

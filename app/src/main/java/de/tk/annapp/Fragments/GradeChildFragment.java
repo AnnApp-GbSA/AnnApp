@@ -1,6 +1,7 @@
 package de.tk.annapp.Fragments;
 
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,7 +40,7 @@ public class GradeChildFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterGradeList(getActivity(), subject, gradeMessage));
+        recyclerView.setAdapter(new RVAdapterGradeList(getActivity(), subject, gradeMessage, getActivity().getPreferences(Context.MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition),0)));
 
         return root;
     }

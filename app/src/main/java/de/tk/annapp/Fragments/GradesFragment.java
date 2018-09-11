@@ -14,6 +14,7 @@ import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -25,6 +26,7 @@ import android.widget.TextView;
 
 
 import de.tk.annapp.Grade;
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.R;
 import de.tk.annapp.Adapter.RVAdapterSubjectList;
 import de.tk.annapp.Subject;
@@ -213,21 +215,21 @@ public class GradesFragment extends Fragment {
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));                    }
                 })*/
 
-    void createAlertDialog(String title, String text, int ic) {
-        AlertDialog.Builder builder;
+    private void createAlertDialog(String title, String text, int ic) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), MainActivity.colorScheme);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Light_Dialog);
-        } else {
-            builder = new AlertDialog.Builder(this.getContext());
-        }
         builder.setTitle(title)
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setIcon(ic)
-                .show();
+                .setIcon(ic);
+
+        AlertDialog alertDialog = builder.show();
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 }
