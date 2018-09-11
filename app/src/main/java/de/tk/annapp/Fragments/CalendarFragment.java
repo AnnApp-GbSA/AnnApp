@@ -1,10 +1,13 @@
 package de.tk.annapp.Fragments;
 
+import android.Manifest;
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
@@ -12,6 +15,8 @@ import android.net.ParseException;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
@@ -31,8 +36,15 @@ import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -51,6 +63,7 @@ import de.tk.annapp.Util;
 @TargetApi(Build.VERSION_CODES.N)
 public class CalendarFragment extends Fragment {
     public static final String TAG = "CalendarFragment";
+    private static final String FILE_NAME = "events.txt";
     CompactCalendarView compactCalendarView;
     ArrayList<Event> events = new ArrayList<>();
     ArrayList<Event> ownEvents = new ArrayList<>();
@@ -89,8 +102,6 @@ public class CalendarFragment extends Fragment {
             }
         }
 
-        System.out.println("events: " + events);
-
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
         ((Button)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -107,13 +118,6 @@ public class CalendarFragment extends Fragment {
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
-
-
-        /*for (Event e :
-                events) {
-            System.out.println(e.getData());
-        }*/
-
         compactCalendarView.addEvents(events);
 
         eventsThisDay.clear();
@@ -178,9 +182,160 @@ public class CalendarFragment extends Fragment {
         return root;
     }
 
-    private void  onSyncWithCalendar(){
+    public void checkPermission(){
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch(requestCode){
+            case 1000:
+                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    Toast.makeText(getContext(), "Permission granted", Toast.LENGTH_SHORT).show();
+                    onSyncWithCalendar();
+                }else{
+                    Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    try {
+                        finalize();
+                    } catch (Throwable throwable) {
+                        throwable.printStackTrace();
+                    }
+                }
+        }
+    }
+
+    private void saveFile(String filename, String content){
+        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
+
+        try {
+            FileOutputStream fos = new FileOutputStream(file);
+            fos.write(content.getBytes());
+            fos.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
+
+    private void openFile(String directory){
+
+    }
+
+    private String eventToICS(int uid, String summary, String location, String startDate, String startTime, String endDate, String endTime){
+        String ics;
+        if(startTime.equals("1") || endTime.equals("1")){
+            ics = new String("BEGIN:VEVENT\nLOCATION:" + location + "\nSUMMARY:" + summary + "\nDESCRIPTION:\nCLASS:PRIVATE\nDTSTART;VALUE=DATE:" + startDate + "\nDTEND;VALUE=DATE:" + endDate + "\nDTSTAMP:\nEND:VEVENT\n");
+            return ics;
+        }
+        ics = new String("BEGIN:VEVENT\nLOCATION:" + location + "\nSUMMARY:" + summary + "\nDESCRIPTION:\nCLASS:PRIVATE\nDTSTART:" + startDate + "T" + startTime + "00Z\nDTEND:" + endDate + "T" + endTime + "00Z\nDTSTAMP:\nEND:VEVENT\n");
+        return ics;
+    }
+
+    public void  onSyncWithCalendar(){
+        checkPermission();
+        String content = new String("BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:AnnApp\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:AnnApp Termine\nX-WR-TIMEZONE:Europe/Berlin\n");
+        int uid = 1;
+        /*for(Event ev:
+             events){
+            if(ev.getTimeInMillis() > System.currentTimeMillis() - 31536000000L){
+                content = content + eventToICS(uid, getSummary(ev), getLocation(ev), getStartDate(ev), getStartTime(ev), getEndDate(ev), getEndTime(ev));
+                uid++;
+            }
+        }*/
+        content = content + eventToICS(uid, getSummary(events.get(22)), getLocation(events.get(22)), getStartDate(events.get(22)), getStartTime(events.get(22)), getEndDate(events.get(22)), getEndTime(events.get(22)));
+        content = content + "END:VCALENDAR";
+        saveFile(FILE_NAME, content);
+        openFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);
+    }
+
+    private String getSummary(Event ev){
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String summary = split[5];
+        return summary;
+    }
+
+    private String getLocation(Event ev){
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String location = split[4];
+        return location;
+    }
+
+    private String getStartDate(Event ev){
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String startDate = split[0];
+        String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(startDate)));
+        String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(startDate)));
+        String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(Long.valueOf(startDate)));
+        return year + month + day;
+    }
+
+    private String getStartTime(Event ev){
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String startTime = split[2];
+        if(!startTime.equals(null)){
+            String[] splitTime = startTime.split(Pattern.quote(":"));
+            String hour = splitTime[0];
+            String minute = "00";
+            if(splitTime.length > 1){
+                minute = splitTime[1];
+                String[] splitMinute = minute.split(Pattern.quote(" "));
+                minute = splitMinute[0];
+                if(Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0){
+                    minute = "0" + minute;
+                }
+            }
+            try {
+                if (Integer.valueOf(hour) < 10 && Integer.valueOf(hour) != 0) {
+                    hour = "0" + hour;
+                }
+            }catch(Exception e){
+                return "1";
+            }
+            return hour + minute;
+        }
+        return "1";
+    }
+
+    private String getEndDate(Event ev){
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String endDate = split[1];
+        String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(endDate)));
+        String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(endDate)));
+        String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(Long.valueOf(endDate)));
+        return year + month + day;
+    }
+
+    private String getEndTime(Event ev){
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String endTime = split[3];
+        if(!endTime.equals(null)){
+            String[] splitTime = endTime.split(Pattern.quote(":"));
+            String hour = splitTime[0];
+            String minute = "00";
+            if(splitTime.length > 1) {
+                minute = splitTime[1];
+                String[] splitMinute = minute.split(Pattern.quote(" "));
+                minute = splitMinute[0];
+                if(Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0){
+                    minute = "0" + minute;
+                }
+            }
+            try {
+                if (Integer.valueOf(hour) < 10 && Integer.valueOf(hour) != 0) {
+                    hour = "0" + hour;
+                }
+            }catch(Exception e){
+                return "1";
+            }
+            return hour + minute;
+        }
+        return "1";
+    }
+
 
     public void createInputDialog(){
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(),R.style.NewDialog);
@@ -490,7 +645,6 @@ public class CalendarFragment extends Fragment {
                         eventsToAdd.remove(x);
                     }
                 }
-                //compactCalendarView.addEvents(eventsToAdd);
                 for(Event ev :
                         eventsToAdd){
                     if (!events.contains(ev)) {
