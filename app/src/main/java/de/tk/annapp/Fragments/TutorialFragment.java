@@ -59,6 +59,9 @@ public class TutorialFragment extends Fragment{
 
         tutorialLength = getResources().getStringArray(R.array.slide_description).length;
 
+        getActivity().findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.nav_view).setVisibility(View.INVISIBLE);
+
 
 
 //        SharedPreferences myPrefs = this.getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
@@ -108,6 +111,11 @@ public class TutorialFragment extends Fragment{
                     fragmentManager.beginTransaction()
                             .replace(R.id.content_frame, new HomeFragment())
                             .commit();
+
+
+                    getActivity().findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.VISIBLE);
+
+                    getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
                 }
             }
         });

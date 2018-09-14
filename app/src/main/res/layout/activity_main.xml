@@ -46,13 +46,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
                 android:layout_marginTop="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:tint="@android:color/white"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/ic_download"
-                android:tint="@android:color/white"
-                android:backgroundTint="@android:color/transparent"/>
+                app:srcCompat="@drawable/ic_download" />
 
         </android.support.constraint.ConstraintLayout>
 

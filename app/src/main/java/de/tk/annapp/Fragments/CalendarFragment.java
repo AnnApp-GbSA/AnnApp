@@ -111,7 +111,7 @@ public class CalendarFragment extends Fragment {
 
         /*for (Event e :
                 events) {
-            System.out.println(e.getData());
+        System.out.println(e.getData());
         }*/
 
         compactCalendarView.addEvents(events);
