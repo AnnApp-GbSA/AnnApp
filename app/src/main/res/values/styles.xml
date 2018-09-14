@@ -261,9 +261,9 @@
     <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog" >
         <item name="colorPrimary">?colorPrimary</item>
         <item name="colorPrimaryDark">?colorPrimaryDark</item>
-        <item name="colorAccent">?colorAccent</item>
         <item name="android:textColor">?android:textColor</item>
-        <item name="android:windowBackground">?android:popupBackground</item>
+        <item name="android:headerBackground">?android:colorBackground</item>
+        <item name="android:dayOfWeekBackground">?android:colorBackground</item>
 
     </style>
 

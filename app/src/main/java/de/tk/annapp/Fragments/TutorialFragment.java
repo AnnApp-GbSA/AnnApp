@@ -34,6 +34,8 @@ public class TutorialFragment extends Fragment{
     private Button nextButton;
     private Button backButton;
 
+    private int tutorialLength;
+
     private int currentPageCount;
 
     private SliderAdapter sliderAdapter;
@@ -54,6 +56,8 @@ public class TutorialFragment extends Fragment{
         dotLayout = root.findViewById(R.id.tutorial_dotLayout);
         nextButton = root.findViewById(R.id.tutorial_nextButton);
         backButton = root.findViewById(R.id.tutorial_backButton);
+
+        tutorialLength = getResources().getStringArray(R.array.slide_description).length;
 
 
 
@@ -82,7 +86,7 @@ public class TutorialFragment extends Fragment{
 
     private void startTutorial(){
 
-        sliderAdapter = new SliderAdapter(this.getActivity());
+        sliderAdapter = new SliderAdapter(this.getContext());
         slideViewPager.setAdapter(sliderAdapter);
 
         addDotsIndicator(0);
@@ -165,7 +169,7 @@ public class TutorialFragment extends Fragment{
 
 
     public void addDotsIndicator(int position){
-        dots = new TextView[7];
+        dots = new TextView[tutorialLength];
         dotLayout.removeAllViews();
 
         for (int i = 0; i < dots.length; i++){

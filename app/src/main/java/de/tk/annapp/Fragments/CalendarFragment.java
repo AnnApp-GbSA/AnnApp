@@ -92,7 +92,7 @@ public class CalendarFragment extends Fragment {
         System.out.println("events: " + events);
 
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
-        ((Button)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSyncWithCalendar();
@@ -217,7 +217,7 @@ public class CalendarFragment extends Fragment {
                 String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(clicked));
                 String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(clicked));
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(), onDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                        getContext(), R.style.TimePickerTheme,onDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
                 datePickerDialog.setTitle(getString(R.string.chooseDate));
                 datePickerDialog.setCanceledOnTouchOutside(false);
                 datePickerDialog.show();
