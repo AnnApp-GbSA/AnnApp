@@ -102,6 +102,21 @@ public class MainActivity extends AppCompatActivity
 
         findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
 
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                FragmentManager fm = getFragmentManager();
+
+                if(fm.getBackStackEntryCount() > 0) {
+                    currentFragmentTag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName();
+                    selectNavigationDrawerItem(currentFragmentTag);
+                }
+            }
+        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -145,8 +160,8 @@ public class MainActivity extends AppCompatActivity
             fm.popBackStack();
 
             drawer.closeDrawer(GravityCompat.START);
-        }else {
-            super.onBackPressed();
+        } else {
+             super.onBackPressed();
         }
     }
 

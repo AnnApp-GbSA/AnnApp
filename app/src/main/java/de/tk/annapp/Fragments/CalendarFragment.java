@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.URL;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Locale;
@@ -63,7 +64,7 @@ import de.tk.annapp.Util;
 @TargetApi(Build.VERSION_CODES.N)
 public class CalendarFragment extends Fragment {
     public static final String TAG = "CalendarFragment";
-    private static final String FILE_NAME = "events.txt";
+    private static final String FILE_NAME = "events.ics";
     CompactCalendarView compactCalendarView;
     ArrayList<Event> events = new ArrayList<>();
     ArrayList<Event> ownEvents = new ArrayList<>();
@@ -83,21 +84,21 @@ public class CalendarFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_calendar, container, false);
 
         ArrayList<CustomEvent> eventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(getContext(), "events");
-        if(eventsPuffer == null)
+        if (eventsPuffer == null)
             eventsPuffer = new ArrayList<>();
-        for(CustomEvent ce :
-                eventsPuffer){
-            if(!events.contains(ce)){
+        for (CustomEvent ce :
+                eventsPuffer) {
+            if (!events.contains(ce)) {
                 events.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
             }
         }
 
         ArrayList<CustomEvent> ownEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(getContext(), "ownEvents");
-        if(ownEventsPuffer == null)
+        if (ownEventsPuffer == null)
             ownEventsPuffer = new ArrayList<>();
-        for(CustomEvent ce :
-                ownEventsPuffer){
-            if(!ownEvents.contains(ce)){
+        for (CustomEvent ce :
+                ownEventsPuffer) {
+            if (!ownEvents.contains(ce)) {
                 ownEvents.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
             }
         }
@@ -118,13 +119,6 @@ public class CalendarFragment extends Fragment {
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
-
-
-        /*for (Event e :
-                events) {
-        System.out.println(e.getData());
-        }*/
-
         compactCalendarView.addEvents(events);
 
         eventsThisDay.clear();
@@ -135,7 +129,7 @@ public class CalendarFragment extends Fragment {
         dateInformation.setText(MillisInDate(System.currentTimeMillis()));
         dateClicked(System.currentTimeMillis());
 
-        monthBack.setOnClickListener(new View.OnClickListener(){
+        monthBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 compactCalendarView.scrollLeft();
@@ -146,7 +140,7 @@ public class CalendarFragment extends Fragment {
             }
         });
 
-        monthForward.setOnClickListener(new View.OnClickListener(){
+        monthForward.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 compactCalendarView.scrollRight();
@@ -189,20 +183,20 @@ public class CalendarFragment extends Fragment {
         return root;
     }
 
-    public void checkPermission(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+    public void checkPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && getContext().checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             requestPermissions(new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1000);
         }
     }
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch(requestCode){
+        switch (requestCode) {
             case 1000:
-                if(grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(getContext(), "Permission granted", Toast.LENGTH_SHORT).show();
                     onSyncWithCalendar();
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
                     try {
                         finalize();
@@ -213,7 +207,7 @@ public class CalendarFragment extends Fragment {
         }
     }
 
-    private void saveFile(String filename, String content){
+    private void saveFile(String filename, String content) {
         File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath(), filename);
 
         try {
@@ -228,51 +222,55 @@ public class CalendarFragment extends Fragment {
 
     }
 
-    private void openFile(String directory){
+    private void openFile(String directory) {
 
     }
 
-    private String eventToICS(int uid, String summary, String location, String startDate, String startTime, String endDate, String endTime){
+    private String eventToICS(String uid, String summary, String location, String startDate, String startTime, String endDate, String endTime) {
         String ics;
-        if(startTime.equals("1") || endTime.equals("1")){
-            ics = new String("BEGIN:VEVENT\nLOCATION:" + location + "\nSUMMARY:" + summary + "\nDESCRIPTION:\nCLASS:PRIVATE\nDTSTART;VALUE=DATE:" + startDate + "\nDTEND;VALUE=DATE:" + endDate + "\nDTSTAMP:\nEND:VEVENT\n");
+        if (startTime.equals("1") || endTime.equals("1")) {
+            ics = new String("BEGIN:VEVENT\nDTSTART:" + startDate + "T" + startTime + "00Z\nDTEND:" + endDate + "T" + endTime + "00Z\nDTSTAMP:\nUID:" + uid + "\nCREATED:\nDESCRIPTION:\nLAST-MODIFIED:\nLOCATION:" + location + "\nSEQUENCE:0\nSTATUS:CONFIRMED\nSUMMARY:" + summary + "\nTRANSP:OPAQUE\nEND:VEVENT\n");
             return ics;
         }
-        ics = new String("BEGIN:VEVENT\nLOCATION:" + location + "\nSUMMARY:" + summary + "\nDESCRIPTION:\nCLASS:PRIVATE\nDTSTART:" + startDate + "T" + startTime + "00Z\nDTEND:" + endDate + "T" + endTime + "00Z\nDTSTAMP:\nEND:VEVENT\n");
+        ics = new String("BEGIN:VEVENT\nDTSTART:" + startDate + "T" + startTime + "00Z\nDTEND:" + endDate + "T" + endTime + "00Z\nDTSTAMP:\nUID:" + uid + "\nCREATED:\nDESCRIPTION:\nLAST-MODIFIED:\nLOCATION:" + location + "\nSEQUENCE:0\nSTATUS:CONFIRMED\nSUMMARY:" + summary + "\nTRANSP:OPAQUE\nEND:VEVENT\n");
         return ics;
     }
 
-    public void  onSyncWithCalendar(){
+    public void onSyncWithCalendar() {
         checkPermission();
-        String content = new String("BEGIN:VCALENDAR\nVERSION:2.0\nPRODID:AnnApp\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:AnnApp Termine\nX-WR-TIMEZONE:Europe/Berlin\n");
-        int uid = 1;
-        /*for(Event ev:
-             events){
-            if(ev.getTimeInMillis() > System.currentTimeMillis() - 31536000000L){
-                content = content + eventToICS(uid, getSummary(ev), getLocation(ev), getStartDate(ev), getStartTime(ev), getEndDate(ev), getEndTime(ev));
-                uid++;
+        String content = new String("BEGIN:VCALENDAR\nPRODID:AnnApp\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:AnnApp\nX-WR-TIMEZONE:Europe/Berlin\nX-WR-CALDESC:\n");
+        for (Event ev :
+                events) {
+            if (ev.getTimeInMillis() > System.currentTimeMillis() - 31536000000L) {
+                content = content + eventToICS(getUID(ev), getSummary(ev), getLocation(ev), getStartDate(ev), getStartTime(ev), getEndDate(ev), getEndTime(ev));
             }
-        }*/
-        content = content + eventToICS(uid, getSummary(events.get(22)), getLocation(events.get(22)), getStartDate(events.get(22)), getStartTime(events.get(22)), getEndDate(events.get(22)), getEndTime(events.get(22)));
+        }
         content = content + "END:VCALENDAR";
         saveFile(FILE_NAME, content);
         openFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);
     }
 
-    private String getSummary(Event ev){
+    private String getSummary(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°"));
         String summary = split[5];
         return summary;
     }
 
-    private String getLocation(Event ev){
+    private String getUID(Event ev) {
+        String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        String uid = split[6];
+        return uid;
+    }
+
+    private String getLocation(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°"));
         String location = split[4];
         return location;
     }
 
-    private String getStartDate(Event ev){
+    private String getStartDate(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°"));
+        System.out.println("String0:" + split[0]);
         String startDate = split[0];
         String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(startDate)));
         String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(startDate)));
@@ -280,18 +278,18 @@ public class CalendarFragment extends Fragment {
         return year + month + day;
     }
 
-    private String getStartTime(Event ev){
+    private String getStartTime(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°"));
         String startTime = split[2];
-        if(!startTime.equals(null)){
+        if (!startTime.equals(null)) {
             String[] splitTime = startTime.split(Pattern.quote(":"));
             String hour = splitTime[0];
             String minute = "00";
-            if(splitTime.length > 1){
+            if (splitTime.length > 1) {
                 minute = splitTime[1];
                 String[] splitMinute = minute.split(Pattern.quote(" "));
                 minute = splitMinute[0];
-                if(Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0){
+                if (Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0) {
                     minute = "0" + minute;
                 }
             }
@@ -299,7 +297,7 @@ public class CalendarFragment extends Fragment {
                 if (Integer.valueOf(hour) < 10 && Integer.valueOf(hour) != 0) {
                     hour = "0" + hour;
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 return "1";
             }
             return hour + minute;
@@ -307,27 +305,30 @@ public class CalendarFragment extends Fragment {
         return "1";
     }
 
-    private String getEndDate(Event ev){
+    private String getEndDate(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°"));
         String endDate = split[1];
-        String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(endDate)));
-        String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(endDate)));
-        String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(Long.valueOf(endDate)));
-        return year + month + day;
+        if (!endDate.equals("")) {
+            String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(endDate)));
+            String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(endDate)));
+            String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(Long.valueOf(endDate)));
+            return year + month + day;
+        }
+        return "";
     }
 
-    private String getEndTime(Event ev){
+    private String getEndTime(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°"));
         String endTime = split[3];
-        if(!endTime.equals(null)){
+        if (!endTime.equals(null)) {
             String[] splitTime = endTime.split(Pattern.quote(":"));
             String hour = splitTime[0];
             String minute = "00";
-            if(splitTime.length > 1) {
+            if (splitTime.length > 1) {
                 minute = splitTime[1];
                 String[] splitMinute = minute.split(Pattern.quote(" "));
                 minute = splitMinute[0];
-                if(Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0){
+                if (Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0) {
                     minute = "0" + minute;
                 }
             }
@@ -335,7 +336,7 @@ public class CalendarFragment extends Fragment {
                 if (Integer.valueOf(hour) < 10 && Integer.valueOf(hour) != 0) {
                     hour = "0" + hour;
                 }
-            }catch(Exception e){
+            } catch (Exception e) {
                 return "1";
             }
             return hour + minute;
@@ -344,8 +345,8 @@ public class CalendarFragment extends Fragment {
     }
 
 
-    public void createInputDialog(){
-        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(),R.style.NewDialog);
+    public void createInputDialog() {
+        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
 
         View mView = View.inflate(this.getContext(), R.layout.dialog_new_event, null);
 
@@ -407,9 +408,9 @@ public class CalendarFragment extends Fragment {
 
         btnOK.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view){
+            public void onClick(View view) {
 
-                if(eventInput.getText().toString().isEmpty()){
+                if (eventInput.getText().toString().isEmpty()) {
                     createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0);
                     return;
                 }
@@ -417,12 +418,13 @@ public class CalendarFragment extends Fragment {
                 Random rnd = new Random();
                 int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
+                String uid = String.valueOf(eventInput.getText().toString().hashCode());
 
-                Event ev1 = new Event(color, start.getTime(), start + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString());
+                Event ev1 = new Event(color, start.getTime(), start.getTime() + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString() + "°" + uid);
                 compactCalendarView.addEvent(ev1);
                 events.add(ev1);
                 ownEvents.add(ev1);
-                save(ownEvents,true);
+                save(ownEvents, true);
                 save(events, false);
                 refresh();
                 dateClicked(clicked);
@@ -452,62 +454,50 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    private String MillisInDate(long time){
+    private String MillisInDate(long time) {
         String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(time));
         String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(time));
-        if(month.equals("01")){
+        if (month.equals("01")) {
             month = "Januar";
-        }
-        else if(month.equals("02")){
+        } else if (month.equals("02")) {
             month = "Februar";
-        }
-        else if(month.equals("03")){
+        } else if (month.equals("03")) {
             month = "März";
-        }
-        else if(month.equals("04")){
+        } else if (month.equals("04")) {
             month = "April";
-        }
-        else if(month.equals("05")){
+        } else if (month.equals("05")) {
             month = "Mai";
-        }
-        else if(month.equals("06")){
+        } else if (month.equals("06")) {
             month = "Juni";
-        }
-        else if(month.equals("07")){
+        } else if (month.equals("07")) {
             month = "Juli";
-        }
-        else if(month.equals("08")){
+        } else if (month.equals("08")) {
             month = "August";
-        }
-        else if(month.equals("09")){
+        } else if (month.equals("09")) {
             month = "September";
-        }
-        else if(month.equals("10")){
+        } else if (month.equals("10")) {
             month = "Oktober";
-        }
-        else if(month.equals("11")){
+        } else if (month.equals("11")) {
             month = "November";
-        }
-        else if(month.equals("12")){
+        } else if (month.equals("12")) {
             month = "Dezember";
-        }
-        else{
+        } else {
             System.out.println("Fehler bei MillisInDate()");
         }
         return day + ". " + month;
     }
 
-    private boolean refresh(){
+    private boolean refresh() {
         TextView event = (TextView) root.findViewById(R.id.Event);
         LinearLayout eventList = (LinearLayout) root.findViewById(R.id.eventList);
         eventList.removeAllViews();
-        if(eventsThisDay.isEmpty()){
+        if (eventsThisDay.isEmpty()) {
             event.setVisibility(View.VISIBLE);
             event.setText(R.string.noEventMessage);
             return false;
         }
         event.setVisibility(View.GONE);
-        for(int x = 0; x < eventsThisDay.size(); x++){
+        for (int x = 0; x < eventsThisDay.size(); x++) {
             View eventView = LayoutInflater.from(this.getContext()).inflate(
                     R.layout.event_layout, null);
             String[] split = eventsThisDay.get(x).getData().toString().split(Pattern.quote("°"));
@@ -537,11 +527,11 @@ public class CalendarFragment extends Fragment {
             int i;
             int y;
             int z = -1;
-            for(i = 0; i < ownEvents.size(); i++){
-                if(eventsThisDay.get(x).equals(ownEvents.get(i))){
+            for (i = 0; i < ownEvents.size(); i++) {
+                if (eventsThisDay.get(x).equals(ownEvents.get(i))) {
                     deleteButton.setVisibility(View.VISIBLE);
-                    for(y = 0; y < events.size(); y++){
-                        if(eventsThisDay.get(x).equals(events.get(y))){
+                    for (y = 0; y < events.size(); y++) {
+                        if (eventsThisDay.get(x).equals(events.get(y))) {
                             z = y;
                         }
                     }
@@ -559,7 +549,7 @@ public class CalendarFragment extends Fragment {
         return true;
     }
 
-    private void askDelete(int pos1){
+    private void askDelete(int pos1) {
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
@@ -582,28 +572,27 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    private void save(ArrayList<Event> ev, boolean own){
+    private void save(ArrayList<Event> ev, boolean own) {
         ArrayList<CustomEvent> customEvents = new ArrayList<>();
-        for(Event event:
-             ev){
+        for (Event event :
+                ev) {
             customEvents.add(new CustomEvent(event.getColor(), event.getTimeInMillis(), event.getData()));
         }
-        if(own){
+        if (own) {
             (new Util()).save(getContext(), customEvents, "ownEvents");
-        }
-        else {
+        } else {
             (new Util()).save(getContext(), customEvents, "events");
         }
     }
 
-    private void delete(Event ev1){
+    private void delete(Event ev1) {
         events.remove(ev1);
         ArrayList<Event> oEvents = new ArrayList<>();
         oEvents.addAll(ownEvents);
         ownEvents.clear();
-        for(Event e:
-             oEvents){
-            if(events.contains(e)){
+        for (Event e :
+                oEvents) {
+            if (events.contains(e)) {
                 ownEvents.add(e);
             }
         }
@@ -614,25 +603,25 @@ public class CalendarFragment extends Fragment {
         refresh();
     }
 
-    private void dateClicked(Date date){
-        for(int x = 0; x < events.size(); x++){
-            if(date.getTime() <= events.get(x).getTimeInMillis() && (date.getTime() + 86400000L) > events.get(x).getTimeInMillis()) {
+    private void dateClicked(Date date) {
+        for (int x = 0; x < events.size(); x++) {
+            if (date.getTime() <= events.get(x).getTimeInMillis() && (date.getTime() + 86400000L) > events.get(x).getTimeInMillis()) {
                 eventsThisDay.add(events.get(x));
             }
         }
         refresh();
     }
 
-    private void dateClicked(long date){
-        for(int x = 0; x < events.size(); x++){
-            if(date <= events.get(x).getTimeInMillis() && (date + 86400000L) > events.get(x).getTimeInMillis()){
+    private void dateClicked(long date) {
+        for (int x = 0; x < events.size(); x++) {
+            if (date <= events.get(x).getTimeInMillis() && (date + 86400000L) > events.get(x).getTimeInMillis()) {
                 boolean already = false;
-                for(int y = 0; y < eventsThisDay.size(); y++){
-                    if(eventsThisDay.get(y).equals(events.get(x))){
+                for (int y = 0; y < eventsThisDay.size(); y++) {
+                    if (eventsThisDay.get(y).equals(events.get(x))) {
                         already = true;
                     }
                 }
-                if(!already) {
+                if (!already) {
                     eventsThisDay.add(events.get(x));
                 }
             }
@@ -647,13 +636,13 @@ public class CalendarFragment extends Fragment {
             ArrayList<Event> eventsToAdd = new ArrayList<>();
             try {
                 eventsToAdd.addAll(getEvents());
-                for(int x = 0; x < eventsToAdd.size(); x++){
-                    if(events.contains(eventsToAdd.get(x))){
+                for (int x = 0; x < eventsToAdd.size(); x++) {
+                    if (events.contains(eventsToAdd.get(x))) {
                         eventsToAdd.remove(x);
                     }
                 }
-                for(Event ev :
-                        eventsToAdd){
+                for (Event ev :
+                        eventsToAdd) {
                     if (!events.contains(ev)) {
                         events.add(ev);
                     }
@@ -664,7 +653,8 @@ public class CalendarFragment extends Fragment {
 
                 save(events, false);
 
-            } catch (Exception e){}
+            } catch (Exception e) {
+            }
 
             return null;
         }
@@ -674,7 +664,7 @@ public class CalendarFragment extends Fragment {
             Date datum = null;
             try {
                 datum = (Date) formatter.parse(date);
-            }catch (java.text.ParseException e){
+            } catch (java.text.ParseException e) {
                 Log.e(TAG, "Error", e);
             }
             long timestamp = datum.getTime();
@@ -682,7 +672,7 @@ public class CalendarFragment extends Fragment {
         }
 
         private ArrayList<Event> getEvents() {
-            try{
+            try {
                 URL url = new URL(urlLink);
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(url.openStream()));
 
@@ -700,6 +690,7 @@ public class CalendarFragment extends Fragment {
                 long endDate = -1;
                 int startMonth = -1;
                 int endMonth = -1;
+                String uid = null;
                 String startTime = null;
                 String endTime = null;
                 String location = null;
@@ -724,20 +715,20 @@ public class CalendarFragment extends Fragment {
                             int day = Integer.valueOf(x.substring(6, 8));
                             String date = day + "." + startMonth + "." + year;
                             startDate = timeInMillis(date);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                         try {
                             String minutes = x.substring(11, 13);
                             int hours = Integer.valueOf(x.substring(9, 11));
-                            if(startMonth > 3 && startMonth < 11){
+                            if (startMonth > 3 && startMonth < 11) {
                                 startTime = (hours + 2) + ":" + minutes + " Uhr";
-                            }
-                            else if(startMonth > 10 || startMonth < 4){
+                            } else if (startMonth > 10 || startMonth < 4) {
                                 startTime = (hours + 1) + ":" + minutes + " Uhr";
-                            }
-                            else{
+                            } else {
                                 System.out.println("Fehler bei Berechnung der Startzeit");
                             }
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                     } else if (s.startsWith("DTSTART;VALUE=DATE:")) {
                         String x = s.replace("DTSTART;VALUE=DATE:", "");
                         try {
@@ -746,7 +737,8 @@ public class CalendarFragment extends Fragment {
                             int day = Integer.valueOf(x.substring(6, 8));
                             String date = day + "." + month + "." + year;
                             startDate = timeInMillis(date);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                     } else if (s.startsWith("DTEND:")) {
                         String x = s.replace("DTEND:", "");
                         try {
@@ -755,20 +747,20 @@ public class CalendarFragment extends Fragment {
                             int day = Integer.valueOf(x.substring(6, 8));
                             String date = day + "." + endMonth + "." + year;
                             endDate = timeInMillis(date);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                         try {
                             String minutes = x.substring(11, 13);
                             int hours = Integer.valueOf(x.substring(9, 11));
-                            if(endMonth > 3 && endMonth < 11){
+                            if (endMonth > 3 && endMonth < 11) {
                                 endTime = (hours + 2) + ":" + minutes + " Uhr";
-                            }
-                            else if(endMonth > 10 || endMonth < 4){
+                            } else if (endMonth > 10 || endMonth < 4) {
                                 endTime = (hours + 1) + ":" + minutes + " Uhr";
-                            }
-                            else{
+                            } else {
                                 System.out.println("Fehler bei Berechnung der Endzeit");
                             }
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
                     } else if (s.startsWith("DTEND;VALUE=DATE:")) {
                         String x = s.replace("DTEND;VALUE=DATE:", "");
                         try {
@@ -777,13 +769,16 @@ public class CalendarFragment extends Fragment {
                             int day = Integer.valueOf(x.substring(6, 8));
                             String date = day + "." + month + "." + year;
                             endDate = timeInMillis(date);
-                        } catch (Exception e) {}
+                        } catch (Exception e) {
+                        }
+                    } else if (s.startsWith("UID:")) {
+                        uid = s.replace("UID:", "");
                     } else if (s.startsWith("SUMMARY:")) {
                         summary = s.replace("SUMMARY:", "");
                     } else if (s.startsWith("LOCATION:")) {
                         location = s.replace("LOCATION:", "");
                     } else if (s.startsWith("END:VEVENT")) {
-                        eventsToGet.add(new Event(Color.GREEN, startDate, startDate + "°" + endDate + "°" + startTime + "°" + endTime + "°" + location + "°" + summary));
+                        eventsToGet.add(new Event(Color.GREEN, startDate, startDate + "°" + endDate + "°" + startTime + "°" + endTime + "°" + location + "°" + summary + "°" + uid));
                     }
                 }
                 return eventsToGet;

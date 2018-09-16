@@ -181,6 +181,12 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
             }
         });
 
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bsd.cancel();
+            }
+        });
 
         bsd.setTitle(context.getString(R.string.editGrade));
 

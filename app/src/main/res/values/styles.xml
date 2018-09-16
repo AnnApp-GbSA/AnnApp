@@ -63,28 +63,6 @@
 
     </style>
 
-    <style name="AppThemeUglyForTesting" parent="BasicTheme">
-        <item name="colorPrimary">@color/lausap</item>
-        <item name="colorPrimaryDark">@color/lausapd</item>
-        <item name="colorAccent">@color/lausapa</item>
-        <item name="colorTimetableHeader">#616161</item>
-        <item name="subject0">@color/lausapa</item>
-        <item name="subject1">@color/lausapa</item>
-        <item name="subject2">@color/lausapa</item>
-        <item name="subject3">@color/lausapa</item>
-        <item name="subject4">@color/lausapa</item>
-        <item name="subject5">@color/lausapa</item>
-        <item name="subject6">@color/lausapa</item>
-        <item name="subject7">@color/lausapa</item>
-        <item name="subject8">@color/lausapa</item>
-        <item name="subject9">@color/lausapa</item>
-        <item name="subject10">@color/lausapa</item>
-        <item name="subject11">@color/lausapa</item>
-        <item name="subject12">@color/lausapa</item>
-        <item name="subject13">@color/lausapa</item>
-        <item name="subject14">@color/lausapa</item>
-    </style>
-
     <style name="AppThemeOrange" parent="BasicTheme">
 
         <item name="subject0">@color/cs1.0</item>
@@ -276,7 +254,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    
+
     <style name="NewDialog">
         <item name="android:windowBackground">@android:color/transparent</item>
         <item name="android:windowAnimationStyle">@android:style/Animation.Dialog</item>
