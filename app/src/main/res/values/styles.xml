@@ -45,10 +45,22 @@
 
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Default</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Default</item>
+
+        <item name="android:theme">@style/NavStyle_Default</item>
     </style>
 
     <style name="ButtonStyle_Default" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="NavStyle_Default">
+
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@android:color/darker_gray</item>
+
     </style>
 
     <style name="AppThemeUglyForTesting" parent="BasicTheme">
@@ -110,10 +122,21 @@
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Orange</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Orange</item>
 
+        <item name="android:theme">@style/NavStyle_Orange</item>
     </style>
 
     <style name="ButtonStyle_Orange" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/cs1.accent</item>
+    </style>
+
+    <style name="NavStyle_Orange">
+
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/cs1.primary</item>
+
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/cs1.accent</item>
+
     </style>
 
 
@@ -153,11 +176,24 @@
 
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Blue</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Blue</item>
+
+        <item name="android:theme">@style/NavStyle_Blue</item>
     </style>
 
     <style name="ButtonStyle_Blue" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
         <item name="android:textColor">@color/cs2.accent</item>
     </style>
+
+    <style name="NavStyle_Blue">
+
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/cs2.primary</item>
+
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/cs2.accent</item>
+
+    </style>
+
 
     <style name="AppThemeColorful" parent="BasicTheme">
         <item name="colorTimetableHeader">#616161</item>
@@ -193,6 +229,18 @@
 
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Color</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Color</item>
+
+        <item name="android:theme">@style/NavStyle_Colorful</item>
+    </style>
+
+    <style name="NavStyle_Colorful">
+
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/cs3.primary</item>
+
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/cs3.accent</item>
+
     </style>
 
     <style name="ButtonStyle_Color" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
@@ -261,9 +309,9 @@
     <style name="TimePickerTheme" parent="Theme.AppCompat.Light.Dialog" >
         <item name="colorPrimary">?colorPrimary</item>
         <item name="colorPrimaryDark">?colorPrimaryDark</item>
-        <item name="colorAccent">?colorAccent</item>
         <item name="android:textColor">?android:textColor</item>
-        <item name="android:windowBackground">?android:popupBackground</item>
+        <item name="android:headerBackground">?android:colorBackground</item>
+        <item name="android:dayOfWeekBackground">?android:colorBackground</item>
 
     </style>
 
@@ -272,6 +320,16 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:textColorTertiary">@android:color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.AppCompat.navTheme">
+
+        <!-- Color of text and icon when SELECTED -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+
+        <!-- Background color when SELECTED -->
+        <item name="colorControlHighlight">@color/colorAccent</item>
+
     </style>
 
 </resources>

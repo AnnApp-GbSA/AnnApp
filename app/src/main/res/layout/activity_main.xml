@@ -40,16 +40,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/syncWithCalendar"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="40dp"
+                android:layout_marginEnd="24dp"
                 android:layout_marginTop="8dp"
+                android:backgroundTint="@android:color/transparent"
+                android:tint="@android:color/white"
                 android:visibility="gone"
-                android:clickable="false"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_download" />
 
         </android.support.constraint.ConstraintLayout>
 
@@ -60,7 +64,8 @@
             android:layout_gravity="start"
             android:fitsSystemWindows="true"
             app:headerLayout="@layout/nav_header_main"
-            app:menu="@menu/activity_main_drawer">
+            app:menu="@menu/activity_main_drawer"
+            android:theme="?android:theme">
 
         </android.support.design.widget.NavigationView>
 

@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+import android.view.View;
 
 import java.util.Date;
 
@@ -95,6 +96,11 @@ public class MainActivity extends AppCompatActivity
                 }
             }
         });
+
+
+        findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.VISIBLE);
+
+        findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(

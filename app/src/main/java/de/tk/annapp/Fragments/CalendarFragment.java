@@ -103,7 +103,7 @@ public class CalendarFragment extends Fragment {
         }
 
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
-        ((Button)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSyncWithCalendar();
@@ -118,6 +118,13 @@ public class CalendarFragment extends Fragment {
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
+
+
+        /*for (Event e :
+                events) {
+        System.out.println(e.getData());
+        }*/
+
         compactCalendarView.addEvents(events);
 
         eventsThisDay.clear();
@@ -372,7 +379,7 @@ public class CalendarFragment extends Fragment {
                 String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(clicked));
                 String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(clicked));
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(), onDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                        getContext(), R.style.TimePickerTheme,onDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
                 datePickerDialog.setTitle(getString(R.string.chooseDate));
                 datePickerDialog.setCanceledOnTouchOutside(false);
                 datePickerDialog.show();
