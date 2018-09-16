@@ -35,12 +35,14 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import de.tk.annapp.Day;
 import de.tk.annapp.Lesson;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
+import de.tk.annapp.Task;
 import de.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
@@ -109,11 +111,14 @@ public class TimetableFragment extends Fragment {
 
         HorizontalScrollView sv = root.findViewById(R.id.background);
 
-        if (dividers) {
+        /*if (dividers) {
             sv.setBackgroundColor(Color.parseColor("#DADADA"));
         } else {
             sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
-        }
+        }*/
+
+        if(!dividers)
+            sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
         initializeTableView();
@@ -467,6 +472,7 @@ public class TimetableFragment extends Fragment {
                     selectedsubject.setRoom(roomInput.getText().toString());
                     oCSubject = selectedsubject;
                 }
+
                 System.out.println(oCSubject + "\\" + (roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString()) + "\\" + day + "\\" + time);
                 subjectManager.setLesson(new Lesson(oCSubject, roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString(), day, time));
 

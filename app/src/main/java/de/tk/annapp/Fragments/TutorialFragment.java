@@ -165,7 +165,7 @@ public class TutorialFragment extends Fragment{
 
 
     public void addDotsIndicator(int position){
-        dots = new TextView[2];
+        dots = new TextView[7];
         dotLayout.removeAllViews();
 
         for (int i = 0; i < dots.length; i++){
@@ -178,7 +178,6 @@ public class TutorialFragment extends Fragment{
         }
 
         if(dots.length > 0){
-
             dots[position].setTextColor(getResources().getColor(R.color.colorWhite));
         }
     }

@@ -118,7 +118,9 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/room"
-                android:inputType="textShortMessage"/>
+                android:inputType="textShortMessage"
+                android:layout_marginBottom="@dimen/marginBottom"/>
+
 
             <ImageView
                 android:id="@+id/btnRoomHelp"

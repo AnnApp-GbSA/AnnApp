@@ -57,14 +57,12 @@ public class FeedbackFragment extends Fragment {
         Intent i = new Intent(Intent.ACTION_SENDTO);
         i.setData(Uri.parse("mailto:"));
         i.putExtra(Intent.EXTRA_EMAIL, new String[]{"gbsanna1531@gmail.com"});
-        //TODO Set name from actual user into the subject of the feedbackMessage
         i.putExtra(Intent.EXTRA_SUBJECT, "FEEDBACK - AnnApp");
         i.putExtra(Intent.EXTRA_TEXT, feedbackText.getText().toString());
 
         try{
             startActivity(Intent.createChooser(i, "send mail"));
         } catch (android.content.ActivityNotFoundException e){
-            //TODO make it a StringRessource
             Toast.makeText(this.getContext(), R.string.noMailApp, Toast.LENGTH_SHORT).show();
         } catch (Exception e){
             Toast.makeText(this.getContext(), getString(R.string.error) + e.getMessage(), Toast.LENGTH_SHORT).show();

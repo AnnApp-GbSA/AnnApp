@@ -16,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -30,8 +31,11 @@ public class MainActivity extends AppCompatActivity
     private SubjectManager subjectManager;
 
     private String currentFragmentTag= null;
+    private String prevFragmentTag = null;
     private Bundle currentFragmentBundle = null;
 
+    private NavigationView navigationView = null;
+    public static int colorScheme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,17 +44,21 @@ public class MainActivity extends AppCompatActivity
         //setTheme(R.style.AppTheme_green);
         switch (getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition),0)){
             case 0:
+                colorScheme = R.style.AppThemeDefault;
                 //TODO nur zum Anzeigen
                 //setTheme(R.style.Tim);
                 //setTheme(R.style.AppThemeColorful);
                 break;
             case 1:
+                colorScheme = R.style.AppThemeOrange;
                 setTheme(R.style.AppThemeOrange);
                 break;
             case 2:
+                colorScheme = R.style.AppThemeBlue;
                 setTheme(R.style.AppThemeBlue);
                 break;
             case 3:
+                colorScheme = R.style.AppThemeColorful;
                 setTheme(R.style.AppThemeColorful);
         }
 
@@ -73,14 +81,26 @@ public class MainActivity extends AppCompatActivity
 
         subjectManager.load();
 
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                FragmentManager fm = getFragmentManager();
+
+                if(fm.getBackStackEntryCount() > 0) {
+                    currentFragmentTag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName();
+                    selectNavigationDrawerItem(currentFragmentTag);
+                }
+            }
+        });
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
 
         if(getPreferences(MODE_PRIVATE).getBoolean("firstLaunch", true)){
             setFragment(TutorialFragment.TAG);
@@ -91,14 +111,15 @@ public class MainActivity extends AppCompatActivity
                 setFragment(savedInstanceState.getString("fragmentTag", HomeFragment.TAG));
             else
                 setFragment(HomeFragment.TAG);
+                navigationView.getMenu().getItem(0).setChecked(true);
         }
-
     }
 
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        Fragment myFragment = getFragmentManager().findFragmentByTag(GradeChildFragment.class.getSimpleName());
+
+        /*Fragment myFragment = getFragmentManager().findFragmentByTag(GradeChildFragment.class.getSimpleName());
         if (myFragment != null && myFragment.isVisible()) {
             setFragment(GradesFragment.TAG);
             drawer.closeDrawer(GravityCompat.START);
@@ -107,6 +128,19 @@ public class MainActivity extends AppCompatActivity
             drawer.closeDrawer(GravityCompat.START);
         } else {
              super.onBackPressed();
+        }*/
+
+        FragmentManager fm = getFragmentManager();
+        //Fragment myFragment = getFragmentManager().findFragmentByTag(prevFragmentTag);
+        if(drawer.isDrawerOpen(GravityCompat.START)){
+            drawer.closeDrawer(GravityCompat.START);
+        }else if(fm.getBackStackEntryCount() > 1) {
+
+            fm.popBackStack();
+
+            drawer.closeDrawer(GravityCompat.START);
+        }else {
+            super.onBackPressed();
         }
     }
 
@@ -140,9 +174,9 @@ public class MainActivity extends AppCompatActivity
             setFragment(TasksFragment.TAG);
         } else if (id == R.id.nav_calendar) {
             setFragment(CalendarFragment.TAG);
-        } /*else if (id == R.id.nav_representationplan) {
+        } else if (id == R.id.nav_representationplan) {
             setFragment(RepresentationPlan.TAG);
-        }*/ else if (id == R.id.nav_annanews) {
+        } else if (id == R.id.nav_annanews) {
             setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
             setFragment(SettingsFragment.TAG);
@@ -209,7 +243,7 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.content_frame, fragment)
-                .addToBackStack(null)
+                .addToBackStack(tag)
                 .commit();
 
         currentFragmentTag = tag;
@@ -220,5 +254,42 @@ public class MainActivity extends AppCompatActivity
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(getString(R.string.bundlekey_fragmentTag),currentFragmentTag );
+    }
+
+    public void selectNavigationDrawerItem(String tag){
+
+        switch (tag){
+            case HomeFragment.TAG:
+                navigationView.getMenu().getItem(0).setChecked(true); break;
+            case TimetableFragment.TAG:
+                navigationView.getMenu().getItem(1).setChecked(true); break;
+            case GradesFragment.TAG:
+                navigationView.getMenu().getItem(2).setChecked(true); break;
+            case CalendarFragment.TAG:
+                navigationView.getMenu().getItem(4).setChecked(true); break;
+            case AnnanewsFragment.TAG:
+                navigationView.getMenu().getItem(6).setChecked(true); break;
+            case FeedbackFragment.TAG:
+                navigationView.getMenu().getItem(8).setChecked(true); break;
+            case SettingsFragment.TAG:
+                navigationView.getMenu().getItem(9).setChecked(true); break;
+            case TasksFragment.TAG:
+                navigationView.getMenu().getItem(3).setChecked(true); break;
+            case GradeChildFragment.TAG:
+                navigationView.getMenu().getItem(2).setChecked(true); break;
+        }
+
+    }
+
+    @Override
+    protected void onStop() {
+        subjectManager.save();
+        super.onStop();
+    }
+
+    @Override
+    protected void onDestroy() {
+        subjectManager.save();
+        super.onDestroy();
     }
 }

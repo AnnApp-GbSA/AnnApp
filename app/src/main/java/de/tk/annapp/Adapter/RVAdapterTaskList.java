@@ -5,11 +5,15 @@ import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Build;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,17 +40,33 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private ArrayList<Task> tasks = new ArrayList<>();
     private SubjectManager subjectManager;
     private TextView taskMessage;
-    int pos;
-    int colorSchemePosition;
-    boolean isPreview;
+    private int pos;
+    private int colorScheme;
+    private boolean isPreview;
 
     public RVAdapterTaskList(Context context, TextView taskMessage, int colorSchemePosition, boolean isPreview) {
 
         this.context = context;
         this.taskMessage = taskMessage;
         subjectManager = SubjectManager.getInstance();
-        this.colorSchemePosition = colorSchemePosition;
         this.isPreview = isPreview;
+
+        switch (colorSchemePosition){
+            case 0:
+                colorScheme = R.style.AppThemeDefault;
+                break;
+            case 1:
+                colorScheme = R.style.AppThemeOrange;
+                break;
+            case 2:
+                colorScheme = R.style.AppThemeBlue;
+                break;
+            case 3:
+                colorScheme = R.style.AppThemeColorful;
+                break;
+            default:
+                colorScheme = R.style.AppThemeDefault;
+        }
         constructor();
 
     }
@@ -54,6 +74,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     void constructor() {
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DAY_OF_YEAR, -1);
+
 
         pos = -1;
 
@@ -189,25 +210,33 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     }
 
     public void createEditDialog(final Task task) {
-        AlertDialog.Builder ad = new AlertDialog.Builder(context);
+        BottomSheetDialog bsd = new BottomSheetDialog(context, R.style.NewDialog);
+
+        //Find a method to get the current Theme Resource ID
 
         View mView = View.inflate(context, R.layout.dialog_edit_task, null);
 
         Calendar now = Calendar.getInstance();
         String[] duedates;
-        /*if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
+        if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
             duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", "Datum auswählen"};
         else
-            duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};*/
+            duedates = new String[]{"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche", Util.getFullDate(task.getDue()), "Datum auswählen"};
 
         duedates = new String[]{context.getString(R.string.nextLesson), context.getString(R.string.next2Lesson), context.getString(R.string.tomorrow), context.getString(R.string.nextWeek), Util.getFullDate(task.getDue()), context.getString(R.string.chooseDate)};
 
         String[] kinds = new String[]{context.getString(R.string.homework), context.getString(R.string.exam), context.getString(R.string.note)};
 
-        final EditText taskInput = (EditText) mView.findViewById(R.id.taskInput);
+        final EditText taskInput = (EditText) mView.findViewById(R.id.edit_taskInput);
         taskInput.setText(String.valueOf(task.getTask()));
 
-        final Spinner kindSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_kind);
+        final TextView subjectName = mView.findViewById(R.id.edit_grade_subjectText);
+        subjectName.setText(task.getSubject().getName());
+
+        final FloatingActionButton cancelBtn = mView.findViewById(R.id.edit_task_btnCancel);
+        final FloatingActionButton okBtn = mView.findViewById(R.id.edit_task_btnOK);
+
+        final Spinner kindSelection = (Spinner) mView.findViewById(R.id.edit_spinner_task_input_kind);
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, kinds);
         kindSelection.setAdapter(adapterKind);
         if (task.getKind().equals(context.getString(R.string.homework_short))) {
@@ -221,7 +250,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         }
 
-        final Spinner timeSelection = (Spinner) mView.findViewById(R.id.timeInput);
+        final Spinner timeSelection = (Spinner) mView.findViewById(R.id.edit_spinner_task_input_time);
         ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, duedates);
         timeSelection.setAdapter(adapterTime);
         timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -258,78 +287,76 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         });
         timeSelection.setSelection(4);
 
-        ad.setTitle(context.getString(R.string.editTask) + task.getSubject().getName())
-                .setView(mView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
+        bsd.setTitle(context.getString(R.string.editTask));
 
-                        if (taskInput.getText().toString().isEmpty()) {
-                            createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
-                            return;
-                        }
 
-                        Calendar due = Calendar.getInstance();
-                        SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
-                        if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
-                            due = task.getSubject().getNextLessonAfter(due, sls);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
-                            System.out.println(due);
-                            due = task.getSubject().getNextLessonAfter(task.getSubject().getNextLessonAfter(due, sls), sls);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
-                            due.add(Calendar.DAY_OF_YEAR, 1);
-                        } else if (timeSelection.getSelectedItem().toString().equals("Nächste Woche")) {
-                            due.add(Calendar.WEEK_OF_YEAR, 1);
-                        } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
-                            due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
-                        } else {
-                            createAlertDialog(/*getString(R.string.warning)*/"Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
-                            return;
-                        }
+        cancelBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bsd.cancel();
+            }
+        });
 
-                        String shortKind;//TODO change this... somehow
-                        String s = (String) kindSelection.getSelectedItem();
-                        if (s.equals(context.getString(R.string.homework))) {
-                            shortKind = context.getString(R.string.homework_short);
-                        } else if (s.equals(context.getString(R.string.exam))) {
-                            shortKind = context.getString(R.string.exam_short);
-                        } else if (s.equals(context.getString(R.string.note))) {
-                            shortKind = context.getString(R.string.note_short);
-                        } else {
-                            shortKind = context.getString(R.string.error);
-                        }
+        okBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (taskInput.getText().toString().isEmpty()) {
+                    createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                    return;
+                }
 
-                        task.setDue(due);
-                        task.setKind(shortKind);
-                        task.setTask(taskInput.getText().toString());
-                        notifyItemChanged(tasks.indexOf(task));
-                        int altindex = tasks.indexOf(task);
-                        constructor();
-                        int newindex = tasks.indexOf(task);
-                        notifyItemMoved(altindex, newindex);
+                Calendar due = Calendar.getInstance();
+                SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
+                if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
+                    due = task.getSubject().getNextLessonAfter(due, sls);
+                } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
+                    System.out.println(due);
+                    due = task.getSubject().getNextLessonAfter(task.getSubject().getNextLessonAfter(due, sls), sls);
+                } else if (timeSelection.getSelectedItem().toString().equals("Morgen")) {
+                    due.add(Calendar.DAY_OF_YEAR, 1);
+                } else if (timeSelection.getSelectedItem().toString().equals("Nächste Woche")) {
+                    due.add(Calendar.WEEK_OF_YEAR, 1);
+                } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
+                    due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
+                } else {
+                    createAlertDialog(context.getString(R.string.warning) + "Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                    return;
+                }
 
-                        subjectManager.save();
-                    }
-                })
-                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        //Do nothing
+                String shortKind;//TODO change this... somehow
+                String s = (String) kindSelection.getSelectedItem();
+                if (s.equals(context.getString(R.string.homework))) {
+                    shortKind = context.getString(R.string.homework_short);
+                } else if (s.equals(context.getString(R.string.exam))) {
+                    shortKind = context.getString(R.string.exam_short);
+                } else if (s.equals(context.getString(R.string.note))) {
+                    shortKind = context.getString(R.string.note_short);
+                } else {
+                    shortKind = context.getString(R.string.error);
+                }
 
-                    }
-                });
+                task.setDue(due);
+                task.setKind(shortKind);
+                task.setTask(taskInput.getText().toString());
+                notifyItemChanged(tasks.indexOf(task));
+                int altindex = tasks.indexOf(task);
+                constructor();
+                int newindex = tasks.indexOf(task);
+                notifyItemMoved(altindex, newindex);
 
-        ad.show();
+                bsd.cancel();
+            }
+        });
+
+        bsd.setContentView(mView);
+        bsd.show();
     }
 
 
     void createAlertDialog(String title, String text, int ic) {
-        AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(context);
-        }
+
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, colorScheme);
+
         builder.setTitle(title)
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -342,12 +369,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     public void askDelete(final Task task) {
 
-        final AlertDialog.Builder builder;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(context, android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(context);
-        }
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, colorScheme);
+
         builder.setTitle(R.string.deleteQuestion)
                 .setMessage(context.getString(R.string.deleteQuestionMessageTask))
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -360,9 +383,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         //I think - do Nothing - but if you want
                     }
                 })
-                .setIcon(android.R.drawable.ic_delete)
-                .show();
+                .setIcon(android.R.drawable.ic_delete);
 
+
+        AlertDialog askDialog = builder.show();
+        askDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = askDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        askDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
     }
 
@@ -377,8 +405,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         tasks.remove(task);
         notifyItemRemoved(index);
-
-        subjectManager.save();
 
         if (tasks.isEmpty()) {
             taskMessage.setVisibility(View.VISIBLE);
