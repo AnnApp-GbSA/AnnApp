@@ -23,43 +23,43 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            android:background="?colorPrimaryDark" />
+            android:background="?android:colorBackground" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?colorPrimaryDark"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/monthBack"
-            android:layout_width="70dp"
-            android:layout_height="25dp"
-            android:layout_marginLeft="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/ic_arrowandroid"
-            android:backgroundTint="@android:color/white" />
-
-        <TextView
-            android:id="@+id/monthIndication"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:textColor="@android:color/white"
-            android:gravity="center"/>
+            android:background="?android:colorBackground"
+            android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/monthForward"
-            android:layout_width="70dp"
-            android:layout_height="25dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@drawable/ic_arrowandroid"
-            android:backgroundTint="@android:color/white"
-            android:rotation="180" />
-    </LinearLayout>
+            <Button
+                android:id="@+id/monthBack"
+                android:layout_width="70dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_arrowandroid"
+                android:backgroundTint="?android:textColorPrimary" />
+
+            <TextView
+                android:id="@+id/monthIndication"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="?android:textColorPrimary" />
+
+            <Button
+                android:id="@+id/monthForward"
+                android:layout_width="70dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_arrowandroid"
+                android:backgroundTint="?android:textColorPrimary"
+                android:rotation="180" />
+        </LinearLayout>
 
         <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/compactcalendar_view"
@@ -68,30 +68,38 @@
             android:paddingLeft="10dp"
             android:paddingRight="10dp"
             android:visibility="visible"
-            app:compactCalendarBackgroundColor="?colorPrimaryDark"
+            app:compactCalendarBackgroundColor="?android:colorBackground"
             app:compactCalendarCurrentDayBackgroundColor="?colorPrimary"
             app:compactCalendarCurrentSelectedDayBackgroundColor="?colorAccent"
             app:compactCalendarMultiEventIndicatorColor="#fff"
             app:compactCalendarTargetHeight="250dp"
-            app:compactCalendarTextColor="@android:color/white"
+            app:compactCalendarTextColor="?android:textColorPrimary"
             app:compactCalendarTextSize="12sp" />
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        app:srcCompat="@drawable/gradient" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/gradient" />
 
-    <TextView
-        android:id="@+id/dateInformation"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center"/>
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider"/>
+
+        <TextView
+            android:id="@+id/dateInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/Event"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text=""/>
+            android:text="" />
 
         <ScrollView
             android:layout_width="match_parent"

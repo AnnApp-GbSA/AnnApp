@@ -190,4 +190,6 @@
     <string name="calendar">Schulkalender</string>
     <string name="ok">OK</string>
     <string name="noEventMessage">Kein Event an diesem Tag</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
 </resources>

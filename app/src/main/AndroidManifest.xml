@@ -2,11 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="de.tk.annapp">
 
-    <!--Permissions-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
-
+    <!-- Permissions -->
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -41,23 +38,19 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".NewsDetailActivity"
-            android:parentActivityName=".MainActivity"
-            android:largeHeap="true"
-            android:supportsRtl="true"
             android:label="@string/AnnaNews"
+            android:largeHeap="true"
+            android:parentActivityName=".MainActivity"
+            android:supportsRtl="true"
             android:theme="@style/AppThemeDefault">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
-
         </activity>
-
 
     </application>
 
