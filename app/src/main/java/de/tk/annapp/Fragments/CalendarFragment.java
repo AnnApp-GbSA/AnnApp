@@ -5,6 +5,7 @@ import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -29,6 +30,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 
@@ -126,7 +128,7 @@ public class CalendarFragment extends Fragment {
         new getCalendarData().execute((Void) null);
 
         monthIndication.setText(dateFormatMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
-        dateInformation.setText(MillisInDate(System.currentTimeMillis()));
+        dateInformation.setText(MillisInDate(System.currentTimeMillis(), false, true));
         dateClicked(System.currentTimeMillis());
 
         monthBack.setOnClickListener(new View.OnClickListener() {
@@ -135,7 +137,7 @@ public class CalendarFragment extends Fragment {
                 compactCalendarView.scrollLeft();
                 eventsThisDay.clear();
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
-                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime()));
+                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
             }
         });
@@ -146,7 +148,7 @@ public class CalendarFragment extends Fragment {
                 compactCalendarView.scrollRight();
                 eventsThisDay.clear();
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
-                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime()));
+                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
             }
         });
@@ -156,7 +158,7 @@ public class CalendarFragment extends Fragment {
             public void onDayClick(Date dateClicked) {
                 clicked = dateClicked.getTime();
                 eventsThisDay.clear();
-                dateInformation.setText(MillisInDate(dateClicked.getTime()));
+                dateInformation.setText(MillisInDate(dateClicked.getTime(), false, true));
                 dateClicked(dateClicked);
             }
 
@@ -166,7 +168,7 @@ public class CalendarFragment extends Fragment {
                     monthIndication.setText(dateFormatMonth.format(firstDayOfNewMonth));
                     clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
                     eventsThisDay.clear();
-                    dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime()));
+                    dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
                     dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
                 } else
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -251,94 +253,54 @@ public class CalendarFragment extends Fragment {
     }
 
     private String getSummary(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        String summary = split[5];
+        String[] split = ev.getData().toString().split(Pattern.quote("°°"));
+        String summary = split[2];
         return summary;
     }
 
     private String getUID(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        String uid = split[6];
+        String[] split = ev.getData().toString().split(Pattern.quote("°°"));
+        String uid = split[3];
         return uid;
     }
 
     private String getLocation(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        String location = split[4];
+        String[] split = ev.getData().toString().split(Pattern.quote("°°"));
+        String location = split[1];
         return location;
     }
 
     private String getStartDate(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        System.out.println("String0:" + split[0]);
-        String startDate = split[0];
-        String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(startDate)));
-        String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(startDate)));
-        String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(Long.valueOf(startDate)));
+        String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(ev.getTimeInMillis()));
+        String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(ev.getTimeInMillis()));
+        String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(ev.getTimeInMillis()));
         return year + month + day;
     }
 
     private String getStartTime(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        String startTime = split[2];
-        if (!startTime.equals(null)) {
-            String[] splitTime = startTime.split(Pattern.quote(":"));
-            String hour = splitTime[0];
-            String minute = "00";
-            if (splitTime.length > 1) {
-                minute = splitTime[1];
-                String[] splitMinute = minute.split(Pattern.quote(" "));
-                minute = splitMinute[0];
-                if (Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0) {
-                    minute = "0" + minute;
-                }
-            }
-            try {
-                if (Integer.valueOf(hour) < 10 && Integer.valueOf(hour) != 0) {
-                    hour = "0" + hour;
-                }
-            } catch (Exception e) {
-                return "1";
-            }
-            return hour + minute;
-        }
-        return "1";
+        String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(ev.getTimeInMillis()));
+        String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(ev.getTimeInMillis()));
+        return hour + minute;
     }
 
     private String getEndDate(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        String endDate = split[1];
+        String[] split = ev.getData().toString().split(Pattern.quote("°°"));
+        String endDate = split[0];
         if (!endDate.equals("")) {
             String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(Long.valueOf(endDate)));
             String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(Long.valueOf(endDate)));
             String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(Long.valueOf(endDate)));
             return year + month + day;
         }
-        return "";
+        return "1";
     }
 
     private String getEndTime(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°"));
-        String endTime = split[3];
+        String[] split = ev.getData().toString().split(Pattern.quote("°°"));
+        String endTime = split[0];
         if (!endTime.equals(null)) {
-            String[] splitTime = endTime.split(Pattern.quote(":"));
-            String hour = splitTime[0];
-            String minute = "00";
-            if (splitTime.length > 1) {
-                minute = splitTime[1];
-                String[] splitMinute = minute.split(Pattern.quote(" "));
-                minute = splitMinute[0];
-                if (Integer.valueOf(minute) < 10 && Integer.valueOf(minute) != 0) {
-                    minute = "0" + minute;
-                }
-            }
-            try {
-                if (Integer.valueOf(hour) < 10 && Integer.valueOf(hour) != 0) {
-                    hour = "0" + hour;
-                }
-            } catch (Exception e) {
-                return "1";
-            }
+            String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(Long.valueOf(endTime)));
+            String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(Long.valueOf(endTime)));
             return hour + minute;
         }
         return "1";
@@ -352,27 +314,67 @@ public class CalendarFragment extends Fragment {
 
         final EditText eventInput = (EditText) mView.findViewById(R.id.eventInput);
         final Button btnStartDateInput = (Button) mView.findViewById(R.id.startDateInput);
-        final EditText endDateInput = (EditText) mView.findViewById(R.id.endDateInput);
-        final EditText endTimeInput = (EditText) mView.findViewById(R.id.endTimeInput);
-        final EditText startTimeInput = (EditText) mView.findViewById(R.id.startTimeInput);
+        final Button btnEndDateInput = (Button) mView.findViewById(R.id.endDateInput);
         final EditText locationInput = (EditText) mView.findViewById(R.id.locationInput);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        btnStartDateInput.setText(MillisInDate(clicked));
+        btnStartDateInput.setText(MillisInDate(clicked, false, true));
         Date start = new Date(clicked);
+        Date end = new Date(clicked);
+        final boolean[] change = {false};
 
-        DatePickerDialog.OnDateSetListener onDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        DatePickerDialog.OnDateSetListener onStartDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
-            public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(clicked));
+                String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(clicked));
                 start.setYear(year - 1900);
-                start.setMonth(monthOfYear);
+                start.setMonth(month);
                 start.setDate(dayOfMonth);
-                btnStartDateInput.setText(MillisInDate(start.getTime()));
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        getContext(), R.style.TimePickerTheme, onStartTimeSetListener, Integer.valueOf(hour), Integer.valueOf(minute), true);
+                timePickerDialog.setTitle("Uhrzeit auswählen");
+                timePickerDialog.setCanceledOnTouchOutside(false);
+                timePickerDialog.show();
             }
+            TimePickerDialog.OnTimeSetListener onStartTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    start.setHours(hourOfDay);
+                    start.setMinutes(minute);
+                    btnStartDateInput.setText(MillisInDate(start.getTime(), true, true));
+                }
+            };
         };
+
+        DatePickerDialog.OnDateSetListener onEndDateSetListener = new DatePickerDialog.OnDateSetListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                String hour = new java.text.SimpleDateFormat("hh").format(start);
+                String minute = new java.text.SimpleDateFormat("mm").format(start);
+                end.setYear(year - 1900);
+                end.setMonth(month);
+                end.setDate(dayOfMonth);
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        getContext(), R.style.TimePickerTheme, onEndTimeSetListener, Integer.valueOf(hour), Integer.valueOf(minute), true);
+                timePickerDialog.setTitle("Uhrzeit auswählen");
+                timePickerDialog.setCanceledOnTouchOutside(false);
+                timePickerDialog.show();
+            }
+            TimePickerDialog.OnTimeSetListener onEndTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+                @Override
+                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                    end.setHours(hourOfDay);
+                    end.setMinutes(minute);
+                    btnEndDateInput.setText(MillisInDate(end.getTime(), true, true));
+                    change[0] = true;
+                }
+            };
+        };
+
         btnStartDateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -380,7 +382,21 @@ public class CalendarFragment extends Fragment {
                 String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(clicked));
                 String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(clicked));
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(), R.style.TimePickerTheme,onDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                        getContext(), R.style.TimePickerTheme, onStartDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                datePickerDialog.setTitle(getString(R.string.chooseDate));
+                datePickerDialog.setCanceledOnTouchOutside(false);
+                datePickerDialog.show();
+            }
+        });
+
+        btnEndDateInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String day = new java.text.SimpleDateFormat("dd").format(start);
+                String month = new java.text.SimpleDateFormat("MM").format(start);
+                String year = new java.text.SimpleDateFormat("yyyy").format(start);
+                DatePickerDialog datePickerDialog = new DatePickerDialog(
+                        getContext(), R.style.TimePickerTheme, onEndDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
                 datePickerDialog.setTitle(getString(R.string.chooseDate));
                 datePickerDialog.setCanceledOnTouchOutside(false);
                 datePickerDialog.show();
@@ -419,8 +435,12 @@ public class CalendarFragment extends Fragment {
                 int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
 
                 String uid = String.valueOf(eventInput.getText().toString().hashCode());
-
-                Event ev1 = new Event(color, start.getTime(), start.getTime() + "°" + endDateInput.getText().toString() + "°" + startTimeInput.getText().toString() + "°" + endTimeInput.getText().toString() + "°" + locationInput.getText().toString() + "°" + eventInput.getText().toString() + "°" + uid);
+                Event ev1;
+                if(change[0] == false){
+                    ev1 = new Event(color, start.getTime(), "" + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
+                }else {
+                    ev1 = new Event(color, start.getTime(), end.getTime() + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
+                }
                 compactCalendarView.addEvent(ev1);
                 events.add(ev1);
                 ownEvents.add(ev1);
@@ -454,9 +474,11 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    private String MillisInDate(long time) {
+    private String MillisInDate(long time, boolean withTime, boolean withDate) {
         String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(time));
         String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(time));
+        String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(time));
+        String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(time));
         if (month.equals("01")) {
             month = "Januar";
         } else if (month.equals("02")) {
@@ -484,6 +506,12 @@ public class CalendarFragment extends Fragment {
         } else {
             System.out.println("Fehler bei MillisInDate()");
         }
+        if(withTime && withDate) {
+            return day + ". " + month + "  " + hour + ":" + minute;
+        }
+        if(withTime){
+            return hour + ":" + minute;
+        }
         return day + ". " + month;
     }
 
@@ -500,13 +528,24 @@ public class CalendarFragment extends Fragment {
         for (int x = 0; x < eventsThisDay.size(); x++) {
             View eventView = LayoutInflater.from(this.getContext()).inflate(
                     R.layout.event_layout, null);
-            String[] split = eventsThisDay.get(x).getData().toString().split(Pattern.quote("°"));
-            String startDate = split[0];
-            String endDate = split[1];
-            String startTime = split[2];
-            String endTime = split[3];
-            String location = split[4];
-            String summary = split[5];
+            String[] split = eventsThisDay.get(x).getData().toString().split(Pattern.quote("°°"));
+            String startDate = MillisInDate(eventsThisDay.get(x).getTimeInMillis(), false, true);
+            String startTime = MillisInDate(eventsThisDay.get(x).getTimeInMillis(), true, false);
+            String endDate = "";
+            String endTime = "";
+            try {
+                endDate = MillisInDate(Long.valueOf(split[0]), false, true);
+                endTime = MillisInDate(Long.valueOf(split[0]), true, false);
+            }catch(Exception e){}
+            String[] splitEnd = endDate.split(Pattern.quote(". "));
+            String[] splitStart = startDate.split(Pattern.quote(". "));
+            try {
+                if (Integer.valueOf(splitEnd[0]) > Integer.valueOf(splitStart[0]) || Integer.valueOf(splitEnd[1]) > Integer.valueOf(splitStart[1])) {
+                    endTime = MillisInDate(Long.valueOf(split[0]), true, true);
+                }
+            }catch(Exception e){}
+            String location = split[1];
+            String summary = split[2];
 
             TextView startTimeTxt = eventView.findViewById(R.id.startTime);
             startTimeTxt.setText("Beginn: " + startTime);
@@ -660,12 +699,13 @@ public class CalendarFragment extends Fragment {
         }
 
         private long timeInMillis(String date) throws ParseException {
-            DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
+            DateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm");
             Date datum = null;
             try {
                 datum = (Date) formatter.parse(date);
             } catch (java.text.ParseException e) {
                 Log.e(TAG, "Error", e);
+                System.out.println("ganz schwerer Fehler");
             }
             long timestamp = datum.getTime();
             return timestamp;
@@ -690,9 +730,9 @@ public class CalendarFragment extends Fragment {
                 long endDate = -1;
                 int startMonth = -1;
                 int endMonth = -1;
+                int startHour = -1;
+                int endHour = -1;
                 String uid = null;
-                String startTime = null;
-                String endTime = null;
                 String location = null;
                 String summary = null;
 
@@ -703,8 +743,9 @@ public class CalendarFragment extends Fragment {
                         endDate = -1;
                         startMonth = -1;
                         endMonth = -1;
-                        startTime = null;
-                        endTime = null;
+                        startHour = -1;
+                        endHour = -1;
+                        uid = null;
                         location = null;
                         summary = null;
                     } else if (s.startsWith("DTSTART:")) {
@@ -713,20 +754,17 @@ public class CalendarFragment extends Fragment {
                             int year = Integer.valueOf(x.substring(0, 4));
                             startMonth = Integer.valueOf(x.substring(4, 6));
                             int day = Integer.valueOf(x.substring(6, 8));
-                            String date = day + "." + startMonth + "." + year;
-                            startDate = timeInMillis(date);
-                        } catch (Exception e) {
-                        }
-                        try {
                             String minutes = x.substring(11, 13);
                             int hours = Integer.valueOf(x.substring(9, 11));
                             if (startMonth > 3 && startMonth < 11) {
-                                startTime = (hours + 2) + ":" + minutes + " Uhr";
+                                startHour = (hours + 2);
                             } else if (startMonth > 10 || startMonth < 4) {
-                                startTime = (hours + 1) + ":" + minutes + " Uhr";
+                                startHour = (hours + 1);
                             } else {
                                 System.out.println("Fehler bei Berechnung der Startzeit");
                             }
+                            String date = day + "." + startMonth + "." + year + " " + startHour + ":" + minutes;
+                            startDate = timeInMillis(date);
                         } catch (Exception e) {
                         }
                     } else if (s.startsWith("DTSTART;VALUE=DATE:")) {
@@ -735,7 +773,7 @@ public class CalendarFragment extends Fragment {
                             int year = Integer.valueOf(x.substring(0, 4));
                             int month = Integer.valueOf(x.substring(4, 6));
                             int day = Integer.valueOf(x.substring(6, 8));
-                            String date = day + "." + month + "." + year;
+                            String date = day + "." + month + "." + year + " " + "00:00";
                             startDate = timeInMillis(date);
                         } catch (Exception e) {
                         }
@@ -745,20 +783,17 @@ public class CalendarFragment extends Fragment {
                             int year = Integer.valueOf(x.substring(0, 4));
                             endMonth = Integer.valueOf(x.substring(4, 6));
                             int day = Integer.valueOf(x.substring(6, 8));
-                            String date = day + "." + endMonth + "." + year;
-                            endDate = timeInMillis(date);
-                        } catch (Exception e) {
-                        }
-                        try {
                             String minutes = x.substring(11, 13);
                             int hours = Integer.valueOf(x.substring(9, 11));
                             if (endMonth > 3 && endMonth < 11) {
-                                endTime = (hours + 2) + ":" + minutes + " Uhr";
+                                endHour = (hours + 2);
                             } else if (endMonth > 10 || endMonth < 4) {
-                                endTime = (hours + 1) + ":" + minutes + " Uhr";
+                                endHour = (hours + 1);
                             } else {
                                 System.out.println("Fehler bei Berechnung der Endzeit");
                             }
+                            String date = day + "." + endMonth + "." + year + " " + endHour + ":" + minutes;
+                            endDate = timeInMillis(date);
                         } catch (Exception e) {
                         }
                     } else if (s.startsWith("DTEND;VALUE=DATE:")) {
@@ -767,7 +802,7 @@ public class CalendarFragment extends Fragment {
                             int year = Integer.valueOf(x.substring(0, 4));
                             int month = Integer.valueOf(x.substring(4, 6));
                             int day = Integer.valueOf(x.substring(6, 8));
-                            String date = day + "." + month + "." + year;
+                            String date = day + "." + month + "." + year + " " + "00:00";
                             endDate = timeInMillis(date);
                         } catch (Exception e) {
                         }
@@ -778,7 +813,7 @@ public class CalendarFragment extends Fragment {
                     } else if (s.startsWith("LOCATION:")) {
                         location = s.replace("LOCATION:", "");
                     } else if (s.startsWith("END:VEVENT")) {
-                        eventsToGet.add(new Event(Color.GREEN, startDate, startDate + "°" + endDate + "°" + startTime + "°" + endTime + "°" + location + "°" + summary + "°" + uid));
+                        eventsToGet.add(new Event(Color.GREEN, startDate, endDate + "°°" + location + "°°" + summary + "°°" + uid));
                     }
                 }
                 return eventsToGet;

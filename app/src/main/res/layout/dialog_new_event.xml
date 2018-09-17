@@ -60,26 +60,12 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <EditText
-                android:id="@+id/startTimeInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Startzeit" />
-
-            <EditText
+            <Button
                 android:id="@+id/endDateInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="Enddatum" />
-
-            <EditText
-                android:id="@+id/endTimeInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Endzeit" />
 
             <EditText
                 android:id="@+id/locationInput"
