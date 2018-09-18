@@ -17,6 +17,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -39,6 +40,7 @@ import java.util.Calendar;
 
 import de.tk.annapp.Day;
 import de.tk.annapp.Lesson;
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.R;
 import de.tk.annapp.Subject;
 import de.tk.annapp.SubjectManager;
@@ -653,8 +655,13 @@ public class TimetableFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setIcon(ic)
-                .show();
+                .setIcon(ic);
+
+        AlertDialog alertDialog = builder.show();
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
     }
 
@@ -674,7 +681,7 @@ public class TimetableFragment extends Fragment {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Light_Dialog);
+            builder = new AlertDialog.Builder(this.getContext(), MainActivity.colorScheme);
         } else {
             builder = new AlertDialog.Builder(this.getContext());
         }
@@ -704,9 +711,13 @@ public class TimetableFragment extends Fragment {
                         bsd.cancel();
                     }
                 })
-                .setIcon(R.drawable.ic_delete)
-                .show();
+                .setIcon(R.drawable.ic_delete);
 
+        AlertDialog alertDialog = builder.show();
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     private void setMargins(View view, int left, int top, int right, int bottom) {

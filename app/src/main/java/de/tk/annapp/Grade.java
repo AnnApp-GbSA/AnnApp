@@ -15,7 +15,6 @@ public class Grade implements Serializable{
     private String note;
 
     private Subject subject;
-
     //private Calendar date;
 
     public Grade(Subject subject, int grade, boolean iswritten, float rating, String note){

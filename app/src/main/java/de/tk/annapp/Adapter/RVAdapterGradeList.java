@@ -10,6 +10,7 @@ import android.os.Build;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.RecyclerView;
+import android.util.SparseBooleanArray;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -51,29 +53,16 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     boolean isWrittenBool;
     AlertDialog adTrueDialog;
 
+    private SparseBooleanArray mTogglePositions;
+
     public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage, int colorSchemePosition){
         this.context = context;
         subjectManager = SubjectManager.getInstance();
         this.subject = subject;
         grades = subject.getAllGrades();
         this.gradeMessage = gradeMessage;
+        mTogglePositions = new SparseBooleanArray();
 
-        switch (colorSchemePosition){
-            case 0:
-                colorScheme = R.style.AppThemeDefault;
-                break;
-            case 1:
-                colorScheme = R.style.AppThemeOrange;
-                break;
-            case 2:
-                colorScheme = R.style.AppThemeBlue;
-                break;
-            case 3:
-                colorScheme = R.style.AppThemeColorful;
-                break;
-            default:
-                colorScheme = R.style.AppThemeDefault;
-        }
     }
 
     @Override
@@ -84,12 +73,14 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     @Override
     public void onBindViewHolder(RecyclerVH holder, final int position) {
+
         holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
 
         if(!grades.get(position).getNote().isEmpty())
-            holder.expandableTextView.setText(grades.get(position).getNote() + "\n" +  context.getString(R.string.ratingList) + grades.get(position).getRating());
+            holder.expandableTextView.setText(grades.get(position).getNote() + "\n" +  context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions , position);
         else
-            holder.expandableTextView.setText(context.getString(R.string.ratingList) + grades.get(position).getRating());
+            holder.expandableTextView.setText(context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions, position);
+
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -104,6 +95,8 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 createEditDialog(grades.get(position));
             }
         });
+
+
     }
 
     @Override
@@ -117,6 +110,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         ExpandableTextView expandableTextView;
         ImageButton editButton;
         ImageButton deleteButton;
+        RelativeLayout relativeLayout;
 
         public RecyclerVH(View itemView){
             super(itemView);

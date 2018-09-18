@@ -17,6 +17,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -27,6 +28,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.R;
 import de.tk.annapp.Adapter.RVAdapterTaskList;
 import de.tk.annapp.SchoolLessonSystem;
@@ -279,7 +281,7 @@ public class TasksFragment extends Fragment {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this.getContext(), MainActivity.colorScheme);
         } else {
             builder = new AlertDialog.Builder(this.getContext());
         }
@@ -289,7 +291,12 @@ public class TasksFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setIcon(ic)
-                .show();
+                .setIcon(ic);
+
+        AlertDialog alertDialog = builder.show();
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 }

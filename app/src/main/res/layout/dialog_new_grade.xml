@@ -24,7 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"
-                android:popupBackground="?colorPrimary"
+                android:popupBackground="?android:colorPrimary"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -51,7 +51,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textColor="?android:textColor"/>
+                android:textColor="?android:textColor"
                 android:text="@string/oral"/>
 
             <RadioButton
@@ -59,8 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="@string/written"/>
-                android:text="schriftlich"
+                android:text="@string/written"
                 android:textColor="?android:textColor"/>
 
         </RadioGroup>
@@ -72,7 +71,7 @@
             android:layout_gravity="left"
             android:background="#00000000"
             android:text="@string/expand"
-            android:textColor="?colorAccent" />
+            android:textColor="?android:colorAccent" />
 
         <LinearLayout
             android:id="@+id/extraLayout"

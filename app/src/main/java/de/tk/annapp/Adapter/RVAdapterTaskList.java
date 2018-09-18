@@ -363,8 +363,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     public void onClick(DialogInterface dialog, int which) {
                     }
                 })
-                .setIcon(ic)
-                .show();
+                .setIcon(ic);
+
+        AlertDialog alertDialog = builder.show();
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     public void askDelete(final Task task) {
@@ -386,11 +391,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 .setIcon(android.R.drawable.ic_delete);
 
 
-        AlertDialog askDialog = builder.show();
-        askDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams lp = askDialog.getWindow().getAttributes();
+        AlertDialog alertDialog = builder.show();
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
-        askDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
     }
 
