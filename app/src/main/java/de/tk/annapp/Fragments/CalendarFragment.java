@@ -75,6 +75,7 @@ public class CalendarFragment extends Fragment {
     String urlLink = "https://calendar.google.com/calendar/ical/o5bthi1gtvamdjhed61rot1e74%40group.calendar.google.com/public/basic.ics";
     String urlLink2 = "https://calendar.google.com/calendar/embed?src=o5bthi1gtvamdjhed61rot1e74@group.calendar.google.com&ctz=Europe/Berlin&pli=1";
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
+    int e = 0;
 
     View root;
 
@@ -117,6 +118,8 @@ public class CalendarFragment extends Fragment {
         TextView dateInformation = root.findViewById(R.id.dateInformation);
         Button monthBack = root.findViewById(R.id.monthBack);
         Button monthForward = root.findViewById(R.id.monthForward);
+        Button ea = root.findViewById(R.id.e);
+        ea.setClickable(false);
         FloatingActionButton fabAdd = root.findViewById(R.id.fabAddCalendar);
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
@@ -150,6 +153,9 @@ public class CalendarFragment extends Fragment {
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
                 dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
+                if(e < 3)
+                    e++;
+                else e = 0;
             }
         });
 
@@ -160,6 +166,22 @@ public class CalendarFragment extends Fragment {
                 eventsThisDay.clear();
                 dateInformation.setText(MillisInDate(dateClicked.getTime(), false, true));
                 dateClicked(dateClicked);
+                if(e == 3){
+                    if(clicked == 1536789600000L) {
+                        ea.setVisibility(View.VISIBLE);
+                        ea.setClickable(true);
+                        ea.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                System.out.println("Easteregg gefunden!!");
+                                ea.setVisibility(View.GONE);
+                                ea.setClickable(false);
+                            }
+                        });
+                    }
+                    else
+                        e = 0;
+                }
             }
 
             @Override
