@@ -133,8 +133,8 @@ public class TimetableFragment extends Fragment {
 
         int u;
         System.out.println(subjectManager.getLongestDaysLessons());
-        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11) > subjectManager.getLongestDaysLessons())
-            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 11);
+        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12) > subjectManager.getLongestDaysLessons())
+            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12);
         else
             u = subjectManager.getLongestDaysLessons();
 

@@ -96,7 +96,6 @@ public class SettingsFragment extends Fragment {
         });
 
 
-
         //GENERAL Settings
         Button btnSchoolStart = root.findViewById(R.id.btnSchoolStart);
         try {
@@ -152,6 +151,12 @@ public class SettingsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty())
                     return;
+                if (Integer.valueOf(s.toString()) > 20) {
+                    breakTime.setText("60");
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_breakTime), 60).commit();
+                    setSchoolLessonSystem();
+                    return;
+                }
                 getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_breakTime), Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
             }
@@ -175,6 +180,11 @@ public class SettingsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty())
                     return;
+                if (Integer.valueOf(s.toString()) > 120) {
+                    lessonTime.setText("120");
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_lessonTime), 120).commit();
+                    return;
+                }
                 getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_lessonTime), Integer.valueOf(s.toString())).commit();
                 setSchoolLessonSystem();
             }
@@ -199,8 +209,14 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty())
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_maxLesson), Integer.valueOf(s.toString())).commit();
+                if (s.toString().isEmpty())
+                    return;
+                if (Integer.valueOf(s.toString()) > 20) {
+                    maxLessons.setText("20");
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_maxLesson), 20).commit();
+                    return;
+                }
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_maxLesson), Integer.valueOf(s.toString())).commit();
             }
         });
 
