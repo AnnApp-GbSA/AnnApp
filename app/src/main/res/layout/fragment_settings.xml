@@ -26,6 +26,25 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Farbschema:" />
+
+            <Spinner
+                android:id="@+id/colorSpinner"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
                 android:text="@string/schoolstart"/>
@@ -123,6 +142,12 @@
             android:text="@string/settings_timetable_gaps"
             android:textColor="?android:textColor"/>
 
+        <Switch
+            android:id="@+id/longClick"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Lange auf einer leeren Stunde bleiben um eine Neue hinzuzufügen" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -146,25 +171,6 @@
                 android:gravity="right"
                 android:hint="@string/settings_max_lessons"
                 android:inputType="number"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="Farbschema:" />
-
-            <Spinner
-                android:id="@+id/colorSpinner"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="0" />
-
         </LinearLayout>
 
     </LinearLayout>

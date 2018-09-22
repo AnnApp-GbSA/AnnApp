@@ -24,7 +24,7 @@
         <com.ms.square.android.expandabletextview.ExpandableTextView
             android:id="@+id/expandable_text_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginStart="60dp"
             android:layout_marginTop="12dp"
             android:paddingEnd="5dp"
@@ -33,10 +33,11 @@
 
             <TextView
                 android:id="@+id/expandable_text"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="50dp"
                 android:layout_weight="1"
+                android:background="@android:color/holo_green_light"
                 android:textSize="16sp"
                 appNs:layout_constraintBottom_toBottomOf="parent"
                 appNs:layout_constraintStart_toStartOf="parent"
@@ -51,7 +52,7 @@
                 android:background="@android:color/transparent"
                 android:textAlignment="viewEnd"
                 appNs:layout_constraintBottom_toBottomOf="parent"
-                appNs:layout_constraintEnd_toEndOf="parent"/>
+                appNs:layout_constraintEnd_toEndOf="parent" />
 
         </com.ms.square.android.expandabletextview.ExpandableTextView>
 

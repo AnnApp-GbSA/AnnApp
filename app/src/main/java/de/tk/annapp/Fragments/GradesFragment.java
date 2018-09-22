@@ -215,9 +215,15 @@ public class GradesFragment extends Fragment {
                         recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));                    }
                 })*/
 
-    private void createAlertDialog(String title, String text, int ic) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getContext(), MainActivity.colorScheme);
 
+    void createAlertDialog(String title, String text, int ic) {
+        AlertDialog.Builder builder;
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(this.getContext(), MainActivity.colorScheme);
+        } else {
+            builder = new AlertDialog.Builder(this.getContext());
+        }
         builder.setTitle(title)
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {

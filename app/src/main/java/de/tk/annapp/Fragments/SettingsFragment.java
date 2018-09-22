@@ -72,6 +72,31 @@ public class SettingsFragment extends Fragment {
         });
 
 
+        Switch longClickSwitch = root.findViewById(R.id.longClick);
+
+        //Setting Switch to actual setting
+        Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+        timetableDividersSwitch.setChecked(longClick);
+
+
+        longClickSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+
+                SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+                SharedPreferences.Editor myPrefEditor = myPrefs.edit();
+                myPrefEditor.putBoolean(getString(R.string.key_longClick), b);
+                myPrefEditor.commit();
+
+
+                SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+
+                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+            }
+        });
+
+
+
         //GENERAL Settings
         Button btnSchoolStart = root.findViewById(R.id.btnSchoolStart);
         try {

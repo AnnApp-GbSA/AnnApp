@@ -6,17 +6,22 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.icu.text.DateFormat;
 import android.icu.text.SimpleDateFormat;
 import android.net.ParseException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +29,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -50,12 +56,14 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Random;
 import java.util.regex.Pattern;
 
 import de.tk.annapp.CustomEvent;
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.R;
 import de.tk.annapp.Util;
 
@@ -107,7 +115,7 @@ public class CalendarFragment extends Fragment {
         }
 
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
-        ((ImageButton)getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
+        ((ImageButton) getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onSyncWithCalendar();
@@ -126,12 +134,28 @@ public class CalendarFragment extends Fragment {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.addEvents(events);
 
+        /*for (Event e :
+                events) {
+            System.out.println((StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true)))[0] < (StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true)))[0]);
+            if(StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[0] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true,true))[0] &&
+                    StringInDate(MillisInDate(e.getTimeInMillis(), false, true,true))[1] <= StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1] ||
+                    StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[1] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1]){
+                System.out.println("hässlichste if der welt erreicht!");
+                long oneDay = 86400000L;
+                long day = e.getTimeInMillis() - e.getTimeInMillis()%oneDay;
+                long endDay = getEndTimeMillis(e) - getEndTimeMillis(e)%oneDay;
+                for (int days = 1; day+(days*oneDay)<= endDay; days++){
+                    compactCalendarView.addEvent(new Event(e.getColor(),e.getTimeInMillis()+(days*oneDay)));
+                }
+            }
+        }*/
+
         eventsThisDay.clear();
 
         new getCalendarData().execute((Void) null);
 
         monthIndication.setText(dateFormatMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
-        dateInformation.setText(MillisInDate(System.currentTimeMillis(), false, true));
+        dateInformation.setText(MillisInDate(System.currentTimeMillis(), false, true, false));
         dateClicked(System.currentTimeMillis());
 
         monthBack.setOnClickListener(new View.OnClickListener() {
@@ -140,7 +164,7 @@ public class CalendarFragment extends Fragment {
                 compactCalendarView.scrollLeft();
                 eventsThisDay.clear();
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
-                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
+                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
             }
         });
@@ -151,7 +175,7 @@ public class CalendarFragment extends Fragment {
                 compactCalendarView.scrollRight();
                 eventsThisDay.clear();
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
-                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
+                dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
                 if(e < 3)
                     e++;
@@ -164,7 +188,7 @@ public class CalendarFragment extends Fragment {
             public void onDayClick(Date dateClicked) {
                 clicked = dateClicked.getTime();
                 eventsThisDay.clear();
-                dateInformation.setText(MillisInDate(dateClicked.getTime(), false, true));
+                dateInformation.setText(MillisInDate(dateClicked.getTime(), false, true, false));
                 dateClicked(dateClicked);
                 if(e == 3){
                     if(clicked == 1536789600000L) {
@@ -190,7 +214,7 @@ public class CalendarFragment extends Fragment {
                     monthIndication.setText(dateFormatMonth.format(firstDayOfNewMonth));
                     clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
                     eventsThisDay.clear();
-                    dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true));
+                    dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
                     dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
                 } else
                     Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
@@ -262,6 +286,54 @@ public class CalendarFragment extends Fragment {
 
     public void onSyncWithCalendar() {
         checkPermission();
+
+
+        long calID = 3;
+        long startMillis = 0;
+        long endMillis = 0;
+        Calendar beginTime = Calendar.getInstance();
+        beginTime.set(2012, 9, 14, 7, 30);
+        startMillis = beginTime.getTimeInMillis();
+        Calendar endTime = Calendar.getInstance();
+        endTime.set(2012, 9, 14, 8, 45);
+        endMillis = endTime.getTimeInMillis();
+
+        ContentResolver cr = getContext().getContentResolver();
+        ContentValues values = new ContentValues();
+        values.put(CalendarContract.Events.DTSTART, startMillis);
+        values.put(CalendarContract.Events.DTEND, endMillis);
+        values.put(CalendarContract.Events.TITLE, "Jazzercise");
+        values.put(CalendarContract.Events.DESCRIPTION, "Group workout");
+        values.put(CalendarContract.Events.CALENDAR_ID, calID);
+        values.put(CalendarContract.Events.EVENT_TIMEZONE, "Europe/Berlin");
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+
+// get the event ID that is the last element in the Uri
+        long eventID = Long.parseLong(uri.getLastPathSegment());
+//
+// ... do something with event ID
+//
+//
+
+        /*for (Event e : events) {
+            if (e.getTimeInMillis() > System.currentTimeMillis() - 31536000000L){
+
+            Calendar beginTime = Calendar.getInstance();
+            beginTime.set(2012, 0, 19, 7, 30);
+            Calendar endTime = Calendar.getInstance();
+            endTime.set(2012, 0, 19, 8, 30);
+            Intent intent = new Intent(Intent.ACTION_INSERT)
+                    .setData(CalendarContract.Events.CONTENT_URI)
+                    .putExtra(CalendarContract.EXTRA_EVENT_BEGIN_TIME, getStartDate(e))
+                    .putExtra(CalendarContract.EXTRA_EVENT_END_TIME, getEndDate(e))
+                    .putExtra(CalendarContract.Events.TITLE, getSummary(e))
+                    .putExtra(CalendarContract.Events.DESCRIPTION, getSummary(e))
+                    .putExtra(CalendarContract.Events.EVENT_LOCATION, getLocation(e))
+                    .putExtra(CalendarContract.Events.AVAILABILITY, CalendarContract.Events.AVAILABILITY_BUSY)
+                    .putExtra(CalendarContract.Events.EVENT_COLOR, e.getColor());
+            startActivity(intent);}
+        }*/
+/*
         String content = new String("BEGIN:VCALENDAR\nPRODID:AnnApp\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:AnnApp\nX-WR-TIMEZONE:Europe/Berlin\nX-WR-CALDESC:\n");
         for (Event ev :
                 events) {
@@ -271,19 +343,13 @@ public class CalendarFragment extends Fragment {
         }
         content = content + "END:VCALENDAR";
         saveFile(FILE_NAME, content);
-        openFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);
+        openFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);*/
     }
 
     private String getSummary(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°°"));
         String summary = split[2];
         return summary;
-    }
-
-    private String getUID(Event ev) {
-        String[] split = ev.getData().toString().split(Pattern.quote("°°"));
-        String uid = split[3];
-        return uid;
     }
 
     private String getLocation(Event ev) {
@@ -320,12 +386,24 @@ public class CalendarFragment extends Fragment {
     private String getEndTime(Event ev) {
         String[] split = ev.getData().toString().split(Pattern.quote("°°"));
         String endTime = split[0];
-        if (!endTime.equals(null)) {
+        if (!endTime.equals("")) {
             String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(Long.valueOf(endTime)));
             String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(Long.valueOf(endTime)));
             return hour + minute;
         }
         return "1";
+    }
+
+    private Long getEndTimeMillis(Event event){
+        String[] split = event.getData().toString().split(Pattern.quote("°°"));
+        String endTime = split[0];
+        try{
+            Long timeMillis = Long.valueOf(endTime);
+            return timeMillis;
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return null;
     }
 
 
@@ -343,7 +421,7 @@ public class CalendarFragment extends Fragment {
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
 
-        btnStartDateInput.setText(MillisInDate(clicked, false, true));
+        btnStartDateInput.setText(MillisInDate(clicked, false, true, false));
         Date start = new Date(clicked);
         Date end = new Date(clicked);
         final boolean[] change = {false};
@@ -362,12 +440,13 @@ public class CalendarFragment extends Fragment {
                 timePickerDialog.setCanceledOnTouchOutside(false);
                 timePickerDialog.show();
             }
+
             TimePickerDialog.OnTimeSetListener onStartTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     start.setHours(hourOfDay);
                     start.setMinutes(minute);
-                    btnStartDateInput.setText(MillisInDate(start.getTime(), true, true));
+                    btnStartDateInput.setText(MillisInDate(start.getTime(), true, true, false));
                 }
             };
         };
@@ -386,12 +465,13 @@ public class CalendarFragment extends Fragment {
                 timePickerDialog.setCanceledOnTouchOutside(false);
                 timePickerDialog.show();
             }
+
             TimePickerDialog.OnTimeSetListener onEndTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
                 @Override
                 public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                     end.setHours(hourOfDay);
                     end.setMinutes(minute);
-                    btnEndDateInput.setText(MillisInDate(end.getTime(), true, true));
+                    btnEndDateInput.setText(MillisInDate(end.getTime(), true, true, false));
                     change[0] = true;
                 }
             };
@@ -458,9 +538,9 @@ public class CalendarFragment extends Fragment {
 
                 String uid = String.valueOf(eventInput.getText().toString().hashCode());
                 Event ev1;
-                if(change[0] == false){
+                if (change[0] == false) {
                     ev1 = new Event(color, start.getTime(), "" + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
-                }else {
+                } else {
                     ev1 = new Event(color, start.getTime(), end.getTime() + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
                 }
                 compactCalendarView.addEvent(ev1);
@@ -496,11 +576,24 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    private String MillisInDate(long time, boolean withTime, boolean withDate) {
+    private int[] StringInDate(String date){
+        String[] split = date.split(". ");
+        int[] ints = new int[2];
+        ints[0] = Integer.valueOf(split[0]);
+        ints[1] = Integer.valueOf(split[1]);
+        return ints;
+    }
+
+    private String MillisInDate(long time, boolean withTime, boolean withDate, boolean monthAsNumber) {
         String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(time));
         String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(time));
         String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(time));
         String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(time));
+
+        if(monthAsNumber && withDate && !withTime){
+            return day + ". " + month;
+        }
+
         if (month.equals("01")) {
             month = "Januar";
         } else if (month.equals("02")) {
@@ -528,12 +621,13 @@ public class CalendarFragment extends Fragment {
         } else {
             System.out.println("Fehler bei MillisInDate()");
         }
-        if(withTime && withDate) {
+        if (withTime && withDate) {
             return day + ". " + month + "  " + hour + ":" + minute;
         }
-        if(withTime){
+        if (withTime) {
             return hour + ":" + minute;
         }
+
         return day + ". " + month;
     }
 
@@ -551,21 +645,23 @@ public class CalendarFragment extends Fragment {
             View eventView = LayoutInflater.from(this.getContext()).inflate(
                     R.layout.event_layout, null);
             String[] split = eventsThisDay.get(x).getData().toString().split(Pattern.quote("°°"));
-            String startDate = MillisInDate(eventsThisDay.get(x).getTimeInMillis(), false, true);
-            String startTime = MillisInDate(eventsThisDay.get(x).getTimeInMillis(), true, false);
+            String startDate = MillisInDate(eventsThisDay.get(x).getTimeInMillis(), false, true, false);
+            String startTime = MillisInDate(eventsThisDay.get(x).getTimeInMillis(), true, false, false);
             String endDate = "";
             String endTime = "";
             try {
-                endDate = MillisInDate(Long.valueOf(split[0]), false, true);
-                endTime = MillisInDate(Long.valueOf(split[0]), true, false);
-            }catch(Exception e){}
+                endDate = MillisInDate(Long.valueOf(split[0]), false, true, false);
+                endTime = MillisInDate(Long.valueOf(split[0]), true, false, false);
+            } catch (Exception e) {
+            }
             String[] splitEnd = endDate.split(Pattern.quote(". "));
             String[] splitStart = startDate.split(Pattern.quote(". "));
             try {
                 if (Integer.valueOf(splitEnd[0]) > Integer.valueOf(splitStart[0]) || Integer.valueOf(splitEnd[1]) > Integer.valueOf(splitStart[1])) {
-                    endTime = MillisInDate(Long.valueOf(split[0]), true, true);
+                    endTime = MillisInDate(Long.valueOf(split[0]), true, true, false);
                 }
-            }catch(Exception e){}
+            } catch (Exception e) {
+            }
             String location = split[1];
             String summary = split[2];
 
@@ -613,7 +709,7 @@ public class CalendarFragment extends Fragment {
     private void askDelete(int pos1) {
         final AlertDialog.Builder builder;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
+            builder = new AlertDialog.Builder(this.getContext(), MainActivity.colorScheme);
         } else {
             builder = new AlertDialog.Builder(this.getContext());
         }
@@ -629,8 +725,14 @@ public class CalendarFragment extends Fragment {
                         //I think - do Nothing - but if you want
                     }
                 })
-                .setIcon(android.R.drawable.ic_delete)
-                .show();
+                .setIcon(android.R.drawable.ic_delete);
+
+        AlertDialog alertDialog = builder.show();
+
+        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+        lp.dimAmount = 0.7f;
+        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     private void save(ArrayList<Event> ev, boolean own) {
@@ -713,6 +815,8 @@ public class CalendarFragment extends Fragment {
                 compactCalendarView.addEvents(events);
 
                 save(events, false);
+
+
 
             } catch (Exception e) {
             }

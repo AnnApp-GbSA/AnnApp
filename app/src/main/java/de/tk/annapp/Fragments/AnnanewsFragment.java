@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Looper;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -58,8 +59,11 @@ public class AnnanewsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 new FetchFeedTask().execute((Void) null);
+                System.out.println("onRefresh");
             }
         });
+
+
 
 
         return root;
@@ -95,6 +99,7 @@ public class AnnanewsFragment extends Fragment {
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
+                Looper.prepare();
                 Toast.makeText(getContext(), R.string.noConnection, Toast.LENGTH_SHORT).show();
             } catch (XmlPullParserException e) {
                 Log.e(TAG, "Error", e);
@@ -146,7 +151,7 @@ public class AnnanewsFragment extends Fragment {
             while (article.contains("<a"))
                 article = xmlcut(article, "<a","</a>");
             while (article.contains("<span"))
-                article = xmlcut(article, "<span","n></span>");
+                article = xmlcut(article, "<span","</span>");
             article = article.replaceAll("<p>","");
             article = article.replaceAll("</p>","");
             while (article.contains("<p "))
@@ -248,6 +253,7 @@ public class AnnanewsFragment extends Fragment {
         edit = edit.replaceAll("&#8230;", "...");
         edit = edit.replaceAll("&nbsp;", "");
         edit = edit.replaceAll("&#8211;", "–");
+        edit = edit.replaceAll("<br />", "\n");
 
         return edit;
     }

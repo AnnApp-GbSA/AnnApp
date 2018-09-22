@@ -36,7 +36,6 @@ import android.widget.Toast;
 
 
 import java.util.ArrayList;
-import java.util.Calendar;
 
 import de.tk.annapp.Day;
 import de.tk.annapp.Lesson;
@@ -119,7 +118,7 @@ public class TimetableFragment extends Fragment {
             sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
         }*/
 
-        if(!dividers)
+        if (!dividers)
             sv.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
 
@@ -251,14 +250,14 @@ public class TimetableFragment extends Fragment {
 
         btn.setBackgroundColor(a.data);
 
-        btn.setTypeface(null, Typeface.BOLD);
+        btn.setTypeface(null, Typeface.BOLD);/*
 
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getContext(), "Clicked ", Toast.LENGTH_SHORT).show();
             }
-        });
+        });*/
 
         return btn;
     }
@@ -305,10 +304,29 @@ public class TimetableFragment extends Fragment {
             @Override
             public boolean onLongClick(View view) {
                 //Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
-                addLesson(view);
+                SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+
+                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+
+                if (longClick)
+                    addLesson(view);
                 return false;
             }
         });
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
+                SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+
+                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+
+                if (!longClick)
+                    addLesson(view);
+            }
+        });
+
         return btn;
     }
 
@@ -730,4 +748,3 @@ public class TimetableFragment extends Fragment {
     }
 
 }
-

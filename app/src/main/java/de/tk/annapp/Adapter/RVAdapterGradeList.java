@@ -72,7 +72,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     }
 
     @Override
-    public void onBindViewHolder(RecyclerVH holder, final int position) {
+    public void onBindViewHolder(RecyclerVH holder,  int position) {
 
         holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
 
@@ -268,9 +268,14 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 bsd.show();
     }
 
-    private void createAlertDialog(String title, String text, int ic){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
+    void createAlertDialog(String title, String text, int ic) {
+        AlertDialog.Builder builder;
 
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
+        } else {
+            builder = new AlertDialog.Builder(context);
+        }
         builder.setTitle(title)
                 .setMessage(text)
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
@@ -288,7 +293,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     public void askDelete(final Grade grade){
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, colorScheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
 
         builder.setTitle(R.string.deleteQuestion)
                 .setMessage(context.getString(R.string.deleteQuestionMessage))

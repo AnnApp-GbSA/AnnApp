@@ -286,18 +286,20 @@ public class SubjectManager {
     }
 
     public void mergeNews(ArrayList<News> news) {
-        ArrayList<News> reallyNewNews = new ArrayList<>();
-        for (News n : news) {
-            if (!this.news.contains(n)) {
-                System.out.println(n);
-                reallyNewNews.add(n);
-            } else
-                for (int i = 0; i < this.news.size(); i++)
-                    if (this.news.get(i).equals(n))
-                        this.news.set(i, n);
-        }
-        reallyNewNews.addAll(this.news);
-        this.news = reallyNewNews;
+//        ArrayList<News> reallyNewNews = new ArrayList<>();
+//        for (News n : news) {
+//            if (!this.news.contains(n)) {
+//                System.out.println(n);
+//                reallyNewNews.add(n);
+//            } else
+//                for (int i = 0; i < this.news.size(); i++)
+//                    if (this.news.get(i).equals(n))
+//                        this.news.set(i, n);
+//        }
+//        reallyNewNews.addAll(this.news);
+//        this.news = reallyNewNews;
+
+        this.news = news;
     }
 
     public void sortSubjects() {

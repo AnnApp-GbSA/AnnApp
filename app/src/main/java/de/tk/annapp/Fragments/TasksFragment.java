@@ -37,8 +37,6 @@ import de.tk.annapp.SubjectManager;
 import de.tk.annapp.Task;
 import de.tk.annapp.Util;
 
-import static android.R.layout.simple_spinner_dropdown_item;
-
 
 public class TasksFragment extends Fragment {
     View root;
@@ -69,7 +67,7 @@ public class TasksFragment extends Fragment {
 
         for (Subject s :
                 subjectManager.getSubjects()) {
-            if(!s.getAllTasks().isEmpty()){
+            if (!s.getAllTasks().isEmpty()) {
                 taskMessage.setVisibility(View.INVISIBLE);
             }
         }
@@ -100,7 +98,7 @@ public class TasksFragment extends Fragment {
     public void createInputDialog() {
 
 
-        final BottomSheetDialog bsd = new BottomSheetDialog(this.getContext(),R.style.NewDialog);
+        final BottomSheetDialog bsd = new BottomSheetDialog(this.getContext(), R.style.NewDialog);
 
         View mView = View.inflate(this.getContext(), R.layout.dialog_new_task, null); //TODO Eines der Layouts elemenieren
 
@@ -119,7 +117,6 @@ public class TasksFragment extends Fragment {
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_subject);
         ArrayAdapter<Subject> adapterSubject = new ArrayAdapter<>(getContext(), R.layout.white_spinner_item, subjects);
         subjectSelection.setAdapter(adapterSubject);
-
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_time);
         ArrayAdapter<String> adapterTime = new ArrayAdapter<>(this.getContext(), R.layout.spinner_item, duedates);
         timeSelection.setAdapter(adapterTime);
@@ -136,14 +133,14 @@ public class TasksFragment extends Fragment {
 
                         @Override
                         public void onDateSet(DatePicker datePicker, int year, int monthOfYear, int dayOfMonth) {
-                            String[] pos = new String[]{getString(R.string.nextLesson), getString(R.string.next2Lesson), getString(R.string.tomorrow), getString(R.string.nextWeek), dayOfMonth + "." + (monthOfYear+1) + "." + year, getString(R.string.chooseDate)};
+                            String[] pos = new String[]{getString(R.string.nextLesson), getString(R.string.next2Lesson), getString(R.string.tomorrow), getString(R.string.nextWeek), dayOfMonth + "." + (monthOfYear + 1) + "." + year, getString(R.string.chooseDate)};
                             ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(getContext(), R.layout.spinner_item, pos);
                             timeSelection.setAdapter(adapterTime);
                             timeSelection.setSelection(4);
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
-                            getContext(), onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                            getContext(), R.style.TimePickerTheme, onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
                     datePickerDialog.setTitle(getString(R.string.chooseDate));
                     datePickerDialog.setCanceledOnTouchOutside(false);
                     datePickerDialog.show();
@@ -189,9 +186,9 @@ public class TasksFragment extends Fragment {
 
                 SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals(getString(R.string.nextLesson))) {
-                    due = subject.getNextLessonAfter(due,sls);
+                    due = subject.getNextLessonAfter(due, sls);
                 } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.next2Lesson))) {
-                    due = subject.getNextLessonAfter(subject.getNextLessonAfter(due,sls),sls);
+                    due = subject.getNextLessonAfter(subject.getNextLessonAfter(due, sls), sls);
                 } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.tomorrow))) {
                     due.add(Calendar.DAY_OF_YEAR, 1);
                 } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.nextWeek))) {
@@ -272,8 +269,8 @@ public class TasksFragment extends Fragment {
                         subjectManager.save();
                     }
                 })*/
-                bsd.setContentView(mView);
-                bsd.show();
+        bsd.setContentView(mView);
+        bsd.show();
     }
 
 
@@ -299,4 +296,5 @@ public class TasksFragment extends Fragment {
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
+
 }
