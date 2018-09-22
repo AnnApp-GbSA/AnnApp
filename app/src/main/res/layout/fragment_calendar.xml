@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -15,109 +16,117 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add" />
 
-    <ScrollView
+    <Button
+        android:id="@+id/e"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Push me for an easteregg"
+        android:visibility="gone"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="83dp"
+        tools:layout_editor_absoluteY="161dp" />
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            android:background="?android:colorBackground" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:background="?android:colorBackground"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/monthBack"
+                android:layout_width="70dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_arrowandroid"
+                android:backgroundTint="?android:textColorPrimary" />
 
             <TextView
-                android:layout_width="match_parent"
-                android:layout_height="10dp"
-                android:background="?android:colorBackground" />
-
-            <LinearLayout
+                android:id="@+id/monthIndication"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="?android:colorBackground"
-                android:orientation="horizontal">
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textColor="?android:textColorPrimary" />
 
-                <Button
-                    android:id="@+id/monthBack"
-                    android:layout_width="70dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_arrowandroid"
-                    android:backgroundTint="?android:textColorPrimary" />
+            <Button
+                android:id="@+id/monthForward"
+                android:layout_width="70dp"
+                android:layout_height="25dp"
+                android:layout_marginRight="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/ic_arrowandroid"
+                android:backgroundTint="?android:textColorPrimary"
+                android:rotation="180" />
+        </LinearLayout>
 
-                <TextView
-                    android:id="@+id/monthIndication"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:textColor="?android:textColorPrimary" />
+        <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/compactcalendar_view"
+            android:layout_width="fill_parent"
+            android:layout_height="250dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:visibility="visible"
+            app:compactCalendarBackgroundColor="?android:colorBackground"
+            app:compactCalendarCurrentDayBackgroundColor="?colorPrimary"
+            app:compactCalendarCurrentSelectedDayBackgroundColor="?colorAccent"
+            app:compactCalendarMultiEventIndicatorColor="#fff"
+            app:compactCalendarTargetHeight="250dp"
+            app:compactCalendarTextColor="?android:textColorPrimary"
+            app:compactCalendarTextSize="12sp" />
 
-                <Button
-                    android:id="@+id/monthForward"
-                    android:layout_width="70dp"
-                    android:layout_height="25dp"
-                    android:layout_marginRight="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ic_arrowandroid"
-                    android:backgroundTint="?android:textColorPrimary"
-                    android:rotation="180" />
-            </LinearLayout>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="30dp"
+            android:visibility="gone"
+            app:srcCompat="@drawable/gradient" />
 
-            <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/compactcalendar_view"
-                android:layout_width="fill_parent"
-                android:layout_height="250dp"
-                android:paddingLeft="10dp"
-                android:paddingRight="10dp"
-                android:visibility="visible"
-                app:compactCalendarBackgroundColor="?android:colorBackground"
-                app:compactCalendarCurrentDayBackgroundColor="?colorPrimary"
-                app:compactCalendarCurrentSelectedDayBackgroundColor="?colorAccent"
-                app:compactCalendarMultiEventIndicatorColor="#fff"
-                app:compactCalendarTargetHeight="250dp"
-                app:compactCalendarTextColor="?android:textColorPrimary"
-                app:compactCalendarTextSize="12sp" />
+        <View
+            android:id="@+id/divider3"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:background="?android:attr/listDivider"/>
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="30dp"
-                android:visibility="gone"
-                app:srcCompat="@drawable/gradient" />
+        <TextView
+            android:id="@+id/dateInformation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center" />
 
-            <View
-                android:id="@+id/divider3"
-                android:layout_width="match_parent"
-                android:layout_height="3dp"
-                android:background="?android:attr/listDivider" />
+        <TextView
+            android:id="@+id/Event"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
 
-            <TextView
-                android:id="@+id/dateInformation"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="30dp"
-                android:gravity="center" />
-
-            <TextView
-                android:id="@+id/Event"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:id="@+id/eventList"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical" />
-
-            <include
-                layout="@layout/event_layout"
-                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:visibility="gone" />
+                android:orientation="vertical" />
+        </ScrollView>
 
-        </LinearLayout>
-    </ScrollView>
+        <include
+            layout="@layout/event_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
+    </LinearLayout>
 </android.support.constraint.ConstraintLayout>
