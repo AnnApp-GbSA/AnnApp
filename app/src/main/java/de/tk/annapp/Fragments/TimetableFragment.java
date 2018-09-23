@@ -142,11 +142,13 @@ public class TimetableFragment extends Fragment {
             TableRow tableRow = new TableRow(this.getContext());
             tableRow.setPadding(0, 0, 0, spacing);
 
-            TypedValue a = new TypedValue();
-            getContext().getTheme().resolveAttribute(R.attr.colorAccent, a, true);
+            if(dividers) {
+                TypedValue a = new TypedValue();
+                getContext().getTheme().resolveAttribute(R.attr.colorAccent, a, true);
 
-            tableRow.setBackgroundColor(a.data);
-
+                tableRow.setBackgroundColor(a.data);
+            }else
+                tableRow.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
             if (i == 0) {
 
@@ -300,7 +302,7 @@ public class TimetableFragment extends Fragment {
             getContext().getTheme().resolveAttribute(android.R.attr.colorBackground, a, true);
             btn.setBackgroundColor(a.data);
         } else
-            btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+           btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
 
         btn.setTag(position);
 

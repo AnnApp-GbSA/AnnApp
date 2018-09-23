@@ -62,7 +62,7 @@ public class SettingsFragment extends Fragment {
                 SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
                 SharedPreferences.Editor myPrefEditor = myPrefs.edit();
                 myPrefEditor.putBoolean(getString(R.string.key_timetableGaps), b);
-                myPrefEditor.commit();
+                myPrefEditor.apply();
 
 
                 SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
@@ -151,7 +151,7 @@ public class SettingsFragment extends Fragment {
             public void afterTextChanged(Editable s) {
                 if (s.toString().isEmpty())
                     return;
-                if (Integer.valueOf(s.toString()) > 20) {
+                if (Integer.valueOf(s.toString()) > 60) {
                     breakTime.setText("60");
                     getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_breakTime), 60).commit();
                     setSchoolLessonSystem();
