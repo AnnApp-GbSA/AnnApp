@@ -76,7 +76,7 @@ public class TasksFragment extends Fragment {
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), taskMessage, getActivity().getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0), false));
+        recyclerView.setAdapter(new RVAdapterTaskList(getActivity(), taskMessage, false));
 
         return root;
     }

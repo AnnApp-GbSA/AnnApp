@@ -142,6 +142,11 @@ public class TimetableFragment extends Fragment {
             TableRow tableRow = new TableRow(this.getContext());
             tableRow.setPadding(0, 0, 0, spacing);
 
+            TypedValue a = new TypedValue();
+            getContext().getTheme().resolveAttribute(R.attr.colorAccent, a, true);
+
+            tableRow.setBackgroundColor(a.data);
+
 
             if (i == 0) {
 
@@ -662,7 +667,7 @@ public class TimetableFragment extends Fragment {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Light_Dialog);
+            builder = new AlertDialog.Builder(this.getContext(), MainActivity.colorScheme);
         } else {
             builder = new AlertDialog.Builder(this.getContext());
         }

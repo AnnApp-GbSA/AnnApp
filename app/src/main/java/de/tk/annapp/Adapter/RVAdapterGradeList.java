@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -72,16 +73,29 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     }
 
     @Override
-    public void onBindViewHolder(RecyclerVH holder,  int position) {
+    public void onBindViewHolder(RecyclerVH holder, int position) {
+
 
         holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
+
+
+        holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(!grades.get((position)).getNote().isEmpty()) {
+                    notifyItemChanged(position);
+                    holder.expandableTextView.onClick(holder.expandableTextView);
+                    notifyItemChanged(position);
+                }
+            }
+        });
 
         if(!grades.get(position).getNote().isEmpty())
             holder.expandableTextView.setText(grades.get(position).getNote() + "\n" +  context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions , position);
         else
             holder.expandableTextView.setText(context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions, position);
 
-
+/*
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -94,8 +108,9 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 System.out.println("Create InputDialog...");
                 createEditDialog(grades.get(position));
             }
-        });
 
+        });
+*/
 
     }
 
@@ -108,16 +123,17 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     public class RecyclerVH extends RecyclerView.ViewHolder{
         TextView gradeTxt;
         ExpandableTextView expandableTextView;
-        ImageButton editButton;
-        ImageButton deleteButton;
+        //ImageButton editButton;
+        //ImageButton deleteButton;
         RelativeLayout relativeLayout;
 
         public RecyclerVH(View itemView){
             super(itemView);
-            editButton = itemView.findViewById(R.id.item_grade_button_edit);
-            deleteButton = itemView.findViewById(R.id.item_grade_button_delete);
+            //editButton = itemView.findViewById(R.id.item_grade_button_edit);
+            //deleteButton = itemView.findViewById(R.id.item_grade_button_delete);
             expandableTextView = itemView.findViewById(R.id.expandable_text_view);
             gradeTxt = itemView.findViewById(R.id.item_grade_grade);
+            relativeLayout = itemView.findViewById(R.id.item_grade_relativeLayout);
         }
     }
 

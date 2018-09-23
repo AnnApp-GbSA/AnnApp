@@ -26,6 +26,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import de.tk.annapp.MainActivity;
 import de.tk.annapp.SchoolLessonSystem;
 import de.tk.annapp.Task;
 import de.tk.annapp.R;
@@ -41,32 +42,15 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private SubjectManager subjectManager;
     private TextView taskMessage;
     private int pos;
-    private int colorScheme;
     private boolean isPreview;
 
-    public RVAdapterTaskList(Context context, TextView taskMessage, int colorSchemePosition, boolean isPreview) {
+    public RVAdapterTaskList(Context context, TextView taskMessage, boolean isPreview) {
 
         this.context = context;
         this.taskMessage = taskMessage;
         subjectManager = SubjectManager.getInstance();
         this.isPreview = isPreview;
 
-        switch (colorSchemePosition){
-            case 0:
-                colorScheme = R.style.AppThemeDefault;
-                break;
-            case 1:
-                colorScheme = R.style.AppThemeOrange;
-                break;
-            case 2:
-                colorScheme = R.style.AppThemeBlue;
-                break;
-            case 3:
-                colorScheme = R.style.AppThemeColorful;
-                break;
-            default:
-                colorScheme = R.style.AppThemeDefault;
-        }
         constructor();
 
     }
@@ -355,7 +339,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     void createAlertDialog(String title, String text, int ic) {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, colorScheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
 
         builder.setTitle(title)
                 .setMessage(text)
@@ -374,7 +358,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     public void askDelete(final Task task) {
 
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, colorScheme);
+        final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
 
         builder.setTitle(R.string.deleteQuestion)
                 .setMessage(context.getString(R.string.deleteQuestionMessageTask))

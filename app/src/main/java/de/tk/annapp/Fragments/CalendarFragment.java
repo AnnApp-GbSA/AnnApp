@@ -306,10 +306,10 @@ public class CalendarFragment extends Fragment {
         values.put(CalendarContract.Events.DESCRIPTION, "Group workout");
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, "Europe/Berlin");
-        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+        //Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
 
 // get the event ID that is the last element in the Uri
-        long eventID = Long.parseLong(uri.getLastPathSegment());
+        //long eventID = Long.parseLong(uri.getLastPathSegment());
 //
 // ... do something with event ID
 //

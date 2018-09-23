@@ -312,4 +312,8 @@
 
     </style>
 
+    <style name="ThemeEditText">
+        <item name="android:popupBackground">@android:color/transparent</item>
+    </style>
+
 </resources>

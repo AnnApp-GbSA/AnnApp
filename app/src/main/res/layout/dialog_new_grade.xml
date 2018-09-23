@@ -37,7 +37,9 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/grade"
-            android:inputType="number" />
+            android:inputType="number"
+            android:theme="@style/ThemeEditText"
+            />
 
         <RadioGroup
             android:layout_width="match_parent"
