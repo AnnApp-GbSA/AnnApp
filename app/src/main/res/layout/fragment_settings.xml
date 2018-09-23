@@ -140,13 +140,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_timetable_gaps"
-            android:textColor="?android:textColor"/>
+            android:textColor="?android:textColor" />
 
         <Switch
             android:id="@+id/longClick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lange auf einer leeren Stunde bleiben um eine Neue hinzuzufügen" />
+            android:text="Lange auf einer leeren Stunde bleiben um eine Neue hinzuzufügen"
+            android:textColor="?android:textColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -170,7 +171,8 @@
                 android:ems="10"
                 android:gravity="right"
                 android:hint="@string/settings_max_lessons"
-                android:inputType="number"/>
+                android:inputType="number"
+                />
         </LinearLayout>
 
     </LinearLayout>

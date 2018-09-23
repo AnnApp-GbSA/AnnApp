@@ -3,7 +3,6 @@ package de.tk.annapp.Fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -106,9 +105,11 @@ public class TimetableFragment extends Fragment {
 
         tableLayout = root.findViewById(R.id.tableLayout);
 
-        SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+        /*SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-        dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);
+        dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);*/
+
+        dividers = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_timetableGaps), false);
 
         HorizontalScrollView sv = root.findViewById(R.id.background);
 
@@ -311,9 +312,10 @@ public class TimetableFragment extends Fragment {
             @Override
             public boolean onLongClick(View view) {
                 //Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
-                SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+                /*SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);*/
+                Boolean longClick = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_longClick), true);
 
                 if (longClick)
                     addLesson(view);
@@ -325,9 +327,11 @@ public class TimetableFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 //Toast.makeText(getContext(), "Empty Cell pressed on Position" + view.getTag(), Toast.LENGTH_SHORT).show();
-                SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+                /*SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);*/
+
+                Boolean longClick = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_longClick), true);
 
                 if (!longClick)
                     addLesson(view);

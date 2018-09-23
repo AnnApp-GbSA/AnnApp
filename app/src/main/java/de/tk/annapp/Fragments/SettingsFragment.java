@@ -4,7 +4,6 @@ package de.tk.annapp.Fragments;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -50,16 +49,21 @@ public class SettingsFragment extends Fragment {
         Switch timetableDividersSwitch = root.findViewById(R.id.dividersSwitch);
 
         //Setting Switch to actual setting
-        SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
-        Boolean dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);
-        timetableDividersSwitch.setChecked(dividers);
+        Boolean dividers = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_timetableGaps), false);
+        if (dividers)
+            timetableDividersSwitch.setChecked(true);
+        else
+            timetableDividersSwitch.setChecked(false);
+
+
+        System.out.println("Show dividers: " + dividers);
 
 
         timetableDividersSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+                /*SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
                 SharedPreferences.Editor myPrefEditor = myPrefs.edit();
                 myPrefEditor.putBoolean(getString(R.string.key_timetableGaps), b);
                 myPrefEditor.apply();
@@ -67,7 +71,8 @@ public class SettingsFragment extends Fragment {
 
                 SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-                Boolean dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);
+                Boolean dividers = sp.getBoolean(getString(R.string.key_timetableGaps), false);*/
+                getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_timetableGaps), b).commit();
             }
         });
 
@@ -75,15 +80,16 @@ public class SettingsFragment extends Fragment {
         Switch longClickSwitch = root.findViewById(R.id.longClick);
 
         //Setting Switch to actual setting
-        Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
-        timetableDividersSwitch.setChecked(longClick);
+//        Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+        Boolean longClick = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_longClick), true);
+        longClickSwitch.setChecked(longClick);
 
 
         longClickSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
 
-                SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
+                /*SharedPreferences myPrefs = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
                 SharedPreferences.Editor myPrefEditor = myPrefs.edit();
                 myPrefEditor.putBoolean(getString(R.string.key_longClick), b);
                 myPrefEditor.commit();
@@ -91,7 +97,9 @@ public class SettingsFragment extends Fragment {
 
                 SharedPreferences sp = getContext().getSharedPreferences("prefs", MODE_PRIVATE);
 
-                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);
+                Boolean longClick = sp.getBoolean(getString(R.string.key_longClick), true);*/
+
+                getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_longClick), b).commit();
             }
         });
 
