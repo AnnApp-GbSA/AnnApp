@@ -117,6 +117,8 @@ public class TutorialFragment extends Fragment{
                     getActivity().findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.VISIBLE);
 
                     getActivity().findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
+
+                    ((DrawerLayout)getActivity().findViewById(R.id.drawer_layout)).setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
                 }
             }
         });
