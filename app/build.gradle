@@ -5,7 +5,7 @@ android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
     defaultConfig {
-        applicationId "com.pax.qbt.annapp"
+        applicationId "com.pax.tk.annapp"
         minSdkVersion 23
         targetSdkVersion 27
         versionCode 1

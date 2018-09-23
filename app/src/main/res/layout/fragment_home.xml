@@ -26,7 +26,7 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="com.pax.qbt.annapp.Fragments.TasksPreviewFragment"
+        android:name="com.pax.tk.annapp.Fragments.TasksPreviewFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="1" />
