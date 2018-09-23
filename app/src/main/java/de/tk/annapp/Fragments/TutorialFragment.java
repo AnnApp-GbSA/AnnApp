@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
 import android.text.Html;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -60,6 +61,7 @@ public class TutorialFragment extends Fragment{
 
         getActivity().findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.GONE);
         getActivity().findViewById(R.id.nav_view).setVisibility(View.INVISIBLE);
+        ((DrawerLayout)getActivity().findViewById(R.id.drawer_layout)).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 
 
