@@ -141,6 +141,12 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onBackPressed() {
+
+        //Disable Back Button while in Tutorial
+        if(getPreferences(MODE_PRIVATE).getBoolean("firstLaunch", true))
+            return;
+
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
         /*Fragment myFragment = getFragmentManager().findFragmentByTag(GradeChildFragment.class.getSimpleName());
@@ -155,6 +161,8 @@ public class MainActivity extends AppCompatActivity
         }*/
 
         FragmentManager fm = getFragmentManager();
+
+
         //Fragment myFragment = getFragmentManager().findFragmentByTag(prevFragmentTag);
         if(drawer.isDrawerOpen(GravityCompat.START)){
             drawer.closeDrawer(GravityCompat.START);
@@ -212,7 +220,7 @@ public class MainActivity extends AppCompatActivity
             Intent i = new Intent(Intent.ACTION_SEND);
             i.setType("text/plain");
             i.putExtra(Intent.EXTRA_SUBJECT, "Sharing URL");
-            i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.pax.qbt.annapp");
+            i.putExtra(Intent.EXTRA_TEXT, "https://play.google.com/store/apps/details?id=com.pax.tk.annapp");
             startActivity(Intent.createChooser(i, getString(R.string.shareAnnApp)));
             return true;
         }

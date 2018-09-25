@@ -178,11 +178,21 @@
     </LinearLayout>
 
     <View
-        android:id="@+id/divider"
+        android:id="@+id/divider4"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginBottom="5dp"
         android:layout_marginTop="5dp"
         android:background="?android:attr/listDivider" />
+
+    <Button
+        android:id="@+id/btn_tutorial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/transparent"
+        android:gravity="fill_vertical"
+        android:singleLine="false"
+        android:text="Tutorial erneut anzeigen"
+        android:textColor="?colorAccent" />
 
 </LinearLayout>

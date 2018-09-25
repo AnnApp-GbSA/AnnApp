@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <integer-array name="slide_images">
-        <item>@drawable/tutorial_home</item>
-        <item>@drawable/tutorial_timetable</item>
-        <item>@drawable/tutorial_grade</item>
-        <item>@drawable/tutorial_tasks</item>
-        <item>@drawable/tutorial_homescreen</item>
-        <item>@drawable/tutorial_homescreen</item>
-        <item>@drawable/tutorial_news</item>
+        <item>@drawable/home_cut</item>
+        <item>@drawable/timetable_cut</item>
+        <item>@drawable/grades_cut</item>
+        <item>@drawable/add_grades_cut</item>
+        <item>@drawable/tasks_cut</item>
+        <item>@drawable/calendar_cut</item>
+        <item>@drawable/representation_plan_cut</item>
+        <item>@drawable/annanews_cut</item>
+        <item>@drawable/settings_cut</item>
     </integer-array>
 </resources>

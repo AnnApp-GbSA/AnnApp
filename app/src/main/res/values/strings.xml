@@ -55,29 +55,24 @@
         <item>Home</item>
         <item>Stundenplan</item>
         <item>Noten</item>
+        <item>Noten hinzufügen</item>
         <item>Aufgaben</item>
-        <item>Schulkalender</item>
+        <item>Kalender</item>
         <item>Vertretungsplan</item>
         <item>AnnaNews</item>
+        <item>Einstellungen</item>
     </string-array>
 
     <string-array name="slide_description">
-        <item>Auf dem Home Screen kannst du deinen täglichen Stundenplan auf der linken Seite sehen.
-            Auf der rechten Seite siehst du deine noch zu erledigenden Aufgaben.</item>
-        <item>Im Stundenplan kannst du alle deine Fächer und Stunden eintragen.
-            Halte eine Stunde kurz gedrückt, damit sich das Menü zum Stunden einfügen öffnet.
-            Hier kannst du ein neues Fach erstellen, indem du neues Fach auswählt und die nötigen Informationen einträgst oder ein bereits bestehendes Fach in die Stunde einfügen.
-            Beim drücken einer Stunde, siehst du dein Lehrer und dein Raum, hier kannst du auch das Fach bearbeiten oder löschen.</item>
-        <item>Unter Noten kannst du deine Noten für jedes Fach eintragen.
-            Der Notendurchschnitt wird rechts oben in der Ecke angezeigt.
-            Um eine Note einzufügen, drücke den Button rechts unten in der Ecke.
-            Wähle das Fach aus und gebe deine Note an.</item>
-        <item>Hier kannst du z.B. Hausaufgaben, Referate oder Schulaufgabentermine einfügen.
-            Benutze den Button im Eck und wähle Fach, Typus und Termin er Aufgabe aus.
-        </item>
-        <item>Schulkalender</item>
-        <item>Vertretungsplan</item>
-        <item>AnnaNews</item>
+        <item>Auf deinem Homescreen siehst du auf der rechten Seite alles, was du in deinen Fächern noch zu erledigen hast, auf der linken Seite welche Stunden du am heutigen Tag noch vor dir hast. Vorausgesetzt du trägst alles pflichtbewusst für jeden Tag ein.</item>
+        <item>Hier kannst du deinen Stundenplan, den zugehörigen Lehrer zu jedem Fach und sogar den Raum für jede Stunde einzeln eintragen. Zusätzlich kannst du auch noch die Wertung der schriftlichen Noten im Vergleich zu den mündlichen Noten einstellen. Es ist wichtig, dass das Verhältnis stimmt, da es wichtig für die Berechnung deiner Gesamtnote ist.</item>
+        <item>In diesem Bereich siehst du deinen Gesamtdurschnitt oben links. Weiter unten siehst du deinen Durschnitt in jedem Fach, sofern du genug Noten eingetragen hast. Mit einem Klick auf das jeweilige Fach kannst du auch die einzelnen, eingetragenen Noten inkl. Wertung einsehen.</item>
+        <item>Mit einem Klick auf den Hinzufügen-Button unten rechts kannst du eine neue Note hinzufügen. Nachdem du das Fach ausgewählt hast, in dem du die Note bekommen hast kannst du noch unterscheiden zwischen mündlichen und schriftlichen Noten, als auch wie die Note im Fach speziell gewertet wird, bei Ratlosigkeit einfach auf das Fragezeichen am rechten Rand der Zeile tippen. Wenn du noch etwas zu dieser Note hinzufügen willst hast du auch noch die Möglichkeit eine kleine Notiz hinzuzufügen.</item>
+        <item>Bei den Aufgaben kannst du sowohl Hausaufgaben, als auch Schulaufgaben und einfache Notizen für das jeweilige Fach eintragen. Diese erscheinen dann in deinem Homescreen unter dem jeweiligem Fach.</item>
+        <item>Hier siehst du deinen Kalender, mit allen eingetragenen Schulterminen. Alternativ kannst du natürlich auch selbst einen neuen Termin mit Beschreibung, Ort und Enddatum/-zeit erstellen. Diese werden dir, wie die Schultermine dann im Kalender angezeigt. Bei einem Klick auf das Download-Symbol oben rechts wird der Schulkalender mit allen Terminen auf deinen Google Kalender übertragen.</item>
+        <item>Hier siehst du den Vertretungsplan, sobald du die Zugangsdaten für DSBmobile eingegeben hast.</item>
+        <item>Unser neues Feature, wo du alle News von unserer Schulhomepage und unserer Schülerzeitung direkt in der App sehen kannst.</item>
+        <item>In den Einstellungen kannst du den Schulbeginn, sowie die Pausen- und Stundenlänge auswählen. Des Weiteren kannst du die maximale Stundenanzahl für einen Tag angeben. Wenn du deiner App einen neuen Look verpassen willst kannst du außerdem noch eines der vorgefertigten Farbschemen wählen!</item>
     </string-array>
 
     <string-array name="school_hours">
