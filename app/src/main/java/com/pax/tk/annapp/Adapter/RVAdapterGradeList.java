@@ -52,7 +52,6 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage, int colorSchemePosition) {
         this.context = context;
         subjectManager = SubjectManager.getInstance();
-        subjectManager.load();
         this.subject = subject;
         grades = subject.getAllGrades();
         this.gradeMessage = gradeMessage;
@@ -67,27 +66,27 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     }
 
     @Override
-    public void onBindViewHolder(RecyclerVH holder, int position) {
+    public void onBindViewHolder(RecyclerVH holder, final int position) {
 
         holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
 
         if (!grades.get(position).getNote().isEmpty())
-            holder.expandableTextView.setText(grades.get(position).getNote() + "\n" + context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions, position);
+            holder.expandableTextView.setText(grades.get(position).getNote() + "\n" + context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions, holder.getAdapterPosition());
         else
-            holder.expandableTextView.setText(context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions, position);
+            holder.expandableTextView.setText(context.getString(R.string.ratingList) + grades.get(position).getRating(), mTogglePositions, holder.getAdapterPosition());
 
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                askDelete(grades.get(position));
+                askDelete(grades.get(holder.getAdapterPosition()));
             }
         });
         holder.editButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 System.out.println("Create InputDialog...");
-                createEditDialog(grades.get(position));
+                createEditDialog(grades.get(holder.getAdapterPosition()));
             }
         });
 
@@ -306,23 +305,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     public void delete(Grade grade) {
         int formerIndex = grades.indexOf(grade);
         grade.getSubject().removeGrade(grade);
-        try {
-            subject.removeGrade(grade);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            grades.remove(grade);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
         notifyItemRemoved(formerIndex);
         ((TextView) ((Activity) context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
         if (grades.isEmpty()) {
             gradeMessage.setVisibility(View.VISIBLE);
         }
-
-        subjectManager.save();
     }
 
     public void addGrade(Grade grade) {

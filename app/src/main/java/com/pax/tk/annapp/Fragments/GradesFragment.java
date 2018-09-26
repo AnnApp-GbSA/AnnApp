@@ -177,7 +177,6 @@ public class GradesFragment extends Fragment {
                 subject.addGrade(newGrade);
                 recyclerView.getAdapter().notifyItemChanged(subjectManager.getSubjects().indexOf(subject));
                 ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(subjectManager.getWholeGradeAverage()));
-                subjectManager.save();
                 //((RVAdapterSubjectList)recyclerView.getAdapter()).addGrade(newGrade);
                 bsd.cancel();
             }

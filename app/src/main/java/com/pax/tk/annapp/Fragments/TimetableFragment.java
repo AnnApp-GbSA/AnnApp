@@ -96,7 +96,7 @@ public class TimetableFragment extends Fragment {
         getActivity().setTitle(getString(R.string.timetable));
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
         subjectManager = SubjectManager.getInstance();
-        subjectManager.load();
+
 
         if (!subjectManager.getSubjects().isEmpty())
             lastSubject = subjectManager.getSubjects().get(0);
@@ -723,18 +723,18 @@ public class TimetableFragment extends Fragment {
                         switch (i) {
                             case 0:
                                 subjectManager.deleteLesson(lesson);
-                                subjectManager.save();
+                                //subjectManager.save();
                                 initializeTableView();
                                 break;
                             case 1:
                                 subjectManager.deleteAllLessons(lesson);
-                                subjectManager.save();
+                                //subjectManager.save();
                                 initializeTableView();
                                 break;
                             case 2:
                                 subjectManager.deleteAllLessons(lesson);
                                 subjectManager.deleteSubject(lesson.getSubject());
-                                subjectManager.save();
+                                //subjectManager.save();
                                 initializeTableView();
                                 break;
                         }

@@ -82,7 +82,7 @@ public class SubjectManager {
             return;
         subjects.add(subject);
         sortSubjects();
-        save();
+        //save();
     }
 
     public ArrayList<News> getNews() {
@@ -195,9 +195,22 @@ public class SubjectManager {
     public void load() {
         try {
             ObjectInputStream ois = new ObjectInputStream(context.openFileInput("AnnApp"));
-            subjects = (ArrayList<Subject>) ois.readObject();
-            days = (Day[]) ois.readObject();
-            news = (ArrayList<News>) ois.readObject();
+            try {
+                subjects = (ArrayList<Subject>) ois.readObject();
+            } catch (Exception e) {
+            }
+            try {
+                days = (Day[]) ois.readObject();
+            } catch (Exception e) {
+            }
+            try {
+                news = (ArrayList<News>) ois.readObject();
+            } catch (Exception e) {
+            }
+            System.out.println("loading:");
+            System.out.println(subjects);
+            System.out.println(days);
+            System.out.println(news);
             ois.close();
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
@@ -206,6 +219,10 @@ public class SubjectManager {
     }
 
     public void save() {
+        System.out.println("saving:");
+        System.out.println(subjects);
+        System.out.println(days);
+        System.out.println(news);
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", MODE_PRIVATE));
             oos.writeObject(subjects);
@@ -236,7 +253,7 @@ public class SubjectManager {
         }
         System.out.println("InSubMan");
         days[day].setLesson(lesson);
-        save();
+        //save();
     }
 
     public void deleteLesson(Lesson lesson) {
