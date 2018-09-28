@@ -50,18 +50,21 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
         return new NewsViewHolder(v);
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = subjectManager.getOneNews(position);
         old.put(news.getLink().hashCode(),news.fullHashCode());
         holder.title.setText(news.getTitle());
         holder.description.setText(news.getDiscription());
-        holder.image.setImageDrawable(news.getImage());
+        holder.image.setImageDrawable(subjectManager.getFromURl(news.getImageurl()));
 
 
 
         if (news.getImage() == null)
             holder.image.setVisibility(View.GONE);
+
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

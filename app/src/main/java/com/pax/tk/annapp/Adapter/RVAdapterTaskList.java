@@ -285,7 +285,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             @Override
             public void onClick(View v) {
                 if (taskInput.getText().toString().isEmpty()) {
-                    createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert, context);
                     return;
                 }
 
@@ -303,7 +303,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 } else if (timeSelection.getSelectedItem().toString().matches("\\d*\\.\\d*\\.\\d*")) {
                     due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
                 } else {
-                    createAlertDialog(context.getString(R.string.warning) + "Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(context.getString(R.string.warning) + "Achtung", "Bitte starten sie die App neu. Ein Fehler ist aufgetreten.", android.R.drawable.ic_dialog_alert, context);
                     return;
                 }
 

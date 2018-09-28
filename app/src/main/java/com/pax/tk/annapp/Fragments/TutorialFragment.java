@@ -19,10 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.pax.tk.annapp.Adapter.SliderAdapter;
-
-
+import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.SubjectManager;
+
 
 public class TutorialFragment extends Fragment{
     View root;
@@ -65,7 +65,6 @@ public class TutorialFragment extends Fragment{
 
         getActivity().findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.GONE);
         getActivity().findViewById(R.id.nav_view).setVisibility(View.INVISIBLE);
-        ((DrawerLayout)getActivity().findViewById(R.id.drawer_layout)).setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 
 
 
@@ -114,11 +113,7 @@ public class TutorialFragment extends Fragment{
                 else if(currentPageCount+1 == dots.length){
                     // Insert the fragment by replacing any existing fragment
                     getActivity().getPreferences(Context.MODE_PRIVATE).edit().putBoolean("firstLaunch", false).commit();
-                    FragmentManager fragmentManager = getFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.content_frame, new HomeFragment())
-                            .commit();
-
+                    ((MainActivity) getContext()).setFragment(HomeFragment.TAG);
 
                     getActivity().findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.VISIBLE);
 

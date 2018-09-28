@@ -12,9 +12,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +33,7 @@ import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterSubjectList;
 import com.pax.tk.annapp.Subject;
 import com.pax.tk.annapp.SubjectManager;
+import com.pax.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -68,7 +71,7 @@ public class GradesFragment extends Fragment {
             public void onClick(View view) {
 
                 if (subjectManager.getSubjects().isEmpty()) {
-                    createAlertDialog(getContext().getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(getContext().getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert, getContext());
                 } else
                     createInputDialog();
             }
@@ -130,7 +133,7 @@ public class GradesFragment extends Fragment {
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog(getString(R.string.rating), getString(R.string.ratingExplanation), 0);
+                Util.createAlertDialog(getString(R.string.rating), getString(R.string.ratingExplanation), 0, getContext());
             }
         });
 
@@ -144,6 +147,8 @@ public class GradesFragment extends Fragment {
         adapter.setDropDownViewTheme(getActivity().getTheme());
 
         subjectSelection.setAdapter(adapter);
+        subjectSelection.setAdapter(adapter);
+
 
         final RadioButton isWritten = mView.findViewById(R.id.isWritten);
 
@@ -164,7 +169,7 @@ public class GradesFragment extends Fragment {
                     isWrittenBool = false;
 
                 if(gradeInput.getText().toString().isEmpty()){
-                    createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0);
+                    Util.createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), 0, getContext());
                     return;
                 }
 
@@ -215,7 +220,7 @@ public class GradesFragment extends Fragment {
                 })*/
 
 
-    void createAlertDialog(String title, String text, int ic) {
+    /*void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -236,5 +241,6 @@ public class GradesFragment extends Fragment {
         WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }
+    }*/
+
 }

@@ -110,7 +110,7 @@ public class TasksFragment extends Fragment {
         final ArrayList<Subject> subjects = subjectManager.getSubjects();
 
         if (subjects.isEmpty()) {
-            createAlertDialog(getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert);
+            Util.createAlertDialog(getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert, getContext());
             return;
         }
 
@@ -175,7 +175,7 @@ public class TasksFragment extends Fragment {
             public void onClick(View v) {
 
                 if (task.getText().toString().isEmpty()) {
-                    createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert, getContext());
                     return;
                 }
 
@@ -196,7 +196,7 @@ public class TasksFragment extends Fragment {
                 } else if (timeSelection.getSelectedItem().toString().matches(getString(R.string.dateFormat_pattern))) {
                     due = Util.getCalendarFromFullString(timeSelection.getSelectedItem().toString());
                 } else {
-                    createAlertDialog(/*getString(R.string.warning)*/getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(/*getString(R.string.warning)*/getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
                     return;
                 }
 
@@ -209,7 +209,7 @@ public class TasksFragment extends Fragment {
                     shortKind = getString(R.string.note_short);
                 } else {
                     shortKind = "";
-                    createAlertDialog(getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
                 }
                 Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);
                 subject.addTask(newTask);
@@ -273,7 +273,7 @@ public class TasksFragment extends Fragment {
     }
 
 
-    void createAlertDialog(String title, String text, int ic) {
+    /*void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -295,5 +295,5 @@ public class TasksFragment extends Fragment {
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
-
+*/
 }

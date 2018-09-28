@@ -395,7 +395,7 @@ public class TimetableFragment extends Fragment {
         btnRoomHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog(getString(R.string.room), getString(R.string.room_warning), 0);
+                Util.createAlertDialog(getString(R.string.room), getString(R.string.room_warning), 0, getContext());
             }
         });
 
@@ -477,7 +477,7 @@ public class TimetableFragment extends Fragment {
 
                 if (subjectSelection.getSelectedItemPosition() == subjectSelection.getAdapter().getCount() - 1) { //Neues Subject
                     if (nameEdittext.getText().toString().equals("")) {
-                        createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_empty), 0);
+                        Util.createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_empty), 0, getContext());
                         return;
                     }
                     oCSubject = new Subject(nameEdittext.getText().toString(),
@@ -485,7 +485,7 @@ public class TimetableFragment extends Fragment {
                             teacherEdittext.getText().toString(),
                             roomInput.getText().toString());
                     if (subjectManager.getSubjects().contains(oCSubject)) {
-                        createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_dup) + oCSubject.getName() + "\"", 0);
+                        Util.createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_dup) + oCSubject.getName() + "\"", 0, getContext());
                         return;
                     }
                     subjectManager.addSubject(oCSubject);
@@ -495,7 +495,7 @@ public class TimetableFragment extends Fragment {
                     oCSubject = selectedsubject;
                 } else {
                     if (nameEdittext.getText().toString().equals("")) {
-                        createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_empty), 0);
+                        Util.createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_empty), 0, getContext());
                         return;
                     }
                     selectedsubject.setName(nameEdittext.getText().toString());
@@ -670,7 +670,7 @@ public class TimetableFragment extends Fragment {
         bsd.show();
     }
 
-    void createAlertDialog(String title, String text, int ic) {
+    /*void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -693,7 +693,7 @@ public class TimetableFragment extends Fragment {
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
 
-    }
+    }*/
 
     void reallyDeleteQuestionForDAUs(final int i, final Lesson lesson, final BottomSheetDialog bsd) {
         String message = "";

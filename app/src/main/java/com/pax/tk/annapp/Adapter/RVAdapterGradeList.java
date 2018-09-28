@@ -33,6 +33,7 @@ import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
 import com.pax.tk.annapp.SubjectManager;
+import com.pax.tk.annapp.Util;
 
 import java.util.ArrayList;
 
@@ -163,7 +164,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         btnHelp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                createAlertDialog(context.getString(R.string.rating), context.getString(R.string.ratingExplanation), 0);
+                Util.createAlertDialog(context.getString(R.string.rating), context.getString(R.string.ratingExplanation), 0, context);
             }
         });
 
@@ -195,7 +196,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                     isWrittenBool = false;
 
                 if (gradeInput.getText().toString().isEmpty()) {
-                    createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert);
+                    Util.createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert, context);
                     return;
                 }
 
@@ -253,7 +254,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         bsd.show();
     }
 
-    void createAlertDialog(String title, String text, int ic) {
+    /*void createAlertDialog(String title, String text, int ic) {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -274,7 +275,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }
+    }*/
 
     public void askDelete(final Grade grade) {
 
