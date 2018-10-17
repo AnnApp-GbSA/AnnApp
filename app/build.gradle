@@ -3,12 +3,12 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 27
-    buildToolsVersion '27.0.3'
+    buildToolsVersion '28.0.3'
     defaultConfig {
         applicationId "com.pax.tk.annapp"
         minSdkVersion 23
         targetSdkVersion 27
-        versionCode 5
+        versionCode 6
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

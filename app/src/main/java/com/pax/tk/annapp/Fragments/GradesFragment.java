@@ -1,6 +1,5 @@
 package com.pax.tk.annapp.Fragments;
 
-import android.app.AlertDialog;
 import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -140,6 +139,14 @@ public class GradesFragment extends Fragment {
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
 
+        subjectSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout), getContext());
+                return false;
+            }
+        });
 
         Context wrappedContext = new ContextThemeWrapper(getContext(), R.style.BasicTheme);
         ArrayAdapter<Subject> adapter = new ArrayAdapter<>(wrappedContext, R.layout.white_spinner_item, subjectManager.getSubjects());

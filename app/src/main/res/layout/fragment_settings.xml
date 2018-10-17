@@ -85,7 +85,8 @@
                 android:ems="10"
                 android:gravity="right"
                 android:hint="@string/settings_break_lenght"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:theme="@style/ThemeEditText"/>
         </LinearLayout>
 
         <LinearLayout
@@ -110,7 +111,8 @@
                 android:ems="10"
                 android:gravity="right"
                 android:hint="@string/settings_lesson_lenght"
-                android:inputType="number"/>
+                android:inputType="number"
+                android:theme="@style/ThemeEditText"/>
         </LinearLayout>
     </LinearLayout>
 
@@ -172,6 +174,7 @@
                 android:gravity="right"
                 android:hint="@string/settings_max_lessons"
                 android:inputType="number"
+                android:theme="@style/ThemeEditText"
                 />
         </LinearLayout>
 

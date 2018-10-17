@@ -43,7 +43,8 @@
             android:hint="@string/grade"
             android:inputType="number"
             android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"/>
+            android:layout_marginEnd="8dp"
+            android:theme="@style/ThemeEditText"/>
 
         <RadioGroup
             android:layout_width="match_parent"
@@ -99,7 +100,8 @@
                 android:layout_height="wrap_content"
                 android:ems="10"
                 android:hint="@string/note"
-                android:inputType="textPersonName"/>
+                android:inputType="textPersonName"
+                android:theme="@style/ThemeEditText"/>
 
             <RelativeLayout
                 android:layout_width="match_parent"
@@ -110,8 +112,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
-                    android:hint="@string/raiting"
-                    android:inputType="numberDecimal"/>
+                    android:hint="@string/rating"
+                    android:inputType="numberDecimal"
+                    android:theme="@style/ThemeEditText"/>
 
                 <ImageView
                     android:id="@+id/edit_btnRoomHelp"

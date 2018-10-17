@@ -24,7 +24,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?colorPrimary"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/headerLayout">
 
             <Spinner
                 android:id="@+id/subjectSelection"
@@ -66,7 +67,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/name"
-                    android:inputType="textShortMessage"/>
+                    android:inputType="textShortMessage"
+                    android:theme="@style/ThemeEditText"/>
 
             </RelativeLayout>
 
@@ -103,7 +105,8 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:hint="@string/teacher"
-                    android:inputType="textShortMessage"/>
+                    android:inputType="textShortMessage"
+                    android:theme="@style/ThemeEditText"/>
 
             </RelativeLayout>
         </LinearLayout>
@@ -119,7 +122,8 @@
                 android:ems="10"
                 android:hint="@string/room"
                 android:inputType="textShortMessage"
-                android:layout_marginBottom="@dimen/marginBottom"/>
+                android:layout_marginBottom="@dimen/marginBottom"
+                android:theme="@style/ThemeEditText"/>
 
 
             <ImageView

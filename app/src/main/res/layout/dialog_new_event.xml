@@ -46,7 +46,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="@string/description" />
+            android:hint="@string/description"
+            android:theme="@style/ThemeEditText"/>
 
         <Button
             android:id="@+id/btnExtra"
@@ -80,7 +81,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Ort"
-                android:ems="10" />
+                android:ems="10"
+                android:theme="@style/ThemeEditText"/>
 
         </LinearLayout>
 

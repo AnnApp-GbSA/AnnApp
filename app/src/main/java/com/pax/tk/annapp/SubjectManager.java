@@ -316,7 +316,15 @@ public class SubjectManager {
 //        reallyNewNews.addAll(this.news);
 //        this.news = reallyNewNews;
 
-        this.news = news;
+        //this.news = news;
+        for (News oneNews :
+                news) {
+            this.news.add(oneNews);
+        }
+    }
+
+    public void addNews (News news){
+        this.news.add(news);
     }
 
     public void sortSubjects() {

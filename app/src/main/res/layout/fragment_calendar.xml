@@ -42,14 +42,17 @@
             android:background="?android:colorBackground"
             android:orientation="horizontal">
 
-            <Button
+            <ImageButton
                 android:id="@+id/monthBack"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
-                android:layout_marginLeft="10dp"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_arrowandroid"
-                android:backgroundTint="?android:textColorPrimary" />
+                android:src="@drawable/ic_arrowandroid"
+                android:backgroundTint="@android:color/transparent"
+                android:tint="?android:textColorPrimary"
+                android:scaleX=".8"
+                android:scaleY=".8"
+                />
 
             <TextView
                 android:id="@+id/monthIndication"
@@ -58,18 +61,23 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
+                android:focusable="false"
                 android:gravity="center"
-                android:textColor="?android:textColorPrimary" />
+                android:textColor="?android:textColorPrimary"
+                android:layout_gravity="center_vertical" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/monthForward"
-                android:layout_width="70dp"
-                android:layout_height="25dp"
-                android:layout_marginRight="10dp"
+                android:layout_width="200dp"
+                android:layout_height="40dp"
                 android:layout_weight="1"
-                android:background="@drawable/ic_arrowandroid"
-                android:backgroundTint="?android:textColorPrimary"
-                android:rotation="180" />
+                android:backgroundTint="@android:color/transparent"
+                android:rotation="180"
+                android:tint="?android:textColorPrimary"
+                android:src="@drawable/ic_arrowandroid"
+                android:scaleX=".8"
+                android:scaleY=".8"
+                />
         </LinearLayout>
 
         <com.github.sundeepk.compactcalendarview.CompactCalendarView xmlns:app="http://schemas.android.com/apk/res-auto"

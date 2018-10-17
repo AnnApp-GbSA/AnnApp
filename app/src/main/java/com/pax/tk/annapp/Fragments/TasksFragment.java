@@ -15,6 +15,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -115,9 +116,25 @@ public class TasksFragment extends Fragment {
         }
 
         final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_subject);
+        subjectSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout), getContext());
+                return false;
+            }
+        });
         ArrayAdapter<Subject> adapterSubject = new ArrayAdapter<>(getContext(), R.layout.white_spinner_item, subjects);
         subjectSelection.setAdapter(adapterSubject);
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_time);
+        timeSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout), getContext());
+                return false;
+            }
+        });
         ArrayAdapter<String> adapterTime = new ArrayAdapter<>(this.getContext(), R.layout.spinner_item, duedates);
         timeSelection.setAdapter(adapterTime);
         timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -154,6 +171,14 @@ public class TasksFragment extends Fragment {
         });
 
         final Spinner kindSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_kind);
+        kindSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout), getContext());
+                return false;
+            }
+        });
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(this.getContext(), R.layout.spinner_item, kinds);
         kindSelection.setAdapter(adapterKind);
 

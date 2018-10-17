@@ -7,7 +7,6 @@
     <string name="navigation_drawer_close">Navigation Drawer schlißen</string>
 
     <string name="settings">Einstellungen</string>
-    <string name="rating">Wertung</string>
     <string name="ratingExplanation">Die Wertung ist der Betrag, der das Verhältnis zu den anderen Noten des selben Types bestimmt.  z.B.: Wertung: 2 Die Note wird doppelt so stark einberechnet wie andere Noten. Wertung: 0,5 Die Note wird halb so stark einberechnet wie andere Noten.</string>
     <string name="addGrade">Note hinzufügen</string>
     <string name="warning">Achtung</string>
@@ -24,7 +23,7 @@
     <string name="deleteQuestionMessage">Wollen Sie diese Note wirklich löschen?</string>
     <string name="deleteQuestionMessageTask">Wollen Sie diese Aufgabe wirklich löschen?</string>
     <string name="deleteQuestionMessageEvent">Wollen Sie dieses Event wirklich löschen?</string>
-    <string name="shareAnnApp">AnnAppp teilen...</string>
+    <string name="shareAnnApp">AnnApp teilen...</string>
     <string name="subjectName">Name des Fachs</string>
     <string name="ratingOfSubject">Wertung des Fachs</string>
     <string name="addSubject">Fach Hinzufügen</string>
@@ -85,7 +84,7 @@
     </string-array>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="addTaskMessage">Bitte fügen Sie eine neue Aufgabe hinzu!</string>
 
     <!--Selectors for color schemes-->
@@ -99,9 +98,9 @@
     <string name="key_schoolstart" translatable="false">schoolstart</string>
     <string name="schoolCalendar">Schulkalender</string>
     <string name="AnnaNews">AnnaNews</string>
-    <string name="loading">Es läd...</string>
-    <string name="short_blindtext">#!#</string>
-    <string name="medium_blindtext">Lorem ipsum dolor sit amet</string>
+    <string name="loading">Es lädt...</string>
+    <string name="short_blindtext" translatable="false">#!#</string>
+    <string name="medium_blindtext" translatable="false">Lorem ipsum dolor sit amet</string>
     <string name="edit">Ändern</string>
     <string name="general">Allgemein</string>
     <string name="schoolstart">Schulbeginn:</string>
@@ -112,7 +111,7 @@
     <string name="settings_timetable_gaps">Teiler im Stundenplan anzeigen</string>
     <string name="settings_max_lessons">Maximale Stundenanzahl</string>
     <string name="colorTheme">Farbschema:</string>
-    <string name="selling_stuff">Schulsachenverkauf</string>
+    <string name="selling_stuff">Vertretungsplan</string>
     <string name="tutoring">Nachhilfe</string>
     <string name="name">Name</string>
     <string name="warning_add_subject_before_grades">Fügen Sie bitte zuerst ein Fach hinzu bevor Sie Noten eintragen!</string>
@@ -122,17 +121,17 @@
     <string name="addEvent">Event hinzufügen</string>
     <string name="oral">mündlich</string>
     <string name="written">schriftlich</string>
-    <string name="expand">erweitert</string>
+    <string name="expand">Erweitert</string>
     <string name="note">Notiz</string>
-    <string name="raiting">Wertung</string>
+    <string name="rating">Wertung</string>
     <string name="teacher">Lehrer</string>
     <string name="room">Raum</string>
     <string name="this_lesson">Diese Stunde</string>
     <string name="subject">Fach</string>
     <string name="what_edit">Was wollen Sie bearbeiten?</string>
-    <string name="long_blindtext">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
-    <string name="dateFormat_long">dd.MM.yyyy</string>
-    <string name="dateFormat_short">dd.MM</string>
+    <string name="long_blindtext" translatable="false">Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.</string>
+    <string name="dateFormat_long" translatable="false">dd.MM.yyyy</string>
+    <string name="dateFormat_short" translatable="false">dd.MM</string>
     <string name="monday_short">MO</string>
     <string name="tuesday_short">Di</string>
     <string name="wednesday_short">Mi</string>
@@ -140,14 +139,14 @@
     <string name="friday_short">Fr</string>
     <string name="saturday_short">Sa</string>
     <string name="sunday_short">So</string>
-    <string name="key_lessonTime">lessonTime</string>
-    <string name="key_breakTime">breaktTime</string>
-    <string name="bundleKey_colorThemePosition">colorSchemePosition</string>
-    <string name="bundlekey_news">news</string>
-    <string name="bundlekey_fragmentTag">fragmentTag</string>
-    <string name="newSubject">neues Fach</string>
-    <string name="key_timetableGaps">timetableDividers</string>
-    <string name="key_maxLesson">maxlessons</string>
+    <string name="key_lessonTime" translatable="false">lessonTime</string>
+    <string name="key_breakTime" translatable="false">breaktTime</string>
+    <string name="bundleKey_colorThemePosition" translatable="false">colorSchemePosition</string>
+    <string name="bundlekey_news" translatable="false">news</string>
+    <string name="bundlekey_fragmentTag" translatable="false">fragmentTag</string>
+    <string name="newSubject">Neues Fach</string>
+    <string name="key_timetableGaps" translatable="false">timetableDividers</string>
+    <string name="key_maxLesson" translatable="false">maxlessons</string>
     <string name="monday">Montag</string>
     <string name="tuesday">Dienstag</string>
     <string name="wednesday">Mittwoch</string>
@@ -172,20 +171,48 @@
     <string name="homework">Hausaufgabe</string>
     <string name="exam">Schulaufgabe</string>
     <string name="addSubjectMessage">Bitte fügen Sie zuerst ein neues Fach hinzu!</string>
-    <string name="dateFormat_pattern">\\d*\\.\\d*\\.\\d*</string>
+    <string name="dateFormat_pattern" translatable="false">\\d*\\.\\d*\\.\\d*</string>
     <string name="appRestartMessage">Bitte starten sie die App neu. Ein Fehler ist aufgetreten.</string>
     <string name="homework_short">HA</string>
     <string name="exam_short">SA</string>
-    <string name="note_short">No</string>
+    <string name="note_short">NO</string>
     <string name="noSchoolToday">Heute hast Du keine Schule!</string>
-    <string name="bundlekey_subject">subject</string>
-    <string name="feedback">Feedback</string>
-    <string name="noMailApp">No mail App found!</string>
-    <string name="error">Unexpected Error</string>
+    <string name="noMailApp">Keine Mail-App gefunden!</string>
+    <string name="error">Unerwarteter Fehler</string>
     <string name="calendar">Schulkalender</string>
     <string name="ok">OK</string>
     <string name="noEventMessage">Kein Event an diesem Tag</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="key_longClick">longClick</string>
+    <string name="add_widget">Widget hinzufügen</string>
+    <string name="key_longClick" translatable="false">longClick</string>
+    <string name="bundlekey_subject" translatable="false">subject</string>
+    <string name="unnamed_day">Unbenannter Tag</string>
+    <string name="add_lesson">Stunde hinzufügen</string>
+    <string name="all">Alle</string>
+    <string name="lessons">stunden</string>
+    <string name="shure_to_delete">Wirklich löschen?</string>
+    <string name="easteregg">Easteregg gefunden!!</string>
+    <string name="permission_granted">Permission granted</string>
+    <string name="permission_denied">Permission denied</string>
+    <string name="select_time">Uhrzeit auswählen</string>
+    <string name="january">Januar</string>
+    <string name="february">Februar</string>
+    <string name="march">März</string>
+    <string name="april">April</string>
+    <string name="may">Mai</string>
+    <string name="june">Juni</string>
+    <string name="july">Juli</string>
+    <string name="august">August</string>
+    <string name="september">September</string>
+    <string name="october">Oktober</string>
+    <string name="november">November</string>
+    <string name="december">Dezember</string>
+    <string name="begin">Beginn:</string>
+    <string name="end">Ende:</string>
+    <string name="location">Ort:</string>
+    <string name="end_date">Enddatum</string>
+    <string name="colorsceme">Farbschema:</string>
+    <string name="hold_to_create_new_lesson">Halten um eine Neue hinzuzufügen</string>
+    <string name="show_tutorial_again">Tutorial erneut anzeigen</string>
+    <string name="feedback">Feedback</string>
 </resources>
+

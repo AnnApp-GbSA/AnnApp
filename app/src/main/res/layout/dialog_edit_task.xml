@@ -50,7 +50,8 @@
             android:ems="10"
             android:hint="@string/task"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:theme="@style/ThemeEditText"/>
 
         <Spinner
             android:id="@+id/edit_spinner_task_input_time"

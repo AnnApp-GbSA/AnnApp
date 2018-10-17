@@ -101,10 +101,8 @@ public class AnnanewsFragment extends Fragment {
                 Log.e(TAG, "Error", e);
                 Looper.prepare();
                 Toast.makeText(getContext(), R.string.noConnection, Toast.LENGTH_SHORT).show();
-            } catch (XmlPullParserException e) {
-                Log.e(TAG, "Error", e);
             }
-            return false;
+                return false;
 
             }
             return false;
@@ -118,16 +116,16 @@ public class AnnanewsFragment extends Fragment {
     //TODO: Delete this Tod
 
     private String xmlcut(String content, String startTag, String endTag){
-        return content.substring(0,content.indexOf(startTag))+content.substring(content.indexOf(endTag,content.indexOf(startTag))+endTag.length(),content.length());
-    }
+        try {
+            return content.substring(0, content.indexOf(startTag)) + content.substring(content.indexOf(endTag, content.indexOf(startTag)) + endTag.length(), content.length());
+        }catch (Exception e){return "";}}
 
     private String xmlget(String content, String startTag, String endTag){
         String ret = content.substring(content.indexOf(startTag)+startTag.length());
         return ret.substring(0,ret.indexOf(endTag));
     }
 
-    public ArrayList<News> parseFeed(InputStream inputStream) throws XmlPullParserException,
-            IOException {
+    public ArrayList<News> parseFeed(InputStream inputStream) throws IOException {
         /*String title = null;
         String link = null;
         String description = null;

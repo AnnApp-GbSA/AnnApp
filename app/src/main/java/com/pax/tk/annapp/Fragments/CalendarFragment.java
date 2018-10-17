@@ -2,6 +2,7 @@ package com.pax.tk.annapp.Fragments;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
@@ -21,6 +22,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.provider.CalendarContract;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomSheetDialog;
@@ -59,6 +61,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Observable;
+import java.util.Observer;
 import java.util.Random;
 import java.util.regex.Pattern;
 
@@ -126,8 +130,8 @@ public class CalendarFragment extends Fragment {
 
         TextView monthIndication = root.findViewById(R.id.monthIndication);
         TextView dateInformation = root.findViewById(R.id.dateInformation);
-        Button monthBack = root.findViewById(R.id.monthBack);
-        Button monthForward = root.findViewById(R.id.monthForward);
+        ImageButton monthBack = root.findViewById(R.id.monthBack);
+        ImageButton monthForward = root.findViewById(R.id.monthForward);
         Button ea = root.findViewById(R.id.e);
         ea.setClickable(false);
         FloatingActionButton fabAdd = root.findViewById(R.id.fabAddCalendar);
@@ -135,7 +139,6 @@ public class CalendarFragment extends Fragment {
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.addEvents(events);
-
         /*for (Event e :
                 events) {
             System.out.println((StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true)))[0] < (StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true)))[0]);
@@ -156,7 +159,7 @@ public class CalendarFragment extends Fragment {
 
         new getCalendarData().execute((Void) null);
 
-        monthIndication.setText(dateFormatMonth.format(compactCalendarView.getFirstDayOfCurrentMonth()));
+        monthIndication.setText(getMonth(compactCalendarView.getFirstDayOfCurrentMonth()) + " - " + getYear(compactCalendarView.getFirstDayOfCurrentMonth()));
         dateInformation.setText(MillisInDate(System.currentTimeMillis(), false, true, false));
         dateClicked(System.currentTimeMillis());
 
@@ -179,7 +182,7 @@ public class CalendarFragment extends Fragment {
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
                 dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
-                if(e < 3)
+                if (e < 3)
                     e++;
                 else e = 0;
             }
@@ -192,8 +195,8 @@ public class CalendarFragment extends Fragment {
                 eventsThisDay.clear();
                 dateInformation.setText(MillisInDate(dateClicked.getTime(), false, true, false));
                 dateClicked(dateClicked);
-                if(e == 3){
-                    if(clicked == 1536789600000L) {
+                if (e == 3) {
+                    if (clicked == 1536789600000L) {
                         ea.setVisibility(View.VISIBLE);
                         ea.setClickable(true);
                         ea.setOnClickListener(new View.OnClickListener() {
@@ -204,22 +207,25 @@ public class CalendarFragment extends Fragment {
                                 ea.setClickable(false);
                             }
                         });
-                    }
-                    else
+                    } else
                         e = 0;
                 }
             }
 
             @Override
             public void onMonthScroll(Date firstDayOfNewMonth) {
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                    monthIndication.setText(dateFormatMonth.format(firstDayOfNewMonth));
-                    clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
-                    eventsThisDay.clear();
-                    dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
-                    dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
-                } else
-                    Toast.makeText(getContext(), "Error", Toast.LENGTH_SHORT).show();
+                clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
+                eventsThisDay.clear();
+
+                monthIndication.setText(getMonth(compactCalendarView.getFirstDayOfCurrentMonth()) + " - " + getYear(compactCalendarView.getFirstDayOfCurrentMonth()));
+
+                //dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
+
+                dateInformation.setText(MillisInDate(clicked, false, true, false));
+
+
+                dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
+
             }
         });
 
@@ -396,13 +402,13 @@ public class CalendarFragment extends Fragment {
         return "1";
     }
 
-    private Long getEndTimeMillis(Event event){
+    private Long getEndTimeMillis(Event event) {
         String[] split = event.getData().toString().split(Pattern.quote("°°"));
         String endTime = split[0];
-        try{
+        try {
             Long timeMillis = Long.valueOf(endTime);
             return timeMillis;
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return null;
@@ -578,7 +584,7 @@ public class CalendarFragment extends Fragment {
                 .show();
     }
 
-    private int[] StringInDate(String date){
+    private int[] StringInDate(String date) {
         String[] split = date.split(". ");
         int[] ints = new int[2];
         ints[0] = Integer.valueOf(split[0]);
@@ -589,10 +595,10 @@ public class CalendarFragment extends Fragment {
     private String MillisInDate(long time, boolean withTime, boolean withDate, boolean monthAsNumber) {
         String day = new java.text.SimpleDateFormat("dd").format(new java.util.Date(time));
         String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(time));
-        String hour = new java.text.SimpleDateFormat("hh").format(new java.util.Date(time));
+        String hour = new java.text.SimpleDateFormat("kk").format(new java.util.Date(time));
         String minute = new java.text.SimpleDateFormat("mm").format(new java.util.Date(time));
 
-        if(monthAsNumber && withDate && !withTime){
+        if (monthAsNumber && withDate && !withTime) {
             return day + ". " + month;
         }
 
@@ -631,6 +637,44 @@ public class CalendarFragment extends Fragment {
         }
 
         return day + ". " + month;
+    }
+
+    private String getYear(Date date){
+        String year = new java.text.SimpleDateFormat("yyyy").format(date);
+        return year;
+    }
+
+    private String getMonth(Date date) {
+        String month = new java.text.SimpleDateFormat("MM").format(date);
+
+        if (month.equals("01")) {
+            month = "Januar";
+        } else if (month.equals("02")) {
+            month = "Februar";
+        } else if (month.equals("03")) {
+            month = "März";
+        } else if (month.equals("04")) {
+            month = "April";
+        } else if (month.equals("05")) {
+            month = "Mai";
+        } else if (month.equals("06")) {
+            month = "Juni";
+        } else if (month.equals("07")) {
+            month = "Juli";
+        } else if (month.equals("08")) {
+            month = "August";
+        } else if (month.equals("09")) {
+            month = "September";
+        } else if (month.equals("10")) {
+            month = "Oktober";
+        } else if (month.equals("11")) {
+            month = "November";
+        } else if (month.equals("12")) {
+            month = "Dezember";
+        } else {
+            month = "error";
+        }
+        return month;
     }
 
     private boolean refresh() {
@@ -796,6 +840,16 @@ public class CalendarFragment extends Fragment {
 
     private class getCalendarData extends AsyncTask<Void, Void, Boolean> {
 
+
+        @Override
+        protected void onPostExecute(Boolean aBoolean) {
+            super.onPostExecute(aBoolean);
+
+            compactCalendarView.removeAllEvents();
+            compactCalendarView.addEvents(events);
+
+        }
+
         @Override
         protected Boolean doInBackground(Void... voids) {
             ArrayList<Event> eventsToAdd = new ArrayList<>();
@@ -813,11 +867,8 @@ public class CalendarFragment extends Fragment {
                     }
                 }
 
-                compactCalendarView.removeAllEvents();
-                compactCalendarView.addEvents(events);
 
                 save(events, false);
-
 
 
             } catch (Exception e) {

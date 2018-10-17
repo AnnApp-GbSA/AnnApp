@@ -16,11 +16,13 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
+import android.text.Layout;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -293,5 +295,10 @@ public class Util {
         WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    public static void closeKeyboard(LinearLayout layout, Context context){
+        InputMethodManager inputMethodManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(layout.getWindowToken(), 0);
     }
 }

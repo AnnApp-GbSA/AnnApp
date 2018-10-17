@@ -104,21 +104,6 @@ public class MainActivity extends AppCompatActivity
 
         findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
 
-        navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-        getFragmentManager().addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
-            @Override
-            public void onBackStackChanged() {
-                FragmentManager fm = getFragmentManager();
-
-                if (fm.getBackStackEntryCount() > 0) {
-                    currentFragmentTag = fm.getBackStackEntryAt(fm.getBackStackEntryCount() - 1).getName();
-                    selectNavigationDrawerItem(currentFragmentTag);
-                }
-            }
-        });
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -163,10 +148,10 @@ public class MainActivity extends AppCompatActivity
         FragmentManager fm = getFragmentManager();
 
 
-        //Fragment myFragment = getFragmentManager().findFragmentByTag(prevFragmentTag);
+        Fragment myFragment = getFragmentManager().findFragmentByTag(prevFragmentTag);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        } else if (fm.getBackStackEntryCount() > 1) {
+        }else if (fm.getBackStackEntryCount() > 1) {
 
             fm.popBackStack();
 

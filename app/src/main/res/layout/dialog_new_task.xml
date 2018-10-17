@@ -22,7 +22,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="?colorPrimary"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:id="@+id/headerLayout">
 
             <Spinner
                 android:id="@+id/spinner_task_input_subject"
@@ -54,7 +55,8 @@
             android:hint="@string/task"
             android:inputType="text"
             android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"/>
+            android:layout_marginStart="8dp"
+            android:theme="@style/ThemeEditText"/>
 
         <Spinner
             android:id="@+id/spinner_task_input_time"
