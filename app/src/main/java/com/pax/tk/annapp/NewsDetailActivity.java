@@ -18,7 +18,6 @@ public class NewsDetailActivity extends AppCompatActivity {
     int colorPrimary;
     int colorAccent;
     int colorPrimaryDark;
-    int defaultTextColor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -21,6 +21,7 @@ import com.pax.tk.annapp.Fragments.GradeChildFragment;
 import com.pax.tk.annapp.Fragments.GradesFragment;
 import com.pax.tk.annapp.Fragments.HomeFragment;
 import com.pax.tk.annapp.Fragments.RepresentationPlan;
+import com.pax.tk.annapp.Fragments.SecuronFragment;
 import com.pax.tk.annapp.Fragments.SettingsFragment;
 import com.pax.tk.annapp.Fragments.TasksFragment;
 import com.pax.tk.annapp.Fragments.TimetableFragment;
@@ -134,30 +135,17 @@ public class MainActivity extends AppCompatActivity
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
 
-        /*Fragment myFragment = getFragmentManager().findFragmentByTag(GradeChildFragment.class.getSimpleName());
-        if (myFragment != null && myFragment.isVisible()) {
-            setFragment(GradesFragment.TAG);
-            drawer.closeDrawer(GravityCompat.START);
-        }
-        else if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-             super.onBackPressed();
-        }*/
-
         FragmentManager fm = getFragmentManager();
 
-
-        Fragment myFragment = getFragmentManager().findFragmentByTag(prevFragmentTag);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
-        }else if (fm.getBackStackEntryCount() > 1) {
+        } else if (fm.getBackStackEntryCount() > 1) {
 
             fm.popBackStack();
 
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            finish();
         }
     }
 
@@ -191,9 +179,11 @@ public class MainActivity extends AppCompatActivity
             setFragment(TasksFragment.TAG);
         } else if (id == R.id.nav_calendar) {
             setFragment(CalendarFragment.TAG);
+        }  else if (id == R.id.nav_securon) {
+            setFragment(SecuronFragment.TAG);
         } else if (id == R.id.nav_representationplan) {
             setFragment(RepresentationPlan.TAG);
-        } else if (id == R.id.nav_annanews) {
+        }else if (id == R.id.nav_annanews) {
             setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
             setFragment(SettingsFragment.TAG);
@@ -242,6 +232,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case CalendarFragment.TAG:
                 fragment = new CalendarFragment();
+                break;
+            case SecuronFragment.TAG:
+                fragment = new SecuronFragment();
                 break;
             case RepresentationPlan.TAG:
                 fragment = new RepresentationPlan();

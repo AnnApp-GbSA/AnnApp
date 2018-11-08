@@ -5,7 +5,9 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -136,7 +138,7 @@ public class SettingsFragment extends Fragment {
                 System.out.println(minute);
                 int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480) / 60);
 
-                TimePickerDialog tpd = new TimePickerDialog(getContext(), R.style.TimePickerTheme, onTimeSetListener, hourOfDay, minute, true); //TODO: fix crah
+                TimePickerDialog tpd = new TimePickerDialog(getContext(), R.style.TimePickerTheme, onTimeSetListener, hourOfDay, minute, true);
 
                 tpd.show();
             }
@@ -246,6 +248,10 @@ public class SettingsFragment extends Fragment {
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 if (getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.bundleKey_colorThemePosition), 0) != position) {
                     getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.bundleKey_colorThemePosition), position).commit();
+
+                    SharedPreferences prefs = getActivity().getSharedPreferences("prefs", Context.MODE_PRIVATE);
+                    prefs.edit().putInt(getString(R.string.bundleKey_colorThemePosition), position).apply();
+
                     /*getActivity().finish();
                     final Intent intent = getActivity().getIntent();
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

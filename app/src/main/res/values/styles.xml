@@ -43,6 +43,7 @@
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Default</item>
 
         <item name="android:theme">@style/NavStyle_Default</item>
+        <item name="bootLogo">@android:color/white</item>
     </style>
 
     <style name="ButtonStyle_Default" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
@@ -83,6 +84,8 @@
         <item name="colorPrimaryDark">@color/cs1.primaryDark</item>
         <item name="colorAccent">@color/cs1.accent</item>
         <item name="accent">@color/cs1.accent</item>
+        <item name="bootLogo">@color/cs1.0</item>
+
 
         <item name="colorTimetableHeader">#616161</item>
 
@@ -141,6 +144,9 @@
         <item name="colorPrimaryDark">@color/cs2.primaryDark</item>
         <item name="colorAccent">@color/cs2.accent</item>
         <item name="accent">@color/cs2.accent</item>
+        <item name="bootLogo">@android:color/white</item>
+
+
 
         <item name="android:textColor">@android:color/black</item>
         <item name="android:popupBackground">@android:color/white</item>
@@ -195,6 +201,8 @@
         <item name="colorPrimaryDark">@color/cs3.primaryDark</item>
         <item name="colorAccent">@color/cs3.accent</item>
         <item name="accent">@color/cs3.accent</item>
+        <item name="bootLogo">@color/cs3.accent</item>
+
 
         <item name="android:textColor">#ffffff</item>
         <item name="android:popupBackground">@color/dark_background_color</item>
