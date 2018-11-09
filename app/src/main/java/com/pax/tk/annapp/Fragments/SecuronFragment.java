@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;*/
+import com.github.sardine.DavResource;
+import com.github.sardine.Sardine;
+import com.github.sardine.SardineFactory;
 import com.pax.tk.annapp.R;
 
 import java.io.IOException;
@@ -31,7 +34,13 @@ public class SecuronFragment extends Fragment {
 
         getActivity().setTitle("Securon");
         root = inflater.inflate(R.layout.fragment_securon, container, false);
-/*
+
+        //startSardine(name, password);
+
+        return root;
+    }
+
+    /*private static void startSardine(String name, String password) {
         Sardine sardine = SardineFactory.begin(name, password);
         List<DavResource> resources = null;
         try {
@@ -39,12 +48,9 @@ public class SecuronFragment extends Fragment {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        for (DavResource res : resources)
-        {
+        for (DavResource res : resources) {
             System.out.println(res); // calls the .toString() method.
-        }*/
-
-        return root;
-    }
+        }
+    }*/
 
 }

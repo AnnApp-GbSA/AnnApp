@@ -2,6 +2,7 @@ package com.pax.tk.annapp;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -13,6 +14,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 
 import com.pax.tk.annapp.Fragments.AnnanewsFragment;
 import com.pax.tk.annapp.Fragments.CalendarFragment;
@@ -108,7 +111,13 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNDEFINED);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close){
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+                closeKeyboard();
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
@@ -134,6 +143,7 @@ public class MainActivity extends AppCompatActivity
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
 
         FragmentManager fm = getFragmentManager();
 
@@ -164,9 +174,12 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+
+
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
+
         int id = item.getItemId();
 
         if (id == R.id.nav_myday) {
@@ -328,4 +341,7 @@ public class MainActivity extends AppCompatActivity
         super.onPause();
         subjectManager.save();
     }
+
+    private void closeKeyboard(){InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
+        inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.drawer_layout).getWindowToken(), 0);}
 }
