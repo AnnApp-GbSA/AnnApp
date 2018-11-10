@@ -59,6 +59,7 @@ import java.net.URL;
 import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.ConcurrentModificationException;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Observable;
@@ -87,8 +88,6 @@ public class CalendarFragment extends Fragment {
     String urlLink = "https://calendar.google.com/calendar/ical/o5bthi1gtvamdjhed61rot1e74%40group.calendar.google.com/public/basic.ics";
     String urlLink2 = "https://calendar.google.com/calendar/embed?src=o5bthi1gtvamdjhed61rot1e74@group.calendar.google.com&ctz=Europe/Berlin&pli=1";
     private SimpleDateFormat dateFormatMonth = new SimpleDateFormat("MMMM - yyyy", Locale.getDefault());
-    int e = 0;
-
     View root;
 
     @Override
@@ -118,8 +117,7 @@ public class CalendarFragment extends Fragment {
             }
         }
 
-        //TODO reactivate ic sync with calendar is working
-        //getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
+        getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.VISIBLE);
 
         ((ImageButton) getActivity().findViewById(R.id.syncWithCalendar)).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -132,30 +130,31 @@ public class CalendarFragment extends Fragment {
         TextView dateInformation = root.findViewById(R.id.dateInformation);
         ImageButton monthBack = root.findViewById(R.id.monthBack);
         ImageButton monthForward = root.findViewById(R.id.monthForward);
-        Button ea = root.findViewById(R.id.e);
-        ea.setClickable(false);
         FloatingActionButton fabAdd = root.findViewById(R.id.fabAddCalendar);
 
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.addEvents(events);
-        /*for (Event e :
-                events) {
-            System.out.println((StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true)))[0] < (StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true)))[0]);
-            if(StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[0] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true,true))[0] &&
-                    StringInDate(MillisInDate(e.getTimeInMillis(), false, true,true))[1] <= StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1] ||
-                    StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[1] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1]){
-                System.out.println("hässlichste if der welt erreicht!");
-                long oneDay = 86400000L;
-                long day = e.getTimeInMillis() - e.getTimeInMillis()%oneDay;
-                long endDay = getEndTimeMillis(e) - getEndTimeMillis(e)%oneDay;
-                for (int days = 1; day+(days*oneDay)<= endDay; days++){
-                    compactCalendarView.addEvent(new Event(e.getColor(),e.getTimeInMillis()+(days*oneDay)));
+        eventsThisDay.clear();
+        try {
+            for (Event e :
+                    events) {
+                if (getEndTimeMillis(e) != null) {
+                    if ((StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[0] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[0] &&
+                            StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[1] <= StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1]) ||
+                            StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[1] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1]) {
+                        long oneDay = 86400000L;
+                        long day = e.getTimeInMillis() - e.getTimeInMillis() % oneDay;
+                        long endDay = getEndTimeMillis(e) - getEndTimeMillis(e) % oneDay;
+                        for (int days = 1; day + (days * oneDay) <= endDay; days++) {
+                            compactCalendarView.addEvent(new Event(e.getColor(), e.getTimeInMillis() + (days * oneDay)));
+                            events.add(new Event(e.getColor(), e.getTimeInMillis() + (days * oneDay), e.getData()));
+                        }
+                    }
                 }
             }
-        }*/
-
-        eventsThisDay.clear();
+        }catch(ConcurrentModificationException e){}
+        refresh();
 
         new getCalendarData().execute((Void) null);
 
@@ -182,9 +181,6 @@ public class CalendarFragment extends Fragment {
                 clicked = compactCalendarView.getFirstDayOfCurrentMonth().getTime();
                 dateInformation.setText(MillisInDate(compactCalendarView.getFirstDayOfCurrentMonth().getTime(), false, true, false));
                 dateClicked(compactCalendarView.getFirstDayOfCurrentMonth());
-                if (e < 3)
-                    e++;
-                else e = 0;
             }
         });
 
@@ -195,21 +191,6 @@ public class CalendarFragment extends Fragment {
                 eventsThisDay.clear();
                 dateInformation.setText(MillisInDate(dateClicked.getTime(), false, true, false));
                 dateClicked(dateClicked);
-                if (e == 3) {
-                    if (clicked == 1536789600000L) {
-                        ea.setVisibility(View.VISIBLE);
-                        ea.setClickable(true);
-                        ea.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                System.out.println("Easteregg gefunden!!");
-                                ea.setVisibility(View.GONE);
-                                ea.setClickable(false);
-                            }
-                        });
-                    } else
-                        e = 0;
-                }
             }
 
             @Override
@@ -250,10 +231,9 @@ public class CalendarFragment extends Fragment {
         switch (requestCode) {
             case 1000:
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(getContext(), "Permission granted", Toast.LENGTH_SHORT).show();
                     onSyncWithCalendar();
                 } else {
-                    Toast.makeText(getContext(), "Permission denied", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.addPermissionMessage, Toast.LENGTH_LONG).show();
                     try {
                         finalize();
                     } catch (Throwable throwable) {
@@ -295,8 +275,7 @@ public class CalendarFragment extends Fragment {
     public void onSyncWithCalendar() {
         checkPermission();
 
-
-        long calID = 3;
+        /*long calID = 3;
         long startMillis = 0;
         long endMillis = 0;
         Calendar beginTime = Calendar.getInstance();
@@ -314,7 +293,7 @@ public class CalendarFragment extends Fragment {
         values.put(CalendarContract.Events.DESCRIPTION, "Group workout");
         values.put(CalendarContract.Events.CALENDAR_ID, calID);
         values.put(CalendarContract.Events.EVENT_TIMEZONE, "Europe/Berlin");
-        //Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
+        Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);*/
 
 // get the event ID that is the last element in the Uri
         //long eventID = Long.parseLong(uri.getLastPathSegment());
@@ -341,17 +320,17 @@ public class CalendarFragment extends Fragment {
                     .putExtra(CalendarContract.Events.EVENT_COLOR, e.getColor());
             startActivity(intent);}
         }*/
-/*
+
         String content = new String("BEGIN:VCALENDAR\nPRODID:AnnApp\nVERSION:2.0\nCALSCALE:GREGORIAN\nMETHOD:PUBLISH\nX-WR-CALNAME:AnnApp\nX-WR-TIMEZONE:Europe/Berlin\nX-WR-CALDESC:\n");
         for (Event ev :
                 events) {
             if (ev.getTimeInMillis() > System.currentTimeMillis() - 31536000000L) {
-                content = content + eventToICS(getUID(ev), getSummary(ev), getLocation(ev), getStartDate(ev), getStartTime(ev), getEndDate(ev), getEndTime(ev));
+                content = content + eventToICS(/*getUID(ev)*/"5", getSummary(ev), getLocation(ev), getStartDate(ev), getStartTime(ev), getEndDate(ev), getEndTime(ev));
             }
         }
         content = content + "END:VCALENDAR";
         saveFile(FILE_NAME, content);
-        openFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);*/
+        openFile(Environment.getExternalStorageDirectory().getAbsolutePath() + "/" + FILE_NAME);
     }
 
     private String getSummary(Event ev) {
