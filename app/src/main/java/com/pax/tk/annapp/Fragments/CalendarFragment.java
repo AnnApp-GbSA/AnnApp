@@ -136,9 +136,8 @@ public class CalendarFragment extends Fragment {
         compactCalendarView.setUseThreeLetterAbbreviation(true);
         compactCalendarView.addEvents(events);
         eventsThisDay.clear();
-        try {
-            for (Event e :
-                    events) {
+            for(int i = 0; i < events.size(); i++) {
+                Event e = events.get(i);
                 if (getEndTimeMillis(e) != null) {
                     if ((StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[0] < StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[0] &&
                             StringInDate(MillisInDate(e.getTimeInMillis(), false, true, true))[1] <= StringInDate(MillisInDate(getEndTimeMillis(e), false, true, true))[1]) ||
@@ -146,14 +145,12 @@ public class CalendarFragment extends Fragment {
                         long oneDay = 86400000L;
                         long day = e.getTimeInMillis() - e.getTimeInMillis() % oneDay;
                         long endDay = getEndTimeMillis(e) - getEndTimeMillis(e) % oneDay;
-                        for (int days = 1; day + (days * oneDay) <= endDay; days++) {
+                        for (int days = 1; day + (days * oneDay) < endDay; days++) {
                             compactCalendarView.addEvent(new Event(e.getColor(), e.getTimeInMillis() + (days * oneDay)));
-                            events.add(new Event(e.getColor(), e.getTimeInMillis() + (days * oneDay), e.getData()));
                         }
                     }
                 }
             }
-        }catch(ConcurrentModificationException e){}
         refresh();
 
         new getCalendarData().execute((Void) null);
@@ -690,6 +687,25 @@ public class CalendarFragment extends Fragment {
             String location = split[1];
             String summary = split[2];
 
+            if(location.length() > 13 && summary.length() > 40){
+                String[] splitLocation = location.split(Pattern.quote(" "));
+                location = splitLocation[0];
+                if(location.length() > 13){
+                    location = "";
+                }
+            }
+
+            String[] splitStartTime = startTime.split(Pattern.quote(" "));
+            if(splitStartTime.length > 1){
+                startTime = splitStartTime[0] + monthToDate(splitStartTime[1]) + ".";
+            }
+
+            String[] splitEndTime = endTime.split(Pattern.quote(" "));
+            if(splitEndTime.length > 1){
+                endTime = splitEndTime[0] + monthToDate(splitEndTime[1]) + ".";
+            }
+
+
             TextView startTimeTxt = eventView.findViewById(R.id.startTime);
             startTimeTxt.setText("Beginn: " + startTime);
 
@@ -729,6 +745,51 @@ public class CalendarFragment extends Fragment {
             eventList.addView(eventView);
         }
         return true;
+    }
+
+    private String monthToDate(String monthName){
+        String month;
+        switch(monthName){
+            case "Januar":
+                month = "01";
+                break;
+            case "Februar":
+                month = "02";
+                break;
+            case "März":
+                month = "03";
+                break;
+            case "April":
+                month = "04";
+                break;
+            case "Mai":
+                month = "05";
+                break;
+            case "Juni":
+                month = "06";
+                break;
+            case "Juli":
+                month = "07";
+                break;
+            case "August":
+                month = "08";
+                break;
+            case "September":
+                month = "09";
+                break;
+            case "Oktober":
+                month = "10";
+                break;
+            case "November":
+                month = "11";
+                break;
+            case "Dezember":
+                month = "12";
+                break;
+            default:
+                month = null;
+        }
+        return month;
     }
 
     private void askDelete(int pos1) {

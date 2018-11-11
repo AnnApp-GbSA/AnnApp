@@ -54,6 +54,7 @@
                 android:focusable="false"
                 android:gravity="center"
                 android:textColor="?android:textColorPrimary"
+                android:textStyle="bold"
                 android:layout_gravity="center_vertical" />
 
             <ImageButton
@@ -102,6 +103,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
+            android:textStyle="bold"
             android:gravity="center" />
 
         <TextView
