@@ -111,7 +111,8 @@
                 android:gravity="center_vertical"
                 android:paddingLeft="10dp"
                 android:text="@string/short_blindtext"
-                android:textSize="25dp" />
+                android:textSize="25dp"
+                android:textColor="@android:color/white"/>
             <!--War mal "Fach:"-->
 
         </LinearLayout>

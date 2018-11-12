@@ -274,7 +274,6 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <!--TODO ?colorAccent doesn't work-->
     <style name="TimePickerTheme" parent="Theme.AppCompat.Dialog">
         <item name="colorAccent">?accent</item>
         <item name="android:textColor">?android:calendarTextColor</item>
@@ -285,7 +284,7 @@
         <item name="android:backgroundTint">?android:popupBackground</item>
     </style>
 
-    <style name="TimePickerThemeOld" parent="Theme.AppCompat.Light.Dialog" >
+    <!--<style name="TimePickerThemeOld" parent="Theme.AppCompat.Light.Dialog" >
         <item name="colorPrimary">?colorPrimary</item>
         <item name="colorPrimaryDark">?colorPrimaryDark</item>
         <item name="colorAccent">?colorAccent</item>
@@ -297,11 +296,11 @@
         <item name="colorControlActivated">?colorAccent</item>
         <item name="android:selectableItemBackgroundBorderless">@color/colorPrimaryDark</item>
         <item name="colorControlHighlight">#d50000</item>
-    </style>
+    </style>-->
 
-    <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
+    <!--<style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
         <item name="colorAccent">@android:color/holo_green_dark</item>
-    </style>
+    </style>-->
 
     <style name="WhiteTextColor">
         <item name="android:textColor">@android:color/white</item>

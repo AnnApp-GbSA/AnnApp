@@ -16,30 +16,20 @@ public class News implements Serializable{
     private String link;
     private String discription;
     private String article;
+    private String rawArticle;
     private String imageurl;
     private transient Drawable image;
 
-    public News(String title, String link , String discription, String article, String imageurl, Drawable image) {
+
+
+    public News(String title, String link , String discription, String article, String rawArticle, String imageurl, Drawable image) {
         this.title = title;
         this.link = link;
         this.discription = discription;
         this.article = article;
+        this.rawArticle = rawArticle;
         this.imageurl = imageurl;
         this.image = image;
-    }
-    public News(String title, String link , String discription, String imageurl, Drawable image) {
-        this(title,link,discription,discription,imageurl,image);
-    }
-
-    public News(String title, String link , String discription, String article, String imageurl) {
-        this.title = title;
-        this.link = link;
-        this.discription = discription;
-        this.article = article;
-        this.imageurl = imageurl;
-    }
-    public News(String title, String link , String discription, String imageurl) {
-        this(title,link,discription,discription,imageurl);
     }
 
     public String getLink() {
@@ -86,6 +76,13 @@ public class News implements Serializable{
         this.image = image;
     }
 
+    public String getRawArticle() {
+        return rawArticle;
+    }
+
+    public void setRawArticle(String rawArticle) {
+        this.rawArticle = rawArticle;
+    }
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

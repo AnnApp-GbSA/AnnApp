@@ -35,6 +35,7 @@ public class AnnanewsFragment extends Fragment {
     private SwipeRefreshLayout mSwipeLayout;
     private ArrayList<News> mFeedModelList;
     private SubjectManager subjectManager;
+    private RVAdapterNews rvAdapterNews;
 
     public static final String TAG = "AnnanewsFragment";
 
@@ -48,17 +49,20 @@ public class AnnanewsFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_annanews, container, false);
         RecyclerView rv = root.findViewById(R.id.rv_news);
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
-        rv.setAdapter(new RVAdapterNews(getContext()));
+        rvAdapterNews = new RVAdapterNews(getContext());
+        rv.setAdapter(rvAdapterNews);
         mSwipeLayout = root.findViewById(R.id.swipeRefreshLayout);
         subjectManager = SubjectManager.getInstance();
 
         new FetchFeedTask().execute((Void) null);
+        rvAdapterNews.update();
 
 
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new FetchFeedTask().execute((Void) null);
+                rvAdapterNews.update();
                 System.out.println("onRefresh");
             }
         });
@@ -95,7 +99,8 @@ public class AnnanewsFragment extends Fragment {
 
                 URL url = new URL(urlLink);
                 InputStream inputStream = url.openConnection().getInputStream();
-                subjectManager.mergeNews(parseFeed(inputStream));
+                ArrayList<News> news = parseFeed(inputStream);
+                subjectManager.mergeNews(news);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
@@ -126,16 +131,12 @@ public class AnnanewsFragment extends Fragment {
     }
 
     public ArrayList<News> parseFeed(InputStream inputStream) throws IOException {
-        /*String title = null;
-        String link = null;
-        String description = null;
-        Drawable image = null;
-        boolean isItem = false;*/
         ArrayList<News> items = new ArrayList<>();
         java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
         String content =  s.hasNext() ? s.next() : "";
-        content = content.replaceAll("\n","");
+        //content = content.replaceAll("\n","");
         content = htmlToString(content);
+
         inputStream.close();
         while (content.contains("<item>")){
             String item = xmlget(content,"<item>","</item>");
@@ -146,100 +147,23 @@ public class AnnanewsFragment extends Fragment {
             String imageurl = item.contains("<content:encoded><![CDATA[<p><a href=\"") ? xmlget(item,"<content:encoded><![CDATA[<p><a href=\"","\">"):null;
             String article = xmlget(item,"<content:encoded><![CDATA[","]]></content:encoded>");
             article = article.replaceAll("</p><p>","\n\n");
-            while (article.contains("<a"))
+            String rawArticle = article;
+            rawArticle = rawArticle.replace("<span style=\"background-color: #99cc00;\">", "<span style=\"background-color: #555555;\">");
+            System.out.println("rawArticle:\n"+rawArticle);
+
+            /*while (article.contains("<a"))
                 article = xmlcut(article, "<a","</a>");
             while (article.contains("<span"))
                 article = xmlcut(article, "<span","</span>");
             article = article.replaceAll("<p>","");
             article = article.replaceAll("</p>","");
             while (article.contains("<p "))
-                article = xmlcut(article,"<p ",">");
+                article = xmlcut(article,"<p ",">");*/
+
             Drawable image = SubjectManager.getInstance().getFromURl(imageurl);
-            items.add(new News(title,link,description,article,imageurl,image));
+            items.add(new News(title,link,description,article, rawArticle, imageurl,image));
         }
         return items;
-
-
-        /*try {
-            XmlPullParser xmlPullParser = Xml.newPullParser();
-            xmlPullParser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-            xmlPullParser.setInput(inputStream, null);
-
-            xmlPullParser.nextTag();
-            while (xmlPullParser.next() != XmlPullParser.END_DOCUMENT) {
-                int eventType = xmlPullParser.getEventType();
-
-                String name = xmlPullParser.getName();
-                if (name == null)
-                    continue;
-
-                if (eventType == XmlPullParser.END_TAG) {
-                    if (name.equalsIgnoreCase("item")) {
-
-                        //TODO Testing
-                        News item = new News(title, link, description, image);
-                        items.add(item);
-
-                        title = null;
-                        link = null;
-                        description = null;
-
-                        isItem = false;
-                    }
-                    continue;
-                }
-
-                if (eventType == XmlPullParser.START_TAG) {
-                    if (name.equalsIgnoreCase("item")) {
-                        isItem = true;
-                        continue;
-                    }
-                }
-
-                //Log.d("MyXmlParser", "Parsing name ==> " + name);
-                String result = "";
-                if (xmlPullParser.next() == XmlPullParser.TEXT) {
-                    result = xmlPullParser.getText();
-                    xmlPullParser.nextTag();
-                }
-
-                if (name.equalsIgnoreCase("title")) {
-                    title = htmlToString(result);
-                    System.out.println(result);
-                } else if (name.equalsIgnoreCase("link")) {
-                    link = result;
-                    System.out.println(result);
-                } else if (name.equalsIgnoreCase("description")) {
-                    description = htmlToString(result);
-                    System.out.println(result);
-                } else if (name.equalsIgnoreCase("content:encoded")) {
-                    result = result.replace("<p><a href=\"", "");
-                    String[] results = result.split("\\\"");
-                    result = results[0];
-                    System.out.println(result);
-                    image = drawableFromUrl(result);
-                }
-
-                if (title != null && link != null && description != null && false) {
-                    if (isItem) {
-                        News item = new News(title, link, description, image);
-                        items.add(item);
-                    } else {
-                        //mFeedTitle = title;
-                        //mFeedLink = link;
-                        //mFeedDescription = description;
-                    }
-                    title = null;
-                    link = null;
-                    description = null;
-                    isItem = false;
-                }
-            }
-
-            return items;
-        } finally {
-            inputStream.close();
-        }*/
     }
 
     public String htmlToString(String string) {

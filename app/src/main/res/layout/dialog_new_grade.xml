@@ -29,7 +29,9 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:backgroundTint="?android:textColor"/>
+                android:backgroundTint="?android:textColor"
+                android:theme="@style/WhiteTextColor"
+                android:popupTheme="@style/WhiteTextColor"/>
         </LinearLayout>
 
         <EditText

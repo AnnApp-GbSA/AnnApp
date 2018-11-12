@@ -1,6 +1,7 @@
 package com.pax.tk.annapp.Fragments;
 
 import android.app.Fragment;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,9 +10,6 @@ import android.view.ViewGroup;
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;*/
-import com.github.sardine.DavResource;
-import com.github.sardine.Sardine;
-import com.github.sardine.SardineFactory;
 import com.pax.tk.annapp.R;
 
 import java.io.IOException;
@@ -22,7 +20,7 @@ public class SecuronFragment extends Fragment {
 
     View root;
     String name = "tkiehnlein";
-    String password = "";
+    String password = "123456789";
 
     public static final String TAG = "SecuronFragment";
 
@@ -35,22 +33,48 @@ public class SecuronFragment extends Fragment {
         getActivity().setTitle("Securon");
         root = inflater.inflate(R.layout.fragment_securon, container, false);
 
-        //startSardine(name, password);
+        //startFTP(name, password);
+        new startFTPConnection().execute((Void) null);
 
         return root;
     }
 
-    /*private static void startSardine(String name, String password) {
-        Sardine sardine = SardineFactory.begin(name, password);
-        List<DavResource> resources = null;
-        try {
-            resources = sardine.list("https://deby0002.securon.eu/dav/");
-        } catch (IOException e) {
-            e.printStackTrace();
+    private static void startFTP (String name, String password) {
+
+
+    }
+
+    private class startFTPConnection extends AsyncTask<Void, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(Void... voids) {
+            try {
+//                FTPClient ftpClient = new FTPClient();
+//                ftpClient.connect("deby0002.securon.eu/dav");
+//                ftpClient.login(name, password);
+////            ftpClient.changeWorkingDirectory(serverRoad);
+//                ftpClient.setFileType(FTP.BINARY_FILE_TYPE);
+//
+//
+//
+//                ftpClient.disconnect();
+
+
+               /* Sardine sardine = SardineFactory.begin(name, password);
+                List<DavResource> resources = null;
+                try {
+                    resources = sardine.list("https://deby0002.securon.eu/dav/");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                for (DavResource res : resources) {
+                    System.out.println(res); // calls the .toString() method.
+                }*/
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return null;
         }
-        for (DavResource res : resources) {
-            System.out.println(res); // calls the .toString() method.
-        }
-    }*/
+    }
 
 }

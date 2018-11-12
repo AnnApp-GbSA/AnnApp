@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.pax.tk.annapp.Adapter.RVAdapterNews;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -317,10 +318,7 @@ public class SubjectManager {
 //        this.news = reallyNewNews;
 
         //this.news = news;
-        for (News oneNews :
-                news) {
-            this.news.add(oneNews);
-        }
+        this.news = news;
     }
 
     public void addNews (News news){

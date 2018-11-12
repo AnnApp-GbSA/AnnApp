@@ -1,23 +1,28 @@
 package com.pax.tk.annapp;
 
+import android.graphics.Color;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
+import android.view.MotionEvent;
+import android.view.View;
+import android.webkit.WebView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 public class NewsDetailActivity extends AppCompatActivity {
 
-    TextView textView;
+    TextView tvTitle;
     ImageView imageViewToolbar;
     AppBarLayout appBarLayout;
     com.pax.tk.annapp.News news;
     int colorPrimary;
     int colorAccent;
     int colorPrimaryDark;
+    WebView webView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,9 +46,10 @@ public class NewsDetailActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_news_detail);
 
-        textView = this.findViewById(R.id.textViewText);
+        tvTitle = this.findViewById(R.id.tvTitle);
         imageViewToolbar = this.findViewById(R.id.imageViewToolbar);
         appBarLayout = this.findViewById(R.id.appbar);
+        webView = this.findViewById(R.id.webView);
 
         System.out.println("onCreateView");
 
@@ -64,10 +70,25 @@ public class NewsDetailActivity extends AppCompatActivity {
         toolbar.setTitleTextColor(getColor(android.R.color.white));
         setSupportActionBar(toolbar);
 
+        tvTitle.setText(news.getTitle());
+
+        webView.getSettings().setJavaScriptEnabled(true);
+        webView.loadDataWithBaseURL("", news.getRawArticle(), "text/html", "UTF-8", "");
+        webView.getSettings();
+        webView.setBackgroundColor(Color.TRANSPARENT);
+        webView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"white\");");
+
+        //disabling scrolling in webView
+        webView.setOnTouchListener(new View.OnTouchListener() {
+
+            public boolean onTouch(View v, MotionEvent event) {
+                return (event.getAction() == MotionEvent.ACTION_MOVE);
+            }
+        });
 
         CollapsingToolbarLayout collapsingToolbarLayout = (CollapsingToolbarLayout) findViewById(R.id.collapsingToolbarLayout);
         collapsingToolbarLayout.setCollapsedTitleTextColor(getColor(android.R.color.white));
-        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.white));
+        collapsingToolbarLayout.setExpandedTitleColor(getColor(android.R.color.transparent));
 
         /*collapsingToolbarLayout.setContentScrimColor(colorPrimary);
         appBarLayout.setBackgroundColor(colorPrimary);*/
@@ -82,7 +103,6 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         imageViewToolbar.setImageDrawable(com.pax.tk.annapp.SubjectManager.getInstance().getFromURl(news.getImageurl()));
 
-        textView.setText(news.getArticle());
         System.out.println(news.getArticle());
 
 

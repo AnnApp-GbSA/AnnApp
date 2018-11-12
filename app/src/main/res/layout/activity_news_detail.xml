@@ -57,12 +57,25 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewText"
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Testtitle"
+                android:textStyle="bold"
+                android:textSize="30dp"/>
+
+            <WebView
+                android:id="@+id/webView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:padding="8dp"
-                android:text="@string/long_blindtext"
-                android:textSize="18sp" />
+                android:backgroundTint="@android:color/holo_green_light"/>
+
+            <Button
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Button"
+                android:visibility="invisible" />
         </LinearLayout>
     </android.support.v4.widget.NestedScrollView>
 
