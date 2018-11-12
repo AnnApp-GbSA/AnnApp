@@ -2,112 +2,128 @@ package com.pax.tk.annapp.Adapter;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
+import android.graphics.Typeface;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v7.widget.RecyclerView;
-import android.util.SparseBooleanArray;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
-import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.pax.tk.annapp.Grade;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
 import com.pax.tk.annapp.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
+public class ELAdapterGradeList extends BaseExpandableListAdapter {
 
-public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.RecyclerVH> {
-
-    Context context;
-    private ArrayList<Grade> grades;
-    private SubjectManager subjectManager;
+    private Context context;
     private Subject subject;
-    private TextView gradeMessage;
+    private ArrayList<Grade> grades;
 
-    boolean isWrittenBool;
+    private boolean isWrittenBool;
 
-    private SparseBooleanArray mTogglePositions;
-
-    public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage, int colorSchemePosition) {
+    public ELAdapterGradeList(Context context, Subject subject){
         this.context = context;
-        subjectManager = SubjectManager.getInstance();
         this.subject = subject;
         grades = subject.getAllGrades();
-        this.gradeMessage = gradeMessage;
-        mTogglePositions = new SparseBooleanArray();
-
     }
 
     @Override
-    public RecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_grade_list, parent, false);
-        return new RecyclerVH(v);
-    }
-
-    @Override
-    public void onBindViewHolder(RecyclerVH holder, final int position) {
-
-        holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
-
-
-        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                askDelete(grades.get(holder.getAdapterPosition()));
-            }
-        });
-        holder.editButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                System.out.println("Create InputDialog...");
-                createEditDialog(grades.get(holder.getAdapterPosition()));
-            }
-        });
-
-
-    }
-
-    @Override
-    public int getItemCount() {
+    public int getGroupCount() {
         return grades.size();
     }
 
-    //Viewholder Class
-    public class RecyclerVH extends RecyclerView.ViewHolder {
-        TextView gradeTxt;
-        ImageButton editButton;
-        ImageButton deleteButton;
-        RelativeLayout relativeLayout;
-
-        public RecyclerVH(View itemView) {
-            super(itemView);
-            editButton = itemView.findViewById(R.id.item_grade_button_edit);
-            deleteButton = itemView.findViewById(R.id.item_grade_button_delete);
-            gradeTxt = itemView.findViewById(R.id.item_grade_grade);
-        }
+    @Override
+    public int getChildrenCount(int groupPosition) {
+        return 1;
     }
 
+    @Override
+    public Grade getGroup(int groupPosition) {
+        return grades.get(groupPosition);
+    }
+
+    @Override
+    public Grade getChild(int groupPosition, int childPosition) {
+        return grades.get(groupPosition);
+    }
+
+    @Override
+    public long getGroupId(int groupPosition) {
+        return groupPosition;
+    }
+
+    @Override
+    public long getChildId(int groupPosition, int childPosition) {
+        return childPosition;
+    }
+
+    @Override
+    public boolean hasStableIds() {
+        return false;
+    }
+
+    @Override
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
+        String headerTitle = Integer.toString(getGroup(groupPosition).getGrade());
+        ImageButton editButton;
+
+        System.out.println("isExpanded:" + isExpanded);
+        if(convertView == null){
+            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.group_grade_list, null);
+        }
+
+        editButton = convertView.findViewById(R.id.item_grade_button_edit);
+        editButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("Create InputDialog...");
+                createEditDialog(grades.get(groupPosition));
+            }
+        });
+
+        TextView gradetext = convertView.findViewById(R.id.item_grade_grade);
+        gradetext.setTypeface(null, Typeface.BOLD);
+        gradetext.setText(headerTitle);
+        return convertView;
+    }
+
+    @Override
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
+        Grade grade = getChild(groupPosition, childPosition);
+        final String childText = grade.getNote() + "/n Wertung:" + grade.getRating();
+        System.out.println(childText);
+        if(convertView == null){
+            LayoutInflater layoutInflater = (LayoutInflater) this.context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = layoutInflater.inflate(R.layout.item_grade_list, parent, false);
+        }
+
+        TextView txtListChild = convertView.findViewById(R.id.igListItem);
+        txtListChild.setText(childText);
+        return convertView;
+    }
+
+    @Override
+    public boolean isChildSelectable(int groupPosition, int childPosition) {
+        return false;
+    }
 
     public void createEditDialog(final Grade grade) {
         BottomSheetDialog bsd = new BottomSheetDialog(context, R.style.NewDialog);
@@ -199,7 +215,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 grade.setIswritten(isWrittenBool);
                 grade.setRating(rating);
                 grade.setNote(note.getText().toString());
-                notifyItemChanged(grades.indexOf(grade));
+                //notifyItemChanged(grades.indexOf(grade));
 
                 ((TextView) ((Activity) context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
 
@@ -244,69 +260,5 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
         bsd.setContentView(mView);
         bsd.show();
-    }
-
-    /*void createAlertDialog(String title, String text, int ic) {
-        AlertDialog.Builder builder;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
-        } else {
-            builder = new AlertDialog.Builder(context);
-        }
-        builder.setTitle(title)
-                .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(ic);
-
-        AlertDialog alertDialog = builder.show();
-        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
-        lp.dimAmount = 0.7f;
-        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }*/
-
-    public void askDelete(final Grade grade) {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
-
-        builder.setTitle(R.string.deleteQuestion)
-                .setMessage(context.getString(R.string.deleteQuestionMessage))
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        delete(grade);
-                    }
-                })
-                .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        //I think - do Nothing - but if you want
-                    }
-                })
-                .setIcon(android.R.drawable.ic_delete);
-
-        AlertDialog askDialog = builder.show();
-        askDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams lp = askDialog.getWindow().getAttributes();
-        lp.dimAmount = 0.7f;
-        askDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
-    }
-
-    public void delete(Grade grade) {
-        int formerIndex = grades.indexOf(grade);
-        grade.getSubject().removeGrade(grade);
-        notifyItemRemoved(formerIndex);
-        ((TextView) ((Activity) context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
-        if (grades.isEmpty()) {
-            gradeMessage.setVisibility(View.VISIBLE);
-        }
-    }
-
-    public void addGrade(Grade grade) {
-        if (grades.contains(grade))
-            notifyItemInserted(grades.indexOf(grade));
     }
 }

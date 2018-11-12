@@ -307,23 +307,29 @@ public class MainActivity extends AppCompatActivity
             case GradesFragment.TAG:
                 navigationView.getMenu().getItem(2).setChecked(true);
                 break;
-            case CalendarFragment.TAG:
-                navigationView.getMenu().getItem(4).setChecked(true);
-                break;
-            case AnnanewsFragment.TAG:
-                navigationView.getMenu().getItem(6).setChecked(true);
-                break;
-            case FeedbackFragment.TAG:
-                navigationView.getMenu().getItem(8).setChecked(true);
-                break;
-            case SettingsFragment.TAG:
-                navigationView.getMenu().getItem(9).setChecked(true);
-                break;
             case TasksFragment.TAG:
                 navigationView.getMenu().getItem(3).setChecked(true);
                 break;
+            case CalendarFragment.TAG:
+                navigationView.getMenu().getItem(4).setChecked(true);
+                break;
+            case SecuronFragment.TAG:
+                navigationView.getMenu().getItem(5).setChecked(true);
+                break;
+            case AnnanewsFragment.TAG:
+                navigationView.getMenu().getItem(7).setChecked(true);
+                break;
+            case FeedbackFragment.TAG:
+                navigationView.getMenu().getItem(9).setChecked(true);
+                break;
+            case SettingsFragment.TAG:
+                navigationView.getMenu().getItem(10).setChecked(true);
+                break;
             case GradeChildFragment.TAG:
                 navigationView.getMenu().getItem(2).setChecked(true);
+                break;
+            case RepresentationPlan.TAG:
+                navigationView.getMenu().getItem(6).setChecked(true);
                 break;
         }
 
