@@ -29,6 +29,7 @@
     <string name="addSubject">Fach Hinzufügen</string>
     <string name="addTask">Aufgabe Hinzufügen</string>
     <string name="addGradeMessage">Bitte fügen sie eine neue Note hinzu!</string>
+    <string name="addPermissionMessage">Bitte erteilen sie der App die Erlaubnis auf den Speicher des Geräts zuzugreifen!</string>
 
     <string name="WerMichFindetGriegtNen">Leuchtkeks</string>
 
