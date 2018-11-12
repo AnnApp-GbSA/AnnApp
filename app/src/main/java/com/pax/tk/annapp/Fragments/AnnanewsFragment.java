@@ -9,6 +9,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.pax.tk.annapp.News;
 import com.pax.tk.annapp.R;
@@ -57,6 +59,11 @@ public class AnnanewsFragment extends Fragment {
         new FetchFeedTask().execute((Void) null);
         rvAdapterNews.update();
 
+        TypedValue a = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.backgroundTint, a, true);
+        mSwipeLayout.setProgressBackgroundColorSchemeColor(a.data);
+
+        mSwipeLayout.setColorSchemeColors(randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000));
 
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
@@ -71,6 +78,13 @@ public class AnnanewsFragment extends Fragment {
 
 
         return root;
+    }
+
+    public static int randomNumberGenerator(int rangeMin, int rangeMax)
+    {
+        Random r = new Random();
+        int createdRanNum = (int) Math.round(rangeMin + (rangeMax - rangeMin) * r.nextDouble());
+        return(createdRanNum);
     }
 
 
@@ -118,7 +132,6 @@ public class AnnanewsFragment extends Fragment {
             mSwipeLayout.setRefreshing(false);
         }
     }
-    //TODO: Delete this Tod
 
     private String xmlcut(String content, String startTag, String endTag){
         try {

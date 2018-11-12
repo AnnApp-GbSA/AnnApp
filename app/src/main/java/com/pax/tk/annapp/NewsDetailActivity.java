@@ -23,13 +23,14 @@ public class NewsDetailActivity extends AppCompatActivity {
     int colorAccent;
     int colorPrimaryDark;
     WebView webView;
+    boolean whiteText = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = getIntent().getExtras();
         this.setTheme(R.style.AppThemeColorful);
-        switch (bundle.getInt(getString(R.string.bundleKey_colorThemePosition))){
+        switch (bundle.getInt(getString(R.string.bundleKey_colorThemePosition))) {
             case 0:
                 //TODO nur zum Anzeigen
                 //setTheme(R.style.Tim);
@@ -37,12 +38,15 @@ public class NewsDetailActivity extends AppCompatActivity {
                 break;
             case 1:
                 setTheme(R.style.AppThemeOrange);
+                whiteText = true;
                 break;
             case 2:
                 setTheme(R.style.AppThemeBlue);
                 break;
             case 3:
                 setTheme(R.style.AppThemeColorful);
+                whiteText = true;
+                break;
         }
         setContentView(R.layout.activity_news_detail);
 
@@ -55,13 +59,11 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         TypedValue typedValue = new TypedValue();
         getTheme().resolveAttribute(R.attr.colorPrimary, typedValue, true);
-        colorPrimary=typedValue.data;
+        colorPrimary = typedValue.data;
         getTheme().resolveAttribute(R.attr.colorPrimaryDark, typedValue, true);
-        colorPrimaryDark=typedValue.data;
+        colorPrimaryDark = typedValue.data;
         getTheme().resolveAttribute(R.attr.colorAccent, typedValue, true);
-        colorAccent=typedValue.data;
-
-
+        colorAccent = typedValue.data;
 
 
         news = (com.pax.tk.annapp.News) bundle.getSerializable(getString(R.string.bundlekey_news));
@@ -73,10 +75,13 @@ public class NewsDetailActivity extends AppCompatActivity {
         tvTitle.setText(news.getTitle());
 
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadDataWithBaseURL("", news.getRawArticle(), "text/html", "UTF-8", "");
+
+        if (whiteText)
+            webView.loadDataWithBaseURL("", "<font color='white'>" + news.getRawArticle(), "text/html", "UTF-8", "");
+        else
+            webView.loadDataWithBaseURL("", news.getRawArticle(), "text/html", "UTF-8", "");
         webView.getSettings();
         webView.setBackgroundColor(Color.TRANSPARENT);
-        webView.loadUrl("javascript:document.body.style.setProperty(\"color\", \"white\");");
 
         //disabling scrolling in webView
         webView.setOnTouchListener(new View.OnTouchListener() {
