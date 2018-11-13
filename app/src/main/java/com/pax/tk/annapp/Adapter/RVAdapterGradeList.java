@@ -1,5 +1,6 @@
 package com.pax.tk.annapp.Adapter;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.FragmentManager;
@@ -7,8 +8,11 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.ContextThemeWrapper;
@@ -27,6 +31,11 @@ import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.aakira.expandablelayout.ExpandableLayout;
+import com.github.aakira.expandablelayout.ExpandableLayoutListener;
+import com.github.aakira.expandablelayout.ExpandableLayoutListenerAdapter;
+import com.github.aakira.expandablelayout.ExpandableLinearLayout;
+import com.github.aakira.expandablelayout.Utils;
 import com.pax.tk.annapp.Grade;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
@@ -47,29 +56,71 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     boolean isWrittenBool;
 
-    private SparseBooleanArray mTogglePositions;
+    private SparseBooleanArray expandedState = new SparseBooleanArray();
 
-    public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage, int colorSchemePosition) {
+    public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage) {
         this.context = context;
-        subjectManager = SubjectManager.getInstance();
         this.subject = subject;
         grades = subject.getAllGrades();
         this.gradeMessage = gradeMessage;
-        mTogglePositions = new SparseBooleanArray();
 
+        for (int i = 0; i < grades.size(); i++){
+            expandedState.append(i, false);
+        }
     }
 
     @Override
     public RecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(context).inflate(R.layout.item_grade_list, parent, false);
-        return new RecyclerVH(v);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.item_grade_withchild, parent, false);
+        return new RecyclerVH(view);
     }
 
     @Override
-    public void onBindViewHolder(RecyclerVH holder, final int position) {
+    public void onBindViewHolder(RecyclerVH holder, int position) {
+        Grade grade = grades.get(position);
+        holder.cardView.setCardBackgroundColor(Util.getSubjectColor(context, subject));
+        holder.gradeTxt.setText(Integer.toString(grade.getGrade()));
 
-        holder.gradeTxt.setText(String.valueOf(grades.get(position).getGrade()));
+        String written;
+        if (grade.iswritten()) {
+            written = context.getResources().getString(R.string.written);
+        } else {
+            written = context.getResources().getString(R.string.oral);
+        }
 
+        String noteTxt;
+        String shortText;
+
+        if (!grade.getNote().isEmpty()) {
+            noteTxt = grade.getNote() + "\n" + context.getResources().getString(R.string.rating) + ": " + grade.getRating() + "\n" + written;
+            holder.noteTxt.setTag(noteTxt);
+
+            if (grade.getNote().length() >= 30) {
+                shortText = grade.getNote().substring(0, 30) + "...";
+            } else {
+                shortText = grade.getNote();
+            }
+
+        } else {
+            noteTxt = context.getResources().getString(R.string.rating) + ": " + grade.getRating() + "\n" + written;
+            shortText = context.getResources().getString(R.string.rating) + ": " + grade.getRating() + ", " + written;
+        }
+
+        holder.noteTxt.setText(shortText);
+
+        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
+                    holder.noteTxt.setText(noteTxt);
+                    changeRotate(holder.arrowButton, 0f, 180f).start();
+                }else if(holder.noteTxt.getText().equals(noteTxt) && noteTxt != null){
+                    holder.noteTxt.setText(shortText);
+                    changeRotate(holder.arrowButton, 180f, 0f).start();
+                }
+            }
+        });
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,8 +135,6 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 createEditDialog(grades.get(holder.getAdapterPosition()));
             }
         });
-
-
     }
 
     @Override
@@ -93,21 +142,27 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         return grades.size();
     }
 
-    //Viewholder Class
     public class RecyclerVH extends RecyclerView.ViewHolder {
+        CardView cardView;
+        TextView noteTxt;
         TextView gradeTxt;
         ImageButton editButton;
         ImageButton deleteButton;
-        RelativeLayout relativeLayout;
+        LinearLayout itemLayout;
+        ImageButton arrowButton;
 
-        public RecyclerVH(View itemView) {
+        public RecyclerVH(View itemView){
             super(itemView);
+
+            arrowButton = itemView.findViewById(R.id.item_grade_arrow);
+            itemLayout = itemView.findViewById(R.id.layout_grade);
+            cardView = itemView.findViewById(R.id.cardView_grades);
             editButton = itemView.findViewById(R.id.item_grade_button_edit);
             deleteButton = itemView.findViewById(R.id.item_grade_button_delete);
+            noteTxt = itemView.findViewById(R.id.item_grade_note);
             gradeTxt = itemView.findViewById(R.id.item_grade_grade);
         }
     }
-
 
     public void createEditDialog(final Grade grade) {
         BottomSheetDialog bsd = new BottomSheetDialog(context, R.style.NewDialog);
@@ -297,6 +352,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     public void delete(Grade grade) {
         int formerIndex = grades.indexOf(grade);
+        grades.remove(formerIndex);
         grade.getSubject().removeGrade(grade);
         notifyItemRemoved(formerIndex);
         ((TextView) ((Activity) context).findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
@@ -309,4 +365,15 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         if (grades.contains(grade))
             notifyItemInserted(grades.indexOf(grade));
     }
+
+    private ObjectAnimator changeRotate(ImageButton button, float to, float from){
+        ObjectAnimator animator = ObjectAnimator.ofFloat(button, "rotation", from, to);
+        animator.setDuration(300);
+        animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));
+        return animator;
+    }
+
 }
+
+
+
