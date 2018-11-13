@@ -5,11 +5,13 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Typeface;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,7 +67,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     @Override
     public RecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
-        View view = inflater.inflate(R.layout.item_grade_withchild, parent, false);
+        View view = inflater.inflate(R.layout.item_grade_list, parent, false);
         return new RecyclerVH(view);
     }
 
@@ -73,6 +75,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
     public void onBindViewHolder(RecyclerVH holder, int position) {
         Grade grade = grades.get(position);
         holder.cardView.setCardBackgroundColor(Util.getSubjectColor(context, subject));
+        holder.gradeTxt.setTypeface(Typeface.DEFAULT_BOLD);
         holder.gradeTxt.setText(Integer.toString(grade.getGrade()));
 
         String written;
@@ -89,8 +92,8 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
             noteTxt = grade.getNote() + "\n" + context.getResources().getString(R.string.rating) + ": " + grade.getRating() + "\n" + written;
             holder.noteTxt.setTag(noteTxt);
 
-            if (grade.getNote().length() >= 30) {
-                shortText = grade.getNote().substring(0, 30) + "...";
+            if (grade.getNote().length() >= 20) {
+                shortText = grade.getNote().substring(0, 20) + "...";
             } else {
                 shortText = grade.getNote();
             }
@@ -103,6 +106,19 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         holder.noteTxt.setText(shortText);
 
         holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
+                    holder.noteTxt.setText(noteTxt);
+                    changeRotate(holder.arrowButton, 0f, 180f).start();
+                }else if(holder.noteTxt.getText().equals(noteTxt) && noteTxt != null){
+                    holder.noteTxt.setText(shortText);
+                    changeRotate(holder.arrowButton, 180f, 0f).start();
+                }
+            }
+        });
+
+        holder.arrowButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
