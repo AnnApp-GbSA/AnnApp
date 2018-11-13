@@ -215,5 +215,6 @@
     <string name="hold_to_create_new_lesson">Halten um eine Neue hinzuzufügen</string>
     <string name="show_tutorial_again">Tutorial erneut anzeigen</string>
     <string name="feedback">Feedback</string>
+    <string name="allday">Ganztägig</string>
 </resources>
 

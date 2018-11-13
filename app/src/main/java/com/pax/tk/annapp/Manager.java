@@ -1,36 +1,39 @@
 package com.pax.tk.annapp;
 
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
+import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
-import com.pax.tk.annapp.Adapter.RVAdapterNews;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class SubjectManager {
+public class Manager {
 
-    private static final SubjectManager subjectManager = new SubjectManager();
+    private static final Manager manager = new Manager();
 
     Context context;
 
     String filename;
+
+    CompactCalendarView compactCalendarView;
 
     private SchoolLessonSystem schoolLessonSystem = null;
 
@@ -38,17 +41,19 @@ public class SubjectManager {
     ArrayList<Subject> subjects = new ArrayList<Subject>();
     ArrayList<News> news = new ArrayList<>();
     Day[] days;
-    Set<Event> events = new HashSet<>();
-    //TODO: Set<Event> sortedEvents = new TreeSet<>(events);
+    public Set<Event> schoolEvents = new HashSet<>();
+    //TODO: Set<Event> sortedEvents = new TreeSet<>(schoolEvents);
 
-    private SubjectManager() {
-        System.out.println("Create SubjectManager...");
+    public int test = 0;
+
+    private Manager() {
+        System.out.println("Create Manager...");
         days = new Day[]{new Day(0), new Day(1), new Day(2), new Day(3), new Day(4)};
     }
 
-    //Returns the singelton subjectManager
-    public static SubjectManager getInstance() {
-        return subjectManager;
+    //Returns the singelton manager
+    public static Manager getInstance() {
+        return manager;
     }
 
     public void setContext(Context c) {
@@ -135,6 +140,7 @@ public class SubjectManager {
     }
 
     public void load() {
+        loadSchoolEvents();
         try {
             ObjectInputStream ois = new ObjectInputStream(context.openFileInput("AnnApp"));
             try {
@@ -147,6 +153,10 @@ public class SubjectManager {
             }
             try {
                 news = (ArrayList<News>) ois.readObject();
+            } catch (Exception e) {
+            }
+            try {
+                schoolEvents = (Set<Event>) ois.readObject();
             } catch (Exception e) {
             }
             System.out.println("loading:");
@@ -165,6 +175,7 @@ public class SubjectManager {
         System.out.println(subjects);
         System.out.println(days);
         System.out.println(news);
+        saveSchoolEvents();
         try {
             ObjectOutputStream oos = new ObjectOutputStream(context.openFileOutput("AnnApp", MODE_PRIVATE));
             oos.writeObject(subjects);
@@ -174,6 +185,25 @@ public class SubjectManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private void loadSchoolEvents() {
+        ArrayList<CustomEvent> ownEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(context, "schoolEvents");
+        if (ownEventsPuffer == null)
+            ownEventsPuffer = new ArrayList<>();
+        for (CustomEvent ce :
+                ownEventsPuffer) {
+            schoolEvents.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
+        }
+    }
+
+    private void saveSchoolEvents() {
+        ArrayList<CustomEvent> customEvents = new ArrayList<>();
+        for (Event event :
+                schoolEvents) {
+            customEvents.add(new CustomEvent(event.getColor(), event.getTimeInMillis(), event.getData()));
+        }
+        (new Util()).save(context, customEvents, "schoolEvents");
     }
 
 
@@ -262,7 +292,7 @@ public class SubjectManager {
         this.news = news;
     }
 
-    public void addNews (News news){
+    public void addNews(News news) {
         this.news.add(news);
     }
 
@@ -315,15 +345,47 @@ public class SubjectManager {
         }
     }
 
-    public Set<Event> getEvents() {
-        return events;
+    public Set<Event> getSchoolEvents() {
+        return schoolEvents;
     }
 
-    public void addEvent(Event event){
-        events.add(event);
+    public void addSchoolEvent(Event event) {
+        int color = Color.GREEN;
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy");
+            String endTime = ((String)event.getData()).split("°°")[0];
+            if(!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))){
+
+                color = Color.RED;
+
+                Event endEvent = new Event(color, Long.valueOf(endTime), event.getData());
+                if (!compactCalendarView.getEvents(new Date(endEvent.getTimeInMillis())).contains(endEvent))
+                    compactCalendarView.addEvent(endEvent);
+                Long currentDate = Long.valueOf(endTime);
+                for (int i = 1; currentDate - i * 86400000L>event.getTimeInMillis(); i++){
+                    compactCalendarView.addEvent(new Event(color, currentDate-i*86400000L, event.getData()));
+                }
+            }
+            //TODO check for n-day event
+            if (!compactCalendarView.getEvents(new Date(event.getTimeInMillis())).contains(event))
+                compactCalendarView.addEvent(new Event(color, event.getTimeInMillis(), event.getData()));
+        } catch (Exception e) {
+        }
+
+        schoolEvents.add(new Event(color, event.getTimeInMillis(), event.getData()));
     }
 
-    public void removeEvent(Event event){
-        events.remove(event);
+    public void removeSchoolEvent(Event event) {
+        schoolEvents.remove(event);
+        //TODO test for n-day event
+        try {
+            compactCalendarView.removeEvent(event);
+        } catch (Exception e) {
+        }
+    }
+
+    public void setCompactCalendarView(CompactCalendarView compactCalendarView) {
+        this.compactCalendarView = compactCalendarView;
     }
 }

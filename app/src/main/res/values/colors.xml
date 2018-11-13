@@ -11,7 +11,7 @@
     <color name= "colorTransparentWhite">#91ffffff</color>
     <color name = "colorWhite">#ffffff</color>
 
-    <color name="bg_line">#E7E7E7</color>
+    <color name="bg_line">#ffffff</color>
     <color name="bg_color">#FF99DCD7</color>
 
     <color name="cell_background_color">#ffffff</color>

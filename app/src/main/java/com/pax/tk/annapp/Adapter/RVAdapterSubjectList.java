@@ -14,17 +14,17 @@ import java.util.ArrayList;
 
 import com.pax.tk.annapp.Fragments.GradeChildFragment;
 import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
 
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
 import com.pax.tk.annapp.Util;
 
 public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectList.RecyclerVH> {
 
     private Context context;
     private ArrayList<Subject> subjects = new ArrayList<>();
-    private SubjectManager subjectManager = SubjectManager.getInstance();
+    private Manager manager = Manager.getInstance();
 
     public RVAdapterSubjectList(Context context,  ArrayList<Subject> subjects){
         this.context = context;

@@ -2,12 +2,10 @@
 package com.pax.tk.annapp.Fragments;
 
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -28,7 +26,7 @@ import java.util.Set;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.SchoolLessonSystem;
-import com.pax.tk.annapp.SubjectManager;
+import com.pax.tk.annapp.Manager;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -305,8 +303,8 @@ public class SettingsFragment extends Fragment {
         SchoolLessonSystem schoolLessonSystem = new SchoolLessonSystem(schoolstart, lessonLength, breakLength, s);
         System.out.println(schoolLessonSystem.getSchoolstart());
 
-        SubjectManager subjectManager = SubjectManager.getInstance();
-        subjectManager.setSchoolLessonSystem(schoolLessonSystem);
+        Manager manager = Manager.getInstance();
+        manager.setSchoolLessonSystem(schoolLessonSystem);
     }
 }
 

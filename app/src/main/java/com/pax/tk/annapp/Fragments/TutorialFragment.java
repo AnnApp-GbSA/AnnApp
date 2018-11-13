@@ -3,7 +3,6 @@ package com.pax.tk.annapp.Fragments;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -20,8 +19,8 @@ import android.widget.TextView;
 
 import com.pax.tk.annapp.Adapter.SliderAdapter;
 import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
-import com.pax.tk.annapp.SubjectManager;
 
 
 public class TutorialFragment extends Fragment{
@@ -40,7 +39,7 @@ public class TutorialFragment extends Fragment{
 
     private SliderAdapter sliderAdapter;
 
-    private SubjectManager subjectManager;
+    private Manager manager;
 
     public static final String TAG = "TutorialFragment";
 
@@ -59,7 +58,7 @@ public class TutorialFragment extends Fragment{
 
         System.out.println("Creating Tutorial-----------------------------------------------");
 
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
 
         slideViewPager = (ViewPager) root.findViewById(R.id.tutorial_viewPager);
         dotLayout = root.findViewById(R.id.tutorial_dotLayout);

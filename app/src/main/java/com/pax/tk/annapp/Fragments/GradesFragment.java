@@ -2,8 +2,6 @@ package com.pax.tk.annapp.Fragments;
 
 import android.app.Fragment;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
@@ -14,8 +12,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -27,21 +23,18 @@ import android.widget.TextView;
 
 
 import com.pax.tk.annapp.Grade;
-import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterSubjectList;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
 import com.pax.tk.annapp.Util;
-
-import static android.R.layout.simple_spinner_dropdown_item;
 
 public class GradesFragment extends Fragment {
     View root;
 
     boolean isWrittenBool;
 
-    private SubjectManager subjectManager;
+    private Manager manager;
 
     RecyclerView recyclerView;
 
@@ -55,13 +48,13 @@ public class GradesFragment extends Fragment {
 
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
 
-        //Get Singelton subjectManager
-        subjectManager = SubjectManager.getInstance();
+        //Get Singelton manager
+        manager = Manager.getInstance();
 
-        String avg = String.valueOf(subjectManager.getWholeGradeAverage());
+        String avg = String.valueOf(manager.getWholeGradeAverage());
         if(!avg.equals("NaN")){
             getActivity().findViewById(R.id.grade).setVisibility(View.VISIBLE);
-            ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(subjectManager.getWholeGradeAverage()));
+            ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(manager.getWholeGradeAverage()));
         }
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAdd);
@@ -69,21 +62,21 @@ public class GradesFragment extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (subjectManager.getSubjects().isEmpty()) {
+                if (manager.getSubjects().isEmpty()) {
                     Util.createAlertDialog(getContext().getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert, getContext());
                 } else
                     createInputDialog();
             }
         });
         TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
-        if (subjectManager.getSubjects().isEmpty())
+        if (manager.getSubjects().isEmpty())
             missingSubjectsWarning.setVisibility(View.VISIBLE);
 
         recyclerView = root.findViewById(R.id.recyclerViewSubjectsId);
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));
+        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), manager.getSubjects()));
 
         //addTestGrades();
 
@@ -149,7 +142,7 @@ public class GradesFragment extends Fragment {
         });
 
         Context wrappedContext = new ContextThemeWrapper(getContext(), R.style.BasicTheme);
-        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(wrappedContext, R.layout.white_spinner_item, subjectManager.getSubjects());
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(wrappedContext, R.layout.white_spinner_item, manager.getSubjects());
 
         adapter.setDropDownViewTheme(getActivity().getTheme());
 
@@ -187,8 +180,8 @@ public class GradesFragment extends Fragment {
                 Subject subject = (Subject) subjectSelection.getSelectedItem();
                 Grade newGrade =new Grade(subject, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
                 subject.addGrade(newGrade);
-                recyclerView.getAdapter().notifyItemChanged(subjectManager.getSubjects().indexOf(subject));
-                ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(subjectManager.getWholeGradeAverage()));
+                recyclerView.getAdapter().notifyItemChanged(manager.getSubjects().indexOf(subject));
+                ((TextView)getActivity().findViewById(R.id.grade)).setText(String.valueOf(manager.getWholeGradeAverage()));
                 //((RVAdapterSubjectList)recyclerView.getAdapter()).addGrade(newGrade);
                 bsd.cancel();
             }
@@ -220,10 +213,10 @@ public class GradesFragment extends Fragment {
                             rating = Float.parseFloat(ratingInput.getText().toString());
 
 
-                        Subject subject = subjectManager.getSubjectByName(subjectSelection.getSelectedItem().toString());
+                        Subject subject = manager.getSubjectByName(subjectSelection.getSelectedItem().toString());
                         subject.addGrade(Integer.valueOf(gradeInput.getText().toString()), isWrittenBool, rating, note.getText().toString());
-                        subjectManager.save(getContext(), "subjects");
-                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), subjectManager.getSubjects()));                    }
+                        manager.save(getContext(), "subjects");
+                        recyclerView.setAdapter(new RVAdapterSubjectList(getActivity(), manager.getSubjects()));                    }
                 })*/
 
 

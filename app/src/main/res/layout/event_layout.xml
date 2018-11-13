@@ -4,65 +4,96 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout_item_event_content"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/colorMarker"
         android:layout_width="5dp"
         android:layout_height="0dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
         android:textColor="@android:color/transparent"
-        app:layout_constraintEnd_toStartOf="@id/startTime"
-        app:layout_constraintBottom_toBottomOf="@+id/location"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/startTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Beginn: 08:00 Uhr"
-        app:layout_constraintStart_toEndOf="@+id/colorMarker"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/endTime"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Ende: 13:00 Uhr"
-        app:layout_constraintStart_toEndOf="@+id/colorMarker"
-        app:layout_constraintTop_toBottomOf="@+id/startTime" />
-
-    <TextView
-        android:id="@+id/location"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:text="Ort: Schule"
-        app:layout_constraintStart_toEndOf="@+id/colorMarker"
-        app:layout_constraintTop_toBottomOf="@+id/endTime"
-        android:paddingBottom="8dp"/>
-
-    <TextView
-        android:id="@+id/description"
+    <LinearLayout
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="8dp"
-        android:text="Beschreibung:\nSchule"
-        app:layout_constraintBottom_toBottomOf="@+id/location"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/startTime"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:textSize="18sp"/>
+        android:gravity="left">
+
+        <LinearLayout
+            android:id="@+id/linearLayout4"
+            android:layout_width="150dp"
+            android:layout_height="match_parent"
+            android:layout_marginVertical="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="0"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/description"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/startTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="16dp"
+                android:text="Beginn: 08:00 Uhr"
+                app:layout_constraintStart_toEndOf="@+id/colorMarker"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/endTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:text="Ende: 13:00 Uhr"
+                app:layout_constraintStart_toEndOf="@+id/colorMarker"
+                app:layout_constraintTop_toBottomOf="@+id/startTime" />
+
+            <TextView
+                android:id="@+id/location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_weight="-1"
+                android:paddingBottom="8dp"
+                android:text="Ort: Schule"
+                app:layout_constraintStart_toEndOf="@+id/colorMarker"
+                app:layout_constraintTop_toBottomOf="@+id/endTime" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="2"
+            android:gravity="center_vertical"
+            android:text="Beschreibung:\nSchule"
+            android:textAlignment="center"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </LinearLayout>
 
     <ImageButton
         android:id="@+id/item_event_button_delete"

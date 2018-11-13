@@ -3,24 +3,17 @@ package com.pax.tk.annapp.Adapter;
 import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Build;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -28,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.github.aakira.expandablelayout.ExpandableLayout;
@@ -38,9 +30,9 @@ import com.github.aakira.expandablelayout.ExpandableLinearLayout;
 import com.github.aakira.expandablelayout.Utils;
 import com.pax.tk.annapp.Grade;
 import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
 import com.pax.tk.annapp.Util;
 
 import java.util.ArrayList;
@@ -50,7 +42,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     Context context;
     private ArrayList<Grade> grades;
-    private SubjectManager subjectManager;
+    private Manager manager;
     private Subject subject;
     private TextView gradeMessage;
 
@@ -60,6 +52,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage) {
         this.context = context;
+        manager = Manager.getInstance();
         this.subject = subject;
         grades = subject.getAllGrades();
         this.gradeMessage = gradeMessage;

@@ -1,14 +1,7 @@
 package com.pax.tk.annapp.Fragments;
 
 import android.app.Fragment;
-import android.app.FragmentContainer;
-import android.app.FragmentManager;
-import android.app.TimePickerDialog;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
-import android.graphics.drawable.Icon;
-import android.icu.text.TimeZoneFormat;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
@@ -16,23 +9,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Space;
 import android.widget.TextView;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pax.tk.annapp.Lesson;
 import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
-import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.Util;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -42,7 +30,7 @@ public class HomeFragment extends Fragment {
 
     View root;
     LinearLayout timeTable;
-    SubjectManager subjectManager;
+    Manager manager;
     View divider;
     View fragment;
 
@@ -57,7 +45,7 @@ public class HomeFragment extends Fragment {
         getActivity().setTitle(getString(R.string.Home));
         root = inflater.inflate(R.layout.fragment_home, container, false);
 
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
 
         timeTable = root.findViewById(R.id.timeTable);
 
@@ -110,11 +98,11 @@ public class HomeFragment extends Fragment {
         if (dayOfWeek != -1) {
 
             for (Lesson l :
-                    subjectManager.getDays()[dayOfWeek].getLessons()) {
+                    manager.getDays()[dayOfWeek].getLessons()) {
 
                 /*Button btn;
 
-                System.out.println(subjectManager.getDays()[dayOfWeek].getLessons());
+                System.out.println(manager.getDays()[dayOfWeek].getLessons());
 
                 timeTable.setShowDividers(View.VISIBLE);
 
@@ -128,7 +116,7 @@ public class HomeFragment extends Fragment {
 
                 View btn;
 
-                System.out.println(subjectManager.getDays()[dayOfWeek].getLessons());
+                System.out.println(manager.getDays()[dayOfWeek].getLessons());
 
                 timeTable.setShowDividers(View.VISIBLE);
 
@@ -170,7 +158,7 @@ public class HomeFragment extends Fragment {
 
         int color = 0;
 
-        int index = subjectManager.getSubjects().indexOf(subject);
+        int index = manager.getSubjects().indexOf(subject);
         for (int i; index > 14; index = index - 14) {
         }
 
@@ -203,7 +191,7 @@ public class HomeFragment extends Fragment {
 
         int color = 0;
 
-        int index = subjectManager.getSubjects().indexOf(subject);
+        int index = manager.getSubjects().indexOf(subject);
         for (int i; index > 14; index = index - 14) {
         }
 

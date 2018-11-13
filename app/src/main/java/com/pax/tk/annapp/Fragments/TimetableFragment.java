@@ -3,8 +3,6 @@ package com.pax.tk.annapp.Fragments;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
-import android.content.res.ColorStateList;
-import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -32,7 +30,6 @@ import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
-import android.widget.Toast;
 
 
 import java.util.ArrayList;
@@ -42,11 +39,9 @@ import com.pax.tk.annapp.Lesson;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
-import com.pax.tk.annapp.Task;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.Util;
 
-import static android.R.layout.simple_spinner_dropdown_item;
 import static android.content.Context.MODE_PRIVATE;
 
 
@@ -71,7 +66,7 @@ public class TimetableFragment extends Fragment {
 
     TableLayout tableLayout;
 
-    SubjectManager subjectManager;
+    Manager manager;
 
     public static final String TAG = "TimetableFragment";
 
@@ -96,11 +91,11 @@ public class TimetableFragment extends Fragment {
 
         getActivity().setTitle(getString(R.string.timetable));
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
 
 
-        if (!subjectManager.getSubjects().isEmpty())
-            lastSubject = subjectManager.getSubjects().get(0);
+        if (!manager.getSubjects().isEmpty())
+            lastSubject = manager.getSubjects().get(0);
         else
             lastSubject = uglyAsHellWayToCreateAOtherCoiseOption;
         //RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
@@ -135,11 +130,11 @@ public class TimetableFragment extends Fragment {
         tableLayout.removeAllViews();
 
         int u;
-        System.out.println(subjectManager.getLongestDaysLessons());
-        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12) > subjectManager.getLongestDaysLessons())
+        System.out.println(manager.getLongestDaysLessons());
+        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12) > manager.getLongestDaysLessons())
             u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12);
         else
-            u = subjectManager.getLongestDaysLessons();
+            u = manager.getLongestDaysLessons();
 
         for (int i = 0; i < u; i++) {
             TableRow tableRow = new TableRow(this.getContext());
@@ -207,7 +202,7 @@ public class TimetableFragment extends Fragment {
                 int x = 0;
 
                 for (Day d :
-                        subjectManager.getDays()) {
+                        manager.getDays()) {
 
                     x++;
                     String cellName;
@@ -349,7 +344,7 @@ public class TimetableFragment extends Fragment {
         int x = Integer.valueOf(s[0]);
         int y = Integer.valueOf(s[1]);
 
-        //subjectManager.setLesson(subjectManager.getSubjects().get(1), "", y, x-1);
+        //manager.setLesson(manager.getSubjects().get(1), "", y, x-1);
 
         createNewLessonDialog(x - 1, y, null, false);
 
@@ -360,7 +355,7 @@ public class TimetableFragment extends Fragment {
         int x = Integer.valueOf(s[0]) - 1;
         int y = Integer.valueOf(s[1]);
 
-        createLessonInfoDialog(x, y, subjectManager.getDays()[x].getLesson(y).getSubject());
+        createLessonInfoDialog(x, y, manager.getDays()[x].getLesson(y).getSubject());
     }
 
     public void createNewLessonDialog(final int day, final int time, final Subject subject, final Boolean subjectEdit) {
@@ -425,7 +420,7 @@ public class TimetableFragment extends Fragment {
             teacherEdittext.setText(subject.getTeacher());
             roomInput.setText(subject.getRoom());
         }
-        ArrayList<Subject> spinnerlist = (ArrayList<Subject>) subjectManager.getSubjects().clone();
+        ArrayList<Subject> spinnerlist = (ArrayList<Subject>) manager.getSubjects().clone();
         spinnerlist.add(uglyAsHellWayToCreateAOtherCoiseOption);
 
 
@@ -493,11 +488,11 @@ public class TimetableFragment extends Fragment {
                             radioBtn1.isChecked() ? 1 : 2,
                             teacherEdittext.getText().toString(),
                             roomInput.getText().toString());
-                    if (subjectManager.getSubjects().contains(oCSubject)) {
+                    if (manager.getSubjects().contains(oCSubject)) {
                         Util.createAlertDialog(getString(R.string.name_warning), getString(R.string.name_warning_dup) + oCSubject.getName() + "\"", 0, getContext());
                         return;
                     }
-                    subjectManager.addSubject(oCSubject);
+                    manager.addSubject(oCSubject);
                 } else if (nameEdittext.getText().toString().equals(selectedsubject.getName()) &
                         teacherEdittext.getText().toString().equals(selectedsubject.getTeacher()) &
                         (radioBtn1.isChecked() ? 1 : 2) == selectedsubject.getRatingSub()) {
@@ -515,7 +510,7 @@ public class TimetableFragment extends Fragment {
                 }
 
                 System.out.println(oCSubject + "\\" + (roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString()) + "\\" + day + "\\" + time);
-                subjectManager.setLesson(new Lesson(oCSubject, roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString(), day, time));
+                manager.setLesson(new Lesson(oCSubject, roomInput.getText().toString().isEmpty() ? null : roomInput.getText().toString(), day, time));
 
                 initializeTableView();
 
@@ -525,7 +520,7 @@ public class TimetableFragment extends Fragment {
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //subjectManager.setLesson(new Lesson(null,null, day, time));
+                //manager.setLesson(new Lesson(null,null, day, time));
                 //initializeTableView();
                 bsd.cancel();
             }
@@ -564,7 +559,7 @@ public class TimetableFragment extends Fragment {
 
         teacherView.setText(subject.getTeacher());
 
-        roomView.setText(subjectManager.getDays()[day].getLesson(time).getRoom());
+        roomView.setText(manager.getDays()[day].getLesson(time).getRoom());
 
         btnClear.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -576,7 +571,7 @@ public class TimetableFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 bsd.cancel();
-                createDeleteQuestionDialog(subjectManager.getDays()[day].getLesson(time));
+                createDeleteQuestionDialog(manager.getDays()[day].getLesson(time));
 
             }
         });
@@ -584,7 +579,7 @@ public class TimetableFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 bsd.cancel();
-                createEditQuestionDialog(subjectManager.getDays()[day].getLesson(time));
+                createEditQuestionDialog(manager.getDays()[day].getLesson(time));
             }
         });
         bsd.setContentView(mView);
@@ -731,19 +726,19 @@ public class TimetableFragment extends Fragment {
                     public void onClick(DialogInterface dialog, int which) {
                         switch (i) {
                             case 0:
-                                subjectManager.deleteLesson(lesson);
-                                //subjectManager.save();
+                                manager.deleteLesson(lesson);
+                                //manager.save();
                                 initializeTableView();
                                 break;
                             case 1:
-                                subjectManager.deleteAllLessons(lesson);
-                                //subjectManager.save();
+                                manager.deleteAllLessons(lesson);
+                                //manager.save();
                                 initializeTableView();
                                 break;
                             case 2:
-                                subjectManager.deleteAllLessons(lesson);
-                                subjectManager.deleteSubject(lesson.getSubject());
-                                //subjectManager.save();
+                                manager.deleteAllLessons(lesson);
+                                manager.deleteSubject(lesson.getSubject());
+                                //manager.save();
                                 initializeTableView();
                                 break;
                         }

@@ -23,23 +23,46 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="12dp"
+                android:layout_marginLeft="8dp"
+                android:backgroundTint="?android:textColor"
                 android:popupBackground="?colorPrimary"
-                android:text=""
+                android:text="@string/addEvent"
+                android:textColor="@color/bg_line"
+                android:textSize="24sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                android:backgroundTint="?android:textColor"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </LinearLayout>
 
-        <Button
-            android:id="@+id/startDateInput"
-            android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:ems="10"
-            android:textColor="?colorAccent"
-            android:background="@android:color/transparent"
-            android:gravity="center_horizontal"
-            android:padding="8dp"/>
+            android:orientation="horizontal"
+            android:layout_gravity="center_horizontal">
+
+            <Button
+                android:id="@+id/startDateInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:text="26. Dezember"
+                android:textColor="?colorAccent" />
+
+            <Button
+                android:id="@+id/startTimeInput"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center_horizontal"
+                android:padding="8dp"
+                android:text="14:30"
+                android:textColor="?colorAccent" />
+
+        </LinearLayout>
 
         <EditText
             android:id="@+id/eventInput"
@@ -47,7 +70,7 @@
             android:layout_height="wrap_content"
             android:ems="10"
             android:hint="@string/description"
-            android:theme="@style/ThemeEditText"/>
+            android:theme="@style/ThemeEditText" />
 
         <Button
             android:id="@+id/btnExtra"
@@ -65,24 +88,42 @@
             android:orientation="vertical"
             android:visibility="gone">
 
-            <Button
-                android:id="@+id/endDateInput"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ems="10"
-                android:hint="Enddatum"
-                android:textColor="?colorAccent"
-                android:background="@android:color/transparent"
-                android:gravity="center_horizontal"
-                android:padding="8dp"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/endDateInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:gravity="center_horizontal"
+                    android:hint="Enddatum"
+                    android:padding="8dp"
+                    android:textColor="?colorAccent" />
+
+                <Button
+                    android:id="@+id/endTimeInput"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@android:color/transparent"
+                    android:ems="10"
+                    android:gravity="center_horizontal"
+                    android:hint="Endzeit"
+                    android:padding="8dp"
+                    android:textColor="?colorAccent" />
+            </LinearLayout>
 
             <EditText
                 android:id="@+id/locationInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Ort"
                 android:ems="10"
-                android:theme="@style/ThemeEditText"/>
+                android:hint="Ort"
+                android:theme="@style/ThemeEditText" />
 
         </LinearLayout>
 

@@ -16,25 +16,25 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.NewsDetailActivity;
 import com.pax.tk.annapp.News;
 import com.pax.tk.annapp.R;
-import com.pax.tk.annapp.SubjectManager;
 
 
 public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHolder> {
 
     Context context;
-    SubjectManager subjectManager;
+    Manager manager;
     HashMap<Integer,Integer> old = new HashMap<Integer,Integer>();
 
     public RVAdapterNews(Context context) {
         this.context = context;
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
     }
 
     public void update(){
-        ArrayList<News> nn = subjectManager.getNews();
+        ArrayList<News> nn = manager.getNews();
         for (int i =0; i< nn.size();i++)
             if (old.keySet().contains(nn.get(i).getLink().hashCode()))
                 if (old.get(nn.get(i).getLink().hashCode()).equals(nn.get(i).fullHashCode()))
@@ -53,11 +53,11 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
 
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
-        News news = subjectManager.getOneNews(position);
+        News news = manager.getOneNews(position);
         old.put(news.getLink().hashCode(),news.fullHashCode());
         holder.title.setText(news.getTitle());
         holder.description.setText(news.getDiscription());
-        holder.image.setImageDrawable(subjectManager.getFromURl(news.getImageurl()));
+        holder.image.setImageDrawable(manager.getFromURl(news.getImageurl()));
 
 
 
@@ -88,7 +88,7 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
 
     @Override
     public int getItemCount() {
-        return subjectManager.getNewsCount();
+        return manager.getNewsCount();
     }
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {

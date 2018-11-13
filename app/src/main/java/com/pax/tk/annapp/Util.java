@@ -1,6 +1,5 @@
 package com.pax.tk.annapp;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -16,9 +15,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
-import android.text.Layout;
 import android.util.TypedValue;
-import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -31,12 +28,8 @@ import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -128,8 +121,6 @@ public class Util {
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-
             NotificationManager mNotificationManager;
             NotificationCompat.Builder mBuilder;
 
@@ -145,6 +136,8 @@ public class Util {
             mBuilder.setSmallIcon(smallIcon);
             mBuilder.setContentTitle(title)
                     .setContentText(subject)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(subject))
                     .setAutoCancel(false)
                     .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                     .setContentIntent(resultPendingIntent);
@@ -182,8 +175,8 @@ public class Util {
     }
 
     public static int getSubjectColor(Context context, Subject subject) {
-        SubjectManager subjectManager = SubjectManager.getInstance();
-        int index = subjectManager.getSubjects().indexOf(subject);
+        Manager manager = Manager.getInstance();
+        int index = manager.getSubjects().indexOf(subject);
 
         TypedValue a = new TypedValue();
 
@@ -257,7 +250,7 @@ public class Util {
             ois.close();
             return o;
         } catch (Exception e) {
-            System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
+            System.out.println("loading failed ----------------------------------------------------"+" "+ key +" "+"-----------------------------------------------------");
             e.printStackTrace();
             return null;
         }

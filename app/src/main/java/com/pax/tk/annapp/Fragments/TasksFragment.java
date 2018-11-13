@@ -2,11 +2,8 @@ package com.pax.tk.annapp.Fragments;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -18,7 +15,6 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
@@ -29,19 +25,18 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 
-import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterTaskList;
 import com.pax.tk.annapp.SchoolLessonSystem;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.Util;
 
 
 public class TasksFragment extends Fragment {
     View root;
-    private SubjectManager subjectManager;
+    private Manager manager;
     RecyclerView recyclerView;
 
     public static final String TAG = "TaskFragment";
@@ -55,7 +50,7 @@ public class TasksFragment extends Fragment {
         getActivity().setTitle(getString(R.string.tasks));
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
 
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
 
         FloatingActionButton fabAdd = (FloatingActionButton) root.findViewById(R.id.fabAddTask);
         fabAdd.setOnClickListener(new View.OnClickListener() {
@@ -67,7 +62,7 @@ public class TasksFragment extends Fragment {
         TextView taskMessage = (TextView) root.findViewById(R.id.noTask);
 
         for (Subject s :
-                subjectManager.getSubjects()) {
+                manager.getSubjects()) {
             if (!s.getAllTasks().isEmpty()) {
                 taskMessage.setVisibility(View.INVISIBLE);
             }
@@ -108,7 +103,7 @@ public class TasksFragment extends Fragment {
         String[] kinds = new String[]{getString(R.string.homework), getString(R.string.exam), getString(R.string.note)};
 
         final EditText task = (EditText) mView.findViewById(R.id.spinner_task_input_task);
-        final ArrayList<Subject> subjects = subjectManager.getSubjects();
+        final ArrayList<Subject> subjects = manager.getSubjects();
 
         if (subjects.isEmpty()) {
             Util.createAlertDialog(getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert, getContext());
@@ -209,7 +204,7 @@ public class TasksFragment extends Fragment {
                 Calendar due = Calendar.getInstance();//"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche",
                 Calendar now = Calendar.getInstance();
 
-                SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
+                SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals(getString(R.string.nextLesson))) {
                     due = subject.getNextLessonAfter(due, sls);
                 } else if (timeSelection.getSelectedItem().toString().equals(getString(R.string.next2Lesson))) {
@@ -259,7 +254,7 @@ public class TasksFragment extends Fragment {
                         Calendar due = Calendar.getInstance();//"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche",
                         Calendar now = Calendar.getInstance();
 
-                        SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
+                        SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                         if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
                             due = subject.getNextLessonAfter(due,sls);
                         } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {
@@ -290,7 +285,7 @@ public class TasksFragment extends Fragment {
                         subject.addTask(newTask);
                         ((RVAdapterTaskList) recyclerView.getAdapter()).addTask(newTask);
                         root.findViewById(R.id.noTask).setVisibility(View.GONE);
-                        subjectManager.save();
+                        manager.save();
                     }
                 })*/
         bsd.setContentView(mView);

@@ -1,14 +1,10 @@
 package com.pax.tk.annapp;
 
-import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,8 +15,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.pax.tk.annapp.Fragments.AnnanewsFragment;
 import com.pax.tk.annapp.Fragments.CalendarFragment;
@@ -35,12 +29,10 @@ import com.pax.tk.annapp.Fragments.TasksFragment;
 import com.pax.tk.annapp.Fragments.TimetableFragment;
 import com.pax.tk.annapp.Fragments.TutorialFragment;
 
-import java.util.Date;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
-    private SubjectManager subjectManager;
+    private Manager manager;
 
     private String currentFragmentTag = null;
     private String prevFragmentTag = null;
@@ -74,24 +66,17 @@ public class MainActivity extends AppCompatActivity
                 setTheme(R.style.AppThemeColorful);
         }
 
-        Date d = new Date();
-        d.setMinutes(d.getMinutes() + 1);
-
-        System.out.println(d);
-
-        new Util().createPushNotification(d, getApplicationContext(), 0, "test", "test", R.drawable.ic_add);
-
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //Creates instance of SubjectManager
-        subjectManager = SubjectManager.getInstance();
-        subjectManager.setContext(this);
+        //Creates instance of Manager
+        manager = Manager.getInstance();
+        manager.setContext(this);
 
-        subjectManager.setSchoolLessonSystem(null);
+        manager.setSchoolLessonSystem(null);
 
-        subjectManager.load();
+        manager.load();
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -338,19 +323,19 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStop() {
         super.onStop();
-        subjectManager.save();
+        manager.save();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        subjectManager.save();
+        manager.save();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        subjectManager.save();
+        manager.save();
     }
 
     private void closeKeyboard(){InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);

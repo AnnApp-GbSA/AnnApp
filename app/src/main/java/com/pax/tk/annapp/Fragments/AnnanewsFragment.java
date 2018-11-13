@@ -15,18 +15,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.News;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterNews;
-import com.pax.tk.annapp.SubjectManager;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -36,7 +34,7 @@ public class AnnanewsFragment extends Fragment {
     private View root;
     private SwipeRefreshLayout mSwipeLayout;
     private ArrayList<News> mFeedModelList;
-    private SubjectManager subjectManager;
+    private Manager manager;
     private RVAdapterNews rvAdapterNews;
 
     public static final String TAG = "AnnanewsFragment";
@@ -54,7 +52,7 @@ public class AnnanewsFragment extends Fragment {
         rvAdapterNews = new RVAdapterNews(getContext());
         rv.setAdapter(rvAdapterNews);
         mSwipeLayout = root.findViewById(R.id.swipeRefreshLayout);
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
 
         new FetchFeedTask().execute((Void) null);
         rvAdapterNews.update();
@@ -114,7 +112,7 @@ public class AnnanewsFragment extends Fragment {
                 URL url = new URL(urlLink);
                 InputStream inputStream = url.openConnection().getInputStream();
                 ArrayList<News> news = parseFeed(inputStream);
-                subjectManager.mergeNews(news);
+                manager.mergeNews(news);
                 return true;
             } catch (IOException e) {
                 Log.e(TAG, "Error", e);
@@ -173,7 +171,7 @@ public class AnnanewsFragment extends Fragment {
             while (article.contains("<p "))
                 article = xmlcut(article,"<p ",">");*/
 
-            Drawable image = SubjectManager.getInstance().getFromURl(imageurl);
+            Drawable image = Manager.getInstance().getFromURl(imageurl);
             items.add(new News(title,link,description,article, rawArticle, imageurl,image));
         }
         return items;

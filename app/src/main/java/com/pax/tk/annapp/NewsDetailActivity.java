@@ -106,7 +106,7 @@ public class NewsDetailActivity extends AppCompatActivity {
 
         this.setTitle(news.getTitle());
 
-        imageViewToolbar.setImageDrawable(com.pax.tk.annapp.SubjectManager.getInstance().getFromURl(news.getImageurl()));
+        imageViewToolbar.setImageDrawable(Manager.getInstance().getFromURl(news.getImageurl()));
 
         System.out.println(news.getArticle());
 

@@ -4,12 +4,10 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.os.Build;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,11 +25,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 
 import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.SchoolLessonSystem;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
-import com.pax.tk.annapp.SubjectManager;
 import com.pax.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
@@ -39,7 +37,7 @@ import static android.R.layout.simple_spinner_dropdown_item;
 public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.RecyclerVHTask> {
     private Context context;
     private ArrayList<Task> tasks = new ArrayList<>();
-    private SubjectManager subjectManager;
+    private Manager manager;
     private TextView taskMessage;
     private int pos;
     private boolean isPreview;
@@ -48,7 +46,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         this.context = context;
         this.taskMessage = taskMessage;
-        subjectManager = SubjectManager.getInstance();
+        manager = Manager.getInstance();
         this.isPreview = isPreview;
 
         constructor();
@@ -63,7 +61,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         pos = -1;
 
         tasks.clear();
-        ArrayList<Subject> subjects = subjectManager.getSubjects();
+        ArrayList<Subject> subjects = manager.getSubjects();
 
 
         for (Subject s : subjects) {
@@ -290,7 +288,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 }
 
                 Calendar due = Calendar.getInstance();
-                SchoolLessonSystem sls = subjectManager.getSchoolLessonSystem();
+                SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
                     due = task.getSubject().getNextLessonAfter(due, sls);
                 } else if (timeSelection.getSelectedItem().toString().equals("Übernächste Stunde")) {

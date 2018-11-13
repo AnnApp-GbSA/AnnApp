@@ -131,5 +131,6 @@
     <string name="colorsceme">Colorsceme:</string>
     <string name="hold_to_create_new_lesson">Hold to create a new lesson</string>
     <string name="show_tutorial_again">Show tutorial again</string>
+    <string name="allday">all-day</string>
 </resources>
 
