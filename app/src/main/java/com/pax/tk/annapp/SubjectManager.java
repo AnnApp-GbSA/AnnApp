@@ -38,10 +38,8 @@ public class SubjectManager {
     ArrayList<Subject> subjects = new ArrayList<Subject>();
     ArrayList<News> news = new ArrayList<>();
     Day[] days;
-    ArrayList<Event> events = new ArrayList<>();
-    ArrayList<Event> ownEvents = new ArrayList<>();
-    ArrayList<SchoolEvent> schoolEvents = new ArrayList<>();
-    ArrayList<SchoolEvent> ownSchoolEvents = new ArrayList<>();
+    Set<Event> events = new HashSet<>();
+    //TODO: Set<Event> sortedEvents = new TreeSet<>(events);
 
     private SubjectManager() {
         System.out.println("Create SubjectManager...");
@@ -90,39 +88,6 @@ public class SubjectManager {
         return news;
     }
 
-    public ArrayList<Event> getEvents() {
-        return events;
-    }
-
-    public void removeEvent(Event event) {
-        events.remove(event);
-    }
-
-    public void addEvent(Event ev) {
-        events.add(ev);
-    }
-
-    public void addEventList(ArrayList<Event> ev) {
-        events.addAll(ev);
-    }
-
-    public ArrayList<Event> getOwnEvents() {
-        return ownEvents;
-    }
-
-    public void removeOwnEvent(Event event) {
-        ownEvents.remove(event);
-    }
-
-    public void addOwnEvent(Event ev) {
-        ownEvents.add(ev);
-    }
-
-    public void removeSubject(Subject subject) {
-        for (Lesson lesson : subject.getLessons())
-            subjectManager.setLesson(new Lesson(null, null, lesson.getDay(), lesson.getTime()));
-    }
-
     //Gives back the average of all subjects
     public float getWholeGradeAverage() {
         float wholeGradeAverage = 0;
@@ -167,30 +132,6 @@ public class SubjectManager {
                 i = x;
         }
         return i;
-    }
-
-    private void afterLoad() {
-        for (SchoolEvent ev :
-                schoolEvents) {
-            events.add(new Event(ev.getColor(), ev.getStartTime(), ev.getData()));
-        }
-        for (SchoolEvent ev :
-                ownSchoolEvents) {
-            ownEvents.add(new Event(ev.getColor(), ev.getStartTime(), ev.getData()));
-        }
-    }
-
-    private void prepSave() {
-        schoolEvents.clear();
-        ownSchoolEvents.clear();
-        for (Event ev :
-                events) {
-            schoolEvents.add(new SchoolEvent(ev.getColor(), ev.getTimeInMillis(), ev.getData().toString()));
-        }
-        for (Event ev :
-                ownEvents) {
-            ownSchoolEvents.add(new SchoolEvent(ev.getColor(), ev.getTimeInMillis(), ev.getData().toString()));
-        }
     }
 
     public void load() {
@@ -374,4 +315,15 @@ public class SubjectManager {
         }
     }
 
+    public Set<Event> getEvents() {
+        return events;
+    }
+
+    public void addEvent(Event event){
+        events.add(event);
+    }
+
+    public void removeEvent(Event event){
+        events.remove(event);
+    }
 }
