@@ -64,6 +64,13 @@
 
         </LinearLayout>
 
+        <CheckBox
+            android:id="@+id/allDayEvent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/allday"
+            android:textColor="?android:attr/textColorPrimary" />
+
         <EditText
             android:id="@+id/eventInput"
             android:layout_width="match_parent"

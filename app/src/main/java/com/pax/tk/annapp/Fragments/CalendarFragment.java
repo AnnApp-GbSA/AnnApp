@@ -7,16 +7,20 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
@@ -25,6 +29,7 @@ import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 
+import java.io.BufferedInputStream;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -47,6 +52,7 @@ public class CalendarFragment extends Fragment {
     SimpleDateFormat kkmm = new SimpleDateFormat("kk:mm");
     SimpleDateFormat ddMMMM = new SimpleDateFormat("dd. MMMM");
     Long currentDay = System.currentTimeMillis();
+    Long currentDayPlusOne = currentDay;
 
     /**
      * initializing variables and calling methods
@@ -78,10 +84,14 @@ public class CalendarFragment extends Fragment {
         EventHandler.loadSchoolEvents();
 
 
-        for (Event e :
-                manager.getSchoolEvents()) {
-            manager.addSchoolEvent(e);
+        for (int i = 0; i<manager.getSchoolEvents().size(); i++){
+            manager.addSchoolEvent((Event) manager.getSchoolEvents().toArray()[i]);
         }
+
+        for (int i = 0; i<manager.getPrivateEvents().size(); i++){
+            manager.addPrivateEvent((Event) manager.getPrivateEvents().toArray()[i]);
+        }
+
 
         dateIndication.setText(ddMMMM.format(new Date(System.currentTimeMillis())));
         //TODO refresh if new event is loaded at this date
@@ -104,7 +114,8 @@ public class CalendarFragment extends Fragment {
             public void onDayClick(Date dateClicked) {
                 refresh(compactCalendarView.getEvents(dateClicked));
                 dateIndication.setText(ddMMMM.format(dateClicked));
-                currentDay=dateClicked.getTime();
+                currentDay = dateClicked.getTime();
+                currentDayPlusOne = dateClicked.getTime() + 86400000;
             }
 
             @Override
@@ -112,7 +123,8 @@ public class CalendarFragment extends Fragment {
                 monthIndication.setText(month.format(compactCalendarView.getFirstDayOfCurrentMonth()) + " - " + year.format(compactCalendarView.getFirstDayOfCurrentMonth()));
                 refresh(compactCalendarView.getEvents(firstDayOfNewMonth));
                 dateIndication.setText(ddMMMM.format(firstDayOfNewMonth));
-                currentDay=firstDayOfNewMonth.getTime();
+                currentDay = firstDayOfNewMonth.getTime();
+                currentDayPlusOne = firstDayOfNewMonth.getTime() + 86400000;
             }
         });
 
@@ -337,17 +349,43 @@ public class CalendarFragment extends Fragment {
 
         final EditText eventInput = (EditText) mView.findViewById(R.id.eventInput);
         final Button btnStartDateInput = (Button) mView.findViewById(R.id.startDateInput);
+        final Button btnStartTimeInput = (Button) mView.findViewById(R.id.startTimeInput);
         final Button btnEndDateInput = (Button) mView.findViewById(R.id.endDateInput);
+        final Button btnEndTimeInput = (Button) mView.findViewById(R.id.endTimeInput);
         final EditText locationInput = (EditText) mView.findViewById(R.id.locationInput);
         final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
         final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
         final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
         final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+        final CheckBox allDayEvent = (CheckBox) mView.findViewById(R.id.allDayEvent);
 
         btnStartDateInput.setText(ddMMMM.format(currentDay));
-        Date start = new Date(currentDay);
-        Date end = new Date(currentDay);
+        Date start = new Date(currentDayPlusOne);
+        System.out.println("start: " + currentDay);
+        Date end = new Date(currentDayPlusOne);
         final boolean[] change = {false};
+
+        allDayEvent.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked) {
+                    TypedValue a = new TypedValue();
+                    getContext().getTheme().resolveAttribute(R.attr.colorTimetableHeader, a, true);
+                    btnStartTimeInput.setEnabled(false);
+                    btnStartTimeInput.setTextColor(a.data);
+                    btnEndTimeInput.setEnabled(false);
+                    btnEndTimeInput.setTextColor(a.data);
+                } else {
+                    TypedValue a = new TypedValue();
+                    getContext().getTheme().resolveAttribute(R.attr.colorAccent, a, true);
+
+                    btnStartTimeInput.setEnabled(true);
+                    btnStartTimeInput.setTextColor(a.data);
+                    btnEndTimeInput.setEnabled(true);
+                    btnEndTimeInput.setTextColor(a.data);
+                }
+            }
+        });
 
         DatePickerDialog.OnDateSetListener onStartDateSetListener = new DatePickerDialog.OnDateSetListener() {
             @Override
@@ -357,21 +395,33 @@ public class CalendarFragment extends Fragment {
                 start.setYear(year - 1900);
                 start.setMonth(month);
                 start.setDate(dayOfMonth);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        getContext(), R.style.TimePickerTheme, onStartTimeSetListener, Integer.valueOf(hour), Integer.valueOf(minute), true);
-                timePickerDialog.setTitle("Uhrzeit auswählen");
-                timePickerDialog.setCanceledOnTouchOutside(false);
-                timePickerDialog.show();
-            }
 
-            TimePickerDialog.OnTimeSetListener onStartTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    start.setHours(hourOfDay);
-                    start.setMinutes(minute);
-                    btnStartDateInput.setText(ddMMMM.format(start.getTime()) + " " + kkmm.format(start.getTime()));
+
+                btnStartDateInput.setText(ddMMMM.format(start.getTime()));
+
+                if (end.getTime() < start.getTime()) {
+                    start.setTime(end.getTime());
+                    Toast.makeText(getContext(), "Die Startzeit darf nicht nach der Endzeit liegen.", Toast.LENGTH_SHORT).show();
+                    btnStartDateInput.setText(ddMMMM.format(start.getTime()));
                 }
-            };
+                if (end.getTime() > start.getTime()) {
+                    allDayEvent.setChecked(true);
+                    allDayEvent.setEnabled(false);
+                } else {
+                    allDayEvent.setEnabled(true);
+                }
+
+                start.setTime(start.getTime() + 86400000);
+            }
+        };
+
+        TimePickerDialog.OnTimeSetListener onStartTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                start.setHours(hourOfDay);
+                start.setMinutes(minute);
+                btnStartTimeInput.setText(kkmm.format(start.getTime()));
+            }
         };
 
         DatePickerDialog.OnDateSetListener onEndDateSetListener = new DatePickerDialog.OnDateSetListener() {
@@ -382,22 +432,34 @@ public class CalendarFragment extends Fragment {
                 end.setYear(year - 1900);
                 end.setMonth(month);
                 end.setDate(dayOfMonth);
-                TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        getContext(), R.style.TimePickerTheme, onEndTimeSetListener, Integer.valueOf(hour), Integer.valueOf(minute), true);
-                timePickerDialog.setTitle("Uhrzeit auswählen");
-                timePickerDialog.setCanceledOnTouchOutside(false);
-                timePickerDialog.show();
+                btnEndDateInput.setText(ddMMMM.format(end.getTime()));
+                if (end.getTime() < start.getTime()) {
+                    end.setTime(start.getTime());
+                    if (currentDay == currentDayPlusOne)
+                        btnEndDateInput.setText(ddMMMM.format(currentDay));
+                    else
+                        btnEndDateInput.setText(ddMMMM.format(end.getTime() - 86400000));
+                    Toast.makeText(getContext(), "Die Endzeit darf nicht vor der Startzeit liegen.", Toast.LENGTH_SHORT).show();
+                }
+                if (end.getTime() > start.getTime()) {
+                    allDayEvent.setChecked(true);
+                    allDayEvent.setEnabled(false);
+                } else {
+                    allDayEvent.setEnabled(true);
+                }
             }
 
-            TimePickerDialog.OnTimeSetListener onEndTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
-                @Override
-                public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                    end.setHours(hourOfDay);
-                    end.setMinutes(minute);
-                    btnEndDateInput.setText(ddMMMM.format(end.getTime()) + " " + kkmm.format(end.getTime()));
-                    change[0] = true;
-                }
-            };
+
+        };
+
+        TimePickerDialog.OnTimeSetListener onEndTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                end.setHours(hourOfDay);
+                end.setMinutes(minute);
+                btnEndTimeInput.setText(kkmm.format(end.getTime()));
+                change[0] = true;
+            }
         };
 
         btnStartDateInput.setOnClickListener(new View.OnClickListener() {
@@ -414,6 +476,21 @@ public class CalendarFragment extends Fragment {
             }
         });
 
+        btnStartTimeInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int hour = Integer.valueOf(new SimpleDateFormat("kk").format(new java.util.Date(currentDay)));
+                int minute = Integer.valueOf(new SimpleDateFormat("mm").format(new java.util.Date(currentDay)));
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        getContext(), R.style.TimePickerTheme, onStartTimeSetListener, hour, minute, true);
+                timePickerDialog.setTitle(getString(R.string.chooseTime));
+                timePickerDialog.setCanceledOnTouchOutside(false);
+                timePickerDialog.show();
+            }
+        });
+
         btnEndDateInput.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -425,6 +502,21 @@ public class CalendarFragment extends Fragment {
                 datePickerDialog.setTitle(getString(R.string.chooseDate));
                 datePickerDialog.setCanceledOnTouchOutside(false);
                 datePickerDialog.show();
+            }
+        });
+
+        btnEndTimeInput.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int hour = Integer.valueOf(new SimpleDateFormat("kk").format(new java.util.Date(currentDay)));
+                int minute = Integer.valueOf(new SimpleDateFormat("mm").format(new java.util.Date(currentDay)));
+
+
+                TimePickerDialog timePickerDialog = new TimePickerDialog(
+                        getContext(), R.style.TimePickerTheme, onEndTimeSetListener, hour, minute, true);
+                timePickerDialog.setTitle(getString(R.string.chooseTime));
+                timePickerDialog.setCanceledOnTouchOutside(false);
+                timePickerDialog.show();
             }
         });
 
@@ -456,19 +548,28 @@ public class CalendarFragment extends Fragment {
                     return;
                 }
 
-                Random rnd = new Random();
-                int color = Color.argb(255, rnd.nextInt(256), rnd.nextInt(256), rnd.nextInt(256));
+                int color = Color.argb(255, randomNumberGenerator(0, 200), randomNumberGenerator(50, 255), randomNumberGenerator(50, 255));
 
                 String uid = String.valueOf(eventInput.getText().toString().hashCode());
                 Event ev1;
-                if (change[0] == false) {
-                    ev1 = new Event(color, start.getTime(), "" + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
+                if (!allDayEvent.isChecked()) {
+                    if (change[0] == false) {
+                        ev1 = new Event(color, start.getTime(), "" + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
+                    } else {
+                        ev1 = new Event(color, start.getTime(), end.getTime() + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
+                    }
                 } else {
-                    ev1 = new Event(color, start.getTime(), end.getTime() + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid);
+                    if (currentDay == currentDayPlusOne)
+                        ev1 = new Event(color, start.getTime() - (start.getTime() % 86400000L) - 3600000, ((end.getTime() - (end.getTime() % 86400000L) - 3600000) + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid));
+                    else
+                        ev1 = new Event(color, start.getTime() - (start.getTime() % 86400000L) - 3600000, ((end.getTime() - (end.getTime() % 86400000L) - 3600000+86400000) + "°°" + locationInput.getText().toString() + "°°" + eventInput.getText().toString() + "°°" + uid));
+
                 }
-                compactCalendarView.addEvent(ev1);
+
+                //compactCalendarView.addEvent(ev1);
 
                 //TODO add to list
+                manager.addPrivateEvent(ev1);
 
                 bsd.cancel();
             }
@@ -476,5 +577,12 @@ public class CalendarFragment extends Fragment {
         bsd.setContentView(mView);
         bsd.show();
     }
+
+    public static int randomNumberGenerator(int rangeMin, int rangeMax) {
+        Random r = new Random();
+        int createdRanNum = (int) Math.round(rangeMin + (rangeMax - rangeMin) * r.nextDouble());
+        return (createdRanNum);
+    }
+
 }
 

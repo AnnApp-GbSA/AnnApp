@@ -43,6 +43,7 @@ public class Manager {
     Day[] days;
     public Set<Event> schoolEvents = new HashSet<>();
     //TODO: Set<Event> sortedEvents = new TreeSet<>(schoolEvents);
+    public Set<Event> privateEvents = new HashSet<>();
 
     public int test = 0;
 
@@ -188,22 +189,37 @@ public class Manager {
     }
 
     private void loadSchoolEvents() {
-        ArrayList<CustomEvent> ownEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(context, "schoolEvents");
-        if (ownEventsPuffer == null)
-            ownEventsPuffer = new ArrayList<>();
+        ArrayList<CustomEvent> schoolEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(context, "schoolEvents");
+        if (schoolEventsPuffer == null)
+            schoolEventsPuffer = new ArrayList<>();
         for (CustomEvent ce :
-                ownEventsPuffer) {
+                schoolEventsPuffer) {
             schoolEvents.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
+        }
+
+        ArrayList<CustomEvent> privateEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(context, "privateEvents");
+        if (privateEventsPuffer == null)
+            privateEventsPuffer = new ArrayList<>();
+        for (CustomEvent ce :
+                privateEventsPuffer) {
+            privateEvents.add(new Event(ce.getColor(), ce.getTimeInMillis(), ce.getData()));
         }
     }
 
     private void saveSchoolEvents() {
-        ArrayList<CustomEvent> customEvents = new ArrayList<>();
+        ArrayList<CustomEvent> customSchoolEvents = new ArrayList<>();
         for (Event event :
                 schoolEvents) {
-            customEvents.add(new CustomEvent(event.getColor(), event.getTimeInMillis(), event.getData()));
+            customSchoolEvents.add(new CustomEvent(event.getColor(), event.getTimeInMillis(), event.getData()));
         }
-        (new Util()).save(context, customEvents, "schoolEvents");
+        (new Util()).save(context, customSchoolEvents, "schoolEvents");
+
+        ArrayList<CustomEvent> customPrivateEvents = new ArrayList<>();
+        for (Event event :
+                privateEvents) {
+            customPrivateEvents.add(new CustomEvent(event.getColor(), event.getTimeInMillis(), event.getData()));
+        }
+        (new Util()).save(context, customPrivateEvents, "privateEvents");
     }
 
 
@@ -383,6 +399,35 @@ public class Manager {
             compactCalendarView.removeEvent(event);
         } catch (Exception e) {
         }
+    }
+
+    public void addPrivateEvent(Event event) {
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy");
+            String endTime = ((String)event.getData()).split("°°")[0];
+            if(!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))){
+                Event endEvent = new Event(event.getColor(), Long.valueOf(endTime), event.getData());
+                System.out.println("adding n-day private event");
+                if (!compactCalendarView.getEvents(new Date(endEvent.getTimeInMillis())).contains(endEvent))
+                    compactCalendarView.addEvent(endEvent);
+                Long currentDate = Long.valueOf(endTime);
+                for (int i = 1; currentDate - i * 86400000L>event.getTimeInMillis(); i++){
+                    compactCalendarView.addEvent(new Event(event.getColor(), currentDate-i*86400000L, event.getData()));
+                }
+            }
+            //TODO check for n-day event
+            if (!compactCalendarView.getEvents(new Date(event.getTimeInMillis())).contains(event))
+                compactCalendarView.addEvent(new Event(event.getColor(), event.getTimeInMillis(), event.getData()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        privateEvents.add(new Event(event.getColor(), event.getTimeInMillis(), event.getData()));
+    }
+
+    public Set<Event> getPrivateEvents() {
+        return privateEvents;
     }
 
     public void setCompactCalendarView(CompactCalendarView compactCalendarView) {
