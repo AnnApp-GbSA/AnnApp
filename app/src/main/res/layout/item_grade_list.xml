@@ -76,6 +76,7 @@
             android:background="@android:color/transparent"
             android:layout_alignParentEnd="true"
             android:focusable="false"
+            android:rotation="180"
             android:src="@drawable/ic_keyboard_arrow_down_black_24dp"
             android:tint="@android:color/white" />
         </LinearLayout>
