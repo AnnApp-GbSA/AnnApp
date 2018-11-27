@@ -23,6 +23,14 @@ public class FeedbackFragment extends Fragment {
 
     public static final String TAG = "FeedbackFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -45,6 +53,10 @@ public class FeedbackFragment extends Fragment {
         return root;
     }
 
+    /**
+     * checks if text is in the EditText and opens a mail-app to send the text as an e-mail to gbsanna1531@gmail.com
+     * makes a toast if an exception is caught
+     */
     void sendFeedback(){
 
         EditText feedbackText = (EditText) root.findViewById(R.id.feedbackText);

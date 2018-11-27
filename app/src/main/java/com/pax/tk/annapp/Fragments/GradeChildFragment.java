@@ -22,6 +22,14 @@ public class GradeChildFragment extends Fragment {
 
     public static final String TAG = "LessonGradeOverviewFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         Bundle args = getArguments();
@@ -44,6 +52,9 @@ public class GradeChildFragment extends Fragment {
         return root;
     }
 
+    /**
+     * destroys the view
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();

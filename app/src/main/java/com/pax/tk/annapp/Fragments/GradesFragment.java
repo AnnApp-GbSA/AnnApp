@@ -40,6 +40,14 @@ public class GradesFragment extends Fragment {
 
     public static final String TAG = "GradeFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().setTitle(getString(R.string.grades));
@@ -83,6 +91,9 @@ public class GradesFragment extends Fragment {
         return root;
     }
 
+    /**
+     * creates an input dialog, sets it up and calls methods
+     */
     public void createInputDialog() {
 
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
@@ -190,6 +201,9 @@ public class GradesFragment extends Fragment {
         bsd.show();
     }
 
+    /**
+     * destroys the view
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();

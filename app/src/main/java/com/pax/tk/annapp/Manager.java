@@ -47,20 +47,37 @@ public class Manager {
 
     public int test = 0;
 
+    /**
+     * creates a manager
+     */
     private Manager() {
         System.out.println("Create Manager...");
         days = new Day[]{new Day(0), new Day(1), new Day(2), new Day(3), new Day(4)};
     }
 
-    //Returns the singelton manager
+    /**
+     * get the singleton manager
+     *
+     * @return singleton manager
+     */
     public static Manager getInstance() {
         return manager;
     }
 
+    /**
+     * sets the context
+     *
+     * @param c Context to be set
+     */
     public void setContext(Context c) {
         this.context = c;
     }
 
+    /**
+     * sets the school lesson system
+     *
+     * @param schoolLessonSystem SchoolLessonSystem to be set
+     */
     public void setSchoolLessonSystem(SchoolLessonSystem schoolLessonSystem) {
         if (schoolLessonSystem == null) {
             Set s = new HashSet<Integer>();
@@ -74,14 +91,20 @@ public class Manager {
         this.schoolLessonSystem = schoolLessonSystem;
     }
 
-    public void setFilename(String filename) {
-        this.filename = filename;
-    }
-
+    /**
+     * get subjects
+     *
+     * @return subjects in an ArrayList<>
+     */
     public ArrayList<Subject> getSubjects() {
         return subjects;
     }
 
+    /**
+     * adds subject if subjects does not contain it already
+     *
+     * @param subject Subject to add
+     */
     public void addSubject(Subject subject) {
         if (subjects.contains(subject))
             return;
@@ -90,11 +113,20 @@ public class Manager {
         //save();
     }
 
+    /**
+     * get news
+     *
+     * @return news in an ArrayList<>
+     */
     public ArrayList<News> getNews() {
         return news;
     }
 
-    //Gives back the average of all subjects
+    /**
+     * get the grade average of all subjects
+     *
+     * @return grade average of all subjects
+     */
     public float getWholeGradeAverage() {
         float wholeGradeAverage = 0;
         int emptySubjects = 0;
@@ -115,6 +147,11 @@ public class Manager {
         return Util.round(wholeGradeAverage, 2);
     }
 
+    /**
+     * get the lessons of the longest day
+     *
+     * @return lessons of the longest day as Integer
+     */
     public int getLongestDaysLessons() {
         int i = 0;
         System.out.println(i);
@@ -140,6 +177,9 @@ public class Manager {
         return i;
     }
 
+    /**
+     * loads subjects, days and news
+     */
     public void load() {
         loadSchoolEvents();
         try {
@@ -171,6 +211,9 @@ public class Manager {
         }
     }
 
+    /**
+     * saves subjects, days and news
+     */
     public void save() {
         System.out.println("saving:");
         System.out.println(subjects);
@@ -188,6 +231,9 @@ public class Manager {
         }
     }
 
+    /**
+     * loads school events
+     */
     private void loadSchoolEvents() {
         ArrayList<CustomEvent> schoolEventsPuffer = (ArrayList<CustomEvent>) (new Util()).load(context, "schoolEvents");
         if (schoolEventsPuffer == null)
@@ -206,6 +252,9 @@ public class Manager {
         }
     }
 
+    /**
+     * saves school events
+     */
     private void saveSchoolEvents() {
         ArrayList<CustomEvent> customSchoolEvents = new ArrayList<>();
         for (Event event :
@@ -222,7 +271,11 @@ public class Manager {
         (new Util()).save(context, customPrivateEvents, "privateEvents");
     }
 
-
+    /**
+     * sets a lesson
+     *
+     * @param lesson Lesson to be set
+     */
     public void setLesson(Lesson lesson) {
         int day = lesson.getDay();
         System.out.println(lesson.getDay());
@@ -244,6 +297,11 @@ public class Manager {
         //save();
     }
 
+    /**
+     * deletes a lesson
+     *
+     * @param lesson Lesson to delete
+     */
     public void deleteLesson(Lesson lesson) {
         for (Day d :
                 days) {
@@ -257,6 +315,11 @@ public class Manager {
         }
     }
 
+    /**
+     * deletes all lessons of a Lesson
+     *
+     * @param lesson Lesson to delete everywhere
+     */
     public void deleteAllLessons(Lesson lesson) {
         for (Day d :
                 days) {
@@ -270,26 +333,57 @@ public class Manager {
         }
     }
 
+    /**
+     * deletes a subject
+     *
+     * @param subject Subject to delete
+     */
     public void deleteSubject(Subject subject) {
         subjects.remove(subject);
     }
 
+    /**
+     * get days
+     *
+     * @return days as Day[]
+     */
     public Day[] getDays() {
         return days;
     }
 
+    /**
+     * get school lesson system
+     *
+     * @return SchoolLessonSystem
+     */
     public SchoolLessonSystem getSchoolLessonSystem() {
         return schoolLessonSystem;
     }
 
+    /**
+     * get news at a position
+     *
+     * @param position position of the news
+     * @return News
+     */
     public News getOneNews(int position) {
         return news.get(position);
     }
 
+    /**
+     * get size of news
+     *
+     * @return size of news
+     */
     public int getNewsCount() {
         return news.size();
     }
 
+    /**
+     * updates the news with new news
+     *
+     * @param news new news
+     */
     public void mergeNews(ArrayList<News> news) {
 //        ArrayList<News> reallyNewNews = new ArrayList<>();
 //        for (News n : news) {
@@ -308,15 +402,20 @@ public class Manager {
         this.news = news;
     }
 
-    public void addNews(News news) {
-        this.news.add(news);
-    }
-
+    /**
+     * sorts the subjects by name
+     */
     public void sortSubjects() {
         Collections.sort(subjects,
                 (o1, o2) -> o1.getName().compareTo(o2.getName()));
     }
 
+    /**
+     * get image from url
+     *
+     * @param url url from which the image is as String
+     * @return image as Drawable
+     */
     public Drawable getFromURl(String url) {
         if (url == null)
             return null;
@@ -340,31 +439,20 @@ public class Manager {
         return d;
     }
 
-    public ArrayList<Lesson> getTodaysLessons() {
-        Calendar calendar = Calendar.getInstance();
-        int day = calendar.get(Calendar.DAY_OF_WEEK);
-
-        switch (day) {
-            case Calendar.MONDAY:
-                return days[0].getLessons();
-            case Calendar.TUESDAY:
-                return days[1].getLessons();
-            case Calendar.WEDNESDAY:
-                return days[2].getLessons();
-            case Calendar.THURSDAY:
-                return days[3].getLessons();
-            case Calendar.FRIDAY:
-                return days[4].getLessons();
-            default:
-                return null;
-
-        }
-    }
-
+    /**
+     * get the school events
+     *
+     * @return school events in a Set<>
+     */
     public Set<Event> getSchoolEvents() {
         return schoolEvents;
     }
 
+    /**
+     * adds a event to the school events
+     *
+     * @param event Event to add
+     */
     public void addSchoolEvent(Event event) {
         int color = Color.GREEN;
 
@@ -392,6 +480,11 @@ public class Manager {
         schoolEvents.add(new Event(color, event.getTimeInMillis(), event.getData()));
     }
 
+    /**
+     * removes a school event
+     *
+     * @param event Event to remove
+     */
     public void removeSchoolEvent(Event event) {
         schoolEvents.remove(event);
         //TODO test for n-day event
@@ -401,6 +494,11 @@ public class Manager {
         }
     }
 
+    /**
+     * adds a private event
+     *
+     * @param event Event to add
+     */
     public void addPrivateEvent(Event event) {
 
         try {
@@ -426,10 +524,20 @@ public class Manager {
         privateEvents.add(new Event(event.getColor(), event.getTimeInMillis(), event.getData()));
     }
 
+    /**
+     * get the private events
+     *
+     * @return private events in a Set<>
+     */
     public Set<Event> getPrivateEvents() {
         return privateEvents;
     }
 
+    /**
+     * sets the compact calendar view
+     *
+     * @param compactCalendarView CompactCalendarView to set
+     */
     public void setCompactCalendarView(CompactCalendarView compactCalendarView) {
         this.compactCalendarView = compactCalendarView;
     }

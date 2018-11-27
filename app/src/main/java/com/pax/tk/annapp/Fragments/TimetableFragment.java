@@ -70,10 +70,17 @@ public class TimetableFragment extends Fragment {
 
     public static final String TAG = "TimetableFragment";
 
+    /**
+     * empty constructor is required
+     */
     public TimetableFragment() {
         // Required empty public constructor
     }
 
+    /**
+     *
+     * @param savedInstanceState ...
+     */
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,6 +89,14 @@ public class TimetableFragment extends Fragment {
         //initData();
     }
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
@@ -125,6 +140,9 @@ public class TimetableFragment extends Fragment {
     }
 
 
+    /**
+     * initializing the tableView
+     */
     void initializeTableView() {
 
         tableLayout.removeAllViews();
@@ -237,6 +255,11 @@ public class TimetableFragment extends Fragment {
 
     }
 
+    /**
+     * creates a spaceButton
+     *
+     * @return spaceButton as a TextView
+     */
     TextView getSpaceButton() {
         TextView btn = new TextView(this.getContext());
         btn.setWidth(spacing);
@@ -245,6 +268,12 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
+    /**
+     * creates a headerButton
+     *
+     * @param colorScheme ...
+     * @return headerButton
+     */
     Button getHeaderButton(int colorScheme) {
         Button btn = new Button(this.getContext());
 
@@ -267,6 +296,13 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
+    /**
+     * creates cellButton and makes it clickable to call lessonInfo()
+     *
+     * @param subject ...
+     * @param position ...
+     * @return cellButton
+     */
     Button getCellButton(Subject subject, String position) {
         Button btn = new Button(this.getContext());
 
@@ -290,6 +326,12 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
+    /**
+     * creates empty cellButton and makes it clickable to add a lesson
+     *
+     * @param position ...
+     * @return empty cellButton
+     */
     Button getEmptyCellButton(String position) {
         Button btn = new Button(this.getContext());
         TypedValue a = new TypedValue();
@@ -338,6 +380,11 @@ public class TimetableFragment extends Fragment {
         return btn;
     }
 
+    /**
+     * calls createNewLessonDialog() for the right day and time
+     *
+     * @param view place in the timetable where a new lesson shall be created
+     */
     void addLesson(View view) {
         //get time out of tag
         String[] s = view.getTag().toString().split("#");
@@ -350,6 +397,11 @@ public class TimetableFragment extends Fragment {
 
     }
 
+    /**
+     * calls createLessonInfoDialog() for the right day and time
+     *
+     * @param view place in the timetable where the info shall be get from
+     */
     void lessonInfo(View view) {
         String[] s = view.getTag().toString().split("#");
         int x = Integer.valueOf(s[0]) - 1;
@@ -358,6 +410,14 @@ public class TimetableFragment extends Fragment {
         createLessonInfoDialog(x, y, manager.getDays()[x].getLesson(y).getSubject());
     }
 
+    /**
+     * creates a newLessonDialog, sets it up and calls methods
+     *
+     * @param day day on which the lesson shall be created
+     * @param time time to which the lesson shall be created
+     * @param subject subject of the lesson
+     * @param subjectEdit true if the subject shall be edited
+     */
     public void createNewLessonDialog(final int day, final int time, final Subject subject, final Boolean subjectEdit) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
@@ -529,7 +589,13 @@ public class TimetableFragment extends Fragment {
         bsd.show();
     }
 
-
+    /**
+     * creates a lessonInfoDialog, sets it up and calls methods
+     *
+     * @param day day of the lesson
+     * @param time time at which the lesson takes place
+     * @param subject subject of the lesson
+     */
     @SuppressLint("ResourceAsColor")
     public void createLessonInfoDialog(final int day, final int time, final Subject subject) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
@@ -586,6 +652,11 @@ public class TimetableFragment extends Fragment {
         bsd.show();
     }
 
+    /**
+     * creates a deleteQuestionDialog, sets it up and calls methods
+     *
+     * @param lesson lesson which shall be deleted
+     */
     void createDeleteQuestionDialog(final Lesson lesson) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
@@ -634,6 +705,11 @@ public class TimetableFragment extends Fragment {
         bsd.show();
     }
 
+    /**
+     * creates a editQuestionDialog, sets it up and calls methods
+     *
+     * @param lesson lesson which shall be edited
+     */
     void createEditQuestionDialog(final Lesson lesson) {
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
@@ -699,6 +775,13 @@ public class TimetableFragment extends Fragment {
 
     }*/
 
+    /**
+     * last Question if the lesson, all lessons of the subject or the whole subject shall be deleted
+     *
+     * @param i only this lesson, all lessons or the whole subject (0, 1, 2)
+     * @param lesson lesson which shall be deleted
+     * @param bsd ...
+     */
     void reallyDeleteQuestionForDAUs(final int i, final Lesson lesson, final BottomSheetDialog bsd) {
         String message = "";
         switch (i) {
@@ -753,14 +836,4 @@ public class TimetableFragment extends Fragment {
         lp.dimAmount = 0.7f;
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
-
-    private void setMargins(View view, int left, int top, int right, int bottom) {
-        if (view.getLayoutParams() instanceof ViewGroup.MarginLayoutParams) {
-            ViewGroup.MarginLayoutParams p = (ViewGroup.MarginLayoutParams) view.getLayoutParams();
-            p.setMargins(left, top, right, bottom);
-            view.requestLayout();
-            System.out.println("-----------------------------------------set Margins");
-        }
-    }
-
 }

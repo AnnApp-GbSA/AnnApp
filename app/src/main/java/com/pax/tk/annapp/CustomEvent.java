@@ -12,36 +12,64 @@ public class CustomEvent implements Serializable {
     private long timeInMillis;
     private Object data;
 
+    /**
+     * creates a custom event with a color and a start time
+     *
+     * @param color color which will be shown for this event as Integer
+     * @param timeInMillis start time in milliseconds
+     */
     public CustomEvent(int color, long timeInMillis) {
         this.color = color;
         this.timeInMillis = timeInMillis;
     }
 
+    /**
+     * creates a custom event with a color, start time and extra information
+     *
+     * @param color color which will be shown for this event as Integer
+     * @param timeInMillis start time in milliseconds
+     * @param data extra information
+     */
     public CustomEvent(int color, long timeInMillis, Object data) {
         this.color = color;
         this.timeInMillis = timeInMillis;
         this.data = data;
     }
 
-    public void parseEvent(Event event){
-        int color = event.getColor();
-        long timeInMillis = event.getTimeInMillis();
-        Object data = event.getData();
-    }
-
+    /**
+     * get the color of a CustomEvent
+     *
+     * @return color as Integer
+     */
     public int getColor() {
         return color;
     }
 
+    /**
+     * get the start time of a CustomEvent
+     *
+     * @return start time in milliseconds
+     */
     public long getTimeInMillis() {
         return timeInMillis;
     }
 
+    /**
+     * get the extra information of a CustomEvent
+     *
+     * @return extra information
+     */
     @Nullable
     public Object getData() {
         return data;
     }
 
+    /**
+     * checks if an object is equal to this CustomEvent
+     *
+     * @param o object to compare with this CustomEvent
+     * @return true if it equals, false if not
+     */
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -56,6 +84,11 @@ public class CustomEvent implements Serializable {
         return true;
     }
 
+    /**
+     * creates a hash code for this CustomEvent
+     *
+     * @return hash code
+     */
     @Override
     public int hashCode() {
         int result = color;
@@ -64,6 +97,11 @@ public class CustomEvent implements Serializable {
         return result;
     }
 
+    /**
+     * converts a CustomEvent into a String
+     *
+     * @return String
+     */
     @Override
     public String toString() {
         return "CustomEvent{" +

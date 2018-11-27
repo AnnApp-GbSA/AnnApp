@@ -43,8 +43,14 @@ public class TutorialFragment extends Fragment{
 
     public static final String TAG = "TutorialFragment";
 
-
-
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container, Bundle savedInstanceState) {
         root = inflater.inflate(R.layout.fragment_tutorial, container, false);
@@ -82,7 +88,11 @@ public class TutorialFragment extends Fragment{
     }
 
 
-
+    /**
+     * recreates the activity
+     *
+     * @param a activity to recreate
+     */
     @SuppressLint("NewApi")
     public static final void recreateActivityCompat(final Activity a) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -97,6 +107,9 @@ public class TutorialFragment extends Fragment{
         }
     }
 
+    /**
+     * initializing the tutorial, sets it up and calls methods
+     */
     private void startTutorial(){
 
         sliderAdapter = new SliderAdapter(this.getContext());
@@ -183,7 +196,11 @@ public class TutorialFragment extends Fragment{
         }
     };
 
-
+    /**
+     * creates dots under the tutorial and counts them up
+     *
+     * @param position ...
+     */
     public void addDotsIndicator(int position){
         dots = new TextView[tutorialLength];
         dotLayout.removeAllViews();

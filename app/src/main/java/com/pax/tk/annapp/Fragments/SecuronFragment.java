@@ -24,6 +24,14 @@ public class SecuronFragment extends Fragment {
 
     public static final String TAG = "SecuronFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -39,12 +47,23 @@ public class SecuronFragment extends Fragment {
         return root;
     }
 
+    /**
+     *
+     * @param name ...
+     * @param password ...
+     */
     private static void startFTP (String name, String password) {
 
 
     }
 
     private class startFTPConnection extends AsyncTask<Void, Void, Boolean> {
+
+        /**
+         * does nothing
+         * @param voids ...
+         * @return null
+         */
         @Override
         protected Boolean doInBackground(Void... voids) {
             try {

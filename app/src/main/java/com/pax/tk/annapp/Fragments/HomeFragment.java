@@ -36,6 +36,14 @@ public class HomeFragment extends Fragment {
 
     public static final String TAG = "HomeFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -65,7 +73,9 @@ public class HomeFragment extends Fragment {
 
     }
 
-
+    /**
+     * initializing the timetable
+     */
     void setTimeTable() {
         GregorianCalendar gc = new GregorianCalendar();
         int i = gc.get(Calendar.DAY_OF_WEEK);
@@ -121,7 +131,6 @@ public class HomeFragment extends Fragment {
                 timeTable.setShowDividers(View.VISIBLE);
 
                 if (l == null || l.getSubject() == null)
-
                     btn = getEmptyCellButton("");
                 else {
                     btn = getCellCardView(l.getSubject(), "");
@@ -149,40 +158,13 @@ public class HomeFragment extends Fragment {
         }
     }
 
-
-    Button getCellButton(Subject subject, String position) {
-        Button btn = new Button(this.getContext());
-
-        //general Settings for Cells
-        btn.setTextColor(getResources().getColor(R.color.default_background_color));
-
-        int color = 0;
-
-        int index = manager.getSubjects().indexOf(subject);
-        for (int i; index > 14; index = index - 14) {
-        }
-
-
-        color = new Util().getSubjectColor(getContext(), subject);
-
-        GradientDrawable shape = new GradientDrawable();
-        shape.setCornerRadius(24);
-        shape.setColor(color);
-
-        btn.setBackground(shape);
-
-        btn.setTag(position);
-
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                ((MainActivity) getContext()).setFragment(TimetableFragment.TAG);
-            }
-        });
-
-        return btn;
-    }
-
+    /**
+     * creates a cardView for a subject and makes it clickable to get into the timetableFragment
+     *
+     * @param subject ...
+     * @param position ...
+     * @return cardView with the subject in it
+     */
     CardView getCellCardView(Subject subject, String position) {
         CardView cardView = new CardView(this.getContext());
 
@@ -228,6 +210,12 @@ public class HomeFragment extends Fragment {
         return cardView;
     }
 
+    /**
+     * creates empty cardView if lesson is empty and makes it clickable to get into the timetableFragment
+     *
+     * @param position ...
+     * @return empty cardView
+     */
     CardView getEmptyCellButton(String position) {
         CardView btn = new CardView(this.getContext());
 

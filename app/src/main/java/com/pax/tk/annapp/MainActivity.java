@@ -41,6 +41,11 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView = null;
     public static int colorScheme;
 
+    /**
+     * creates the MainActivity, sets it up and calls methods
+     *
+     * @param savedInstanceState ...
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -124,6 +129,10 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * goes back if the BackButton is pressed or closes the App if the App was just opened
+     * deactivates the BackButton while it is in the tutorial
+     */
     @Override
     public void onBackPressed() {
 
@@ -149,14 +158,27 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    /**
+     * creates a option menu
+     * inflates the menu
+     * this adds items to the action bar if it is present.
+     *
+     * @param menu ...
+     * @return true
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
 
         return true;
     }
 
+    /**
+     * calls onOptionItemSelected() when a optionsItem is selected
+     *
+     * @param item selected item
+     * @return super.onOptionsItemSelected(item)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -165,7 +187,12 @@ public class MainActivity extends AppCompatActivity
     }
 
 
-
+    /**
+     * calles setFragment() when a navigationItem is selected and starts sharing the App when clicked on Share
+     *
+     * @param item selected item
+     * @return true
+     */
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -186,7 +213,7 @@ public class MainActivity extends AppCompatActivity
             setFragment(SecuronFragment.TAG);
         } else if (id == R.id.nav_representationplan) {
             setFragment(RepresentationPlan.TAG);
-        }else if (id == R.id.nav_annanews) {
+        } else if (id == R.id.nav_annanews) {
             setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
             setFragment(SettingsFragment.TAG);
@@ -208,10 +235,23 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * calls setFragment(String tag, Bundle bundle) to set a fragment
+     *
+     * @param tag tag of the fragment which shall be set
+     * @return setFragment(tag, new Bundle())
+     */
     public boolean setFragment(String tag) {
         return setFragment(tag, new Bundle());
     }
 
+    /**
+     * sets a fragment
+     *
+     * @param tag tag of the fragment which shall be set
+     * @param bundle ...
+     * @return false if fragment equals null, true if it does not
+     */
     public boolean setFragment(String tag, Bundle bundle) {
         if (tag == null) return false;
         if (tag.equals(currentFragmentTag)) return true;
@@ -274,12 +314,22 @@ public class MainActivity extends AppCompatActivity
         return true;
     }
 
+    /**
+     * saves the instance state
+     *
+     * @param outState ...
+     */
     @Override
     public void onSaveInstanceState(final Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putSerializable(getString(R.string.bundlekey_fragmentTag), currentFragmentTag);
     }
 
+    /**
+     * selects the navigation drawer item
+     *
+     * @param tag tag of the fragment to which the navigation drawer item shall be selected
+     */
     public void selectNavigationDrawerItem(String tag) {
 
         switch (tag) {
@@ -320,24 +370,36 @@ public class MainActivity extends AppCompatActivity
 
     }
 
+    /**
+     * saves the manager when the App stops
+     */
     @Override
     protected void onStop() {
         super.onStop();
         manager.save();
     }
 
+    /**
+     * saves the manager when the App gets destroyed
+     */
     @Override
     protected void onDestroy() {
         super.onDestroy();
         manager.save();
     }
 
+    /**
+     * saves the manager when the App gets paused
+     */
     @Override
     protected void onPause() {
         super.onPause();
         manager.save();
     }
 
+    /**
+     * closes the keyboard
+     */
     private void closeKeyboard(){InputMethodManager inputMethodManager = (InputMethodManager)this.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(findViewById(R.id.drawer_layout).getWindowToken(), 0);}
 }

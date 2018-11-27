@@ -39,6 +39,14 @@ public class AnnanewsFragment extends Fragment {
 
     public static final String TAG = "AnnanewsFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -78,6 +86,13 @@ public class AnnanewsFragment extends Fragment {
         return root;
     }
 
+    /**
+     * creates a random number between two numbers
+     *
+     * @param rangeMin smallest possible number
+     * @param rangeMax biggest possible number
+     * @return random number between rangeMin and rangeMax
+     */
     public static int randomNumberGenerator(int rangeMin, int rangeMax)
     {
         Random r = new Random();
@@ -85,12 +100,14 @@ public class AnnanewsFragment extends Fragment {
         return(createdRanNum);
     }
 
-
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
 
         private String[] urlLinks = new String[1];
 
-
+        /**
+         * method is called before loading the AnnaNews
+         * sets the link where the news are from and sets the layout refreshable
+         */
         @Override
         protected void onPreExecute() {
             urlLinks[0] = "http://gym-anna.de/wordpress/?feed=rss2";
@@ -99,12 +116,18 @@ public class AnnanewsFragment extends Fragment {
             //urlLink = "http://gym-anna.de/wordpress/?feed=rss2";
         }
 
+        /**
+         * tests if the link is usable and makes it usable if not
+         * loads the information from the link into an ArrayList of news with calling the parseFeed()
+         * calls the mergeNews() in the manager
+         *
+         * @param voids ...
+         * @return true if the method is successful and false if an IOException is caught
+         */
         @Override
         protected Boolean doInBackground(Void... voids) {
             for (String urlLink :
                     urlLinks) {
-
-
             try {
                 if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
                     urlLink = "http://" + urlLink;
@@ -125,22 +148,38 @@ public class AnnanewsFragment extends Fragment {
             return false;
         }
 
+        /**
+         * method is called after loading the AnnaNews
+         * disable the refreshable layout
+         *
+         * @param success ...
+         */
         @Override
         protected void onPostExecute(Boolean success) {
             mSwipeLayout.setRefreshing(false);
         }
     }
 
-    private String xmlcut(String content, String startTag, String endTag){
-        try {
-            return content.substring(0, content.indexOf(startTag)) + content.substring(content.indexOf(endTag, content.indexOf(startTag)) + endTag.length(), content.length());
-        }catch (Exception e){return "";}}
-
+    /**
+     * finds the text between two xmlTags
+     *
+     * @param content xmlText which in the text should be found
+     * @param startTag ...
+     * @param endTag ...
+     * @return text between the two xmlTags
+     */
     private String xmlget(String content, String startTag, String endTag){
         String ret = content.substring(content.indexOf(startTag)+startTag.length());
         return ret.substring(0,ret.indexOf(endTag));
     }
 
+    /**
+     * gets the news in a inputStream and returns them in an ArrayList
+     *
+     * @param inputStream ...
+     * @return ArrayList of News with all news from the inputStream in it
+     * @throws IOException ...
+     */
     public ArrayList<News> parseFeed(InputStream inputStream) throws IOException {
         ArrayList<News> items = new ArrayList<>();
         java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
@@ -177,6 +216,12 @@ public class AnnanewsFragment extends Fragment {
         return items;
     }
 
+    /**
+     * replaces html shortcuts with Strings
+     *
+     * @param string input String with html shortcuts in it
+     * @return edited String with no html shortcuts in it
+     */
     public String htmlToString(String string) {
         String edit;
         edit = string.replaceAll("&#8220;", "“");

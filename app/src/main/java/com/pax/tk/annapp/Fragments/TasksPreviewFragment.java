@@ -42,6 +42,14 @@ public class TasksPreviewFragment extends Fragment {
 
     public static final String TAG = "HomeTaskFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -73,6 +81,11 @@ public class TasksPreviewFragment extends Fragment {
         return root;
     }
 
+    /**
+     * recreates the activity
+     *
+     * @param a activity to recreate
+     */
     @SuppressLint("NewApi")
     public static final void recreateActivityCompat(final Activity a) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -87,6 +100,9 @@ public class TasksPreviewFragment extends Fragment {
         }
     }
 
+    /**
+     * creates an input dialog, sets it up and calls methods
+     */
     public void createInputDialog() {
 
 
@@ -265,46 +281,4 @@ public class TasksPreviewFragment extends Fragment {
                 bsd.setContentView(mView);
                 bsd.show();
     }
-
-    public void createInputDialogCalendar() {
-        /*AlertDialog.Builder ad = new  AlertDialog.Builder(this.getContext());
-
-        View mView = View.inflate(this.getContext(), R.layout.fragment_task_input_calendar, null);
-
-        final CalendarView calendar = (CalendarView) mView.findViewById(R.id.calendarViewTasks);
-
-        calendar.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
-            @Override
-            public void onSelectedDayChange(@NonNull CalendarView calendarView, int i, int i1, int i2) {
-                selectedDate = new Date(i, i1, i2);
-            }
-        });
-
-        ad      .setTitle("Datum auswählen")
-                .setView(mView)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                    }
-                })
-                .show();*/
-    }
-
-    /*void createAlertDialog(String title, String text, int ic) {
-        AlertDialog.Builder builder;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), android.R.style.Theme_Material_Dialog_Alert);
-        } else {
-            builder = new AlertDialog.Builder(this.getContext());
-        }
-        builder.setTitle(title)
-                .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(ic)
-                .show();
-    }*/
 }

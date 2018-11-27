@@ -41,6 +41,14 @@ public class TasksFragment extends Fragment {
 
     public static final String TAG = "TaskFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -77,6 +85,11 @@ public class TasksFragment extends Fragment {
         return root;
     }
 
+    /**
+     * recreates the activity
+     *
+     * @param a activity to recreate
+     */
     @SuppressLint("NewApi")
     public static final void recreateActivityCompat(final Activity a) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
@@ -91,6 +104,9 @@ public class TasksFragment extends Fragment {
         }
     }
 
+    /**
+     * creates an input dialog, sets it up and calls methods
+     */
     public void createInputDialog() {
 
 

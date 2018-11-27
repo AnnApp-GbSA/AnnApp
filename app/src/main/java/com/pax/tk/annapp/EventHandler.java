@@ -17,16 +17,29 @@ import java.util.Date;
 public class EventHandler{
     Manager manager;
 
+    /**
+     * creates an event handler
+     */
     public EventHandler(){
         manager = Manager.getInstance();
     }
 
+    /**
+     * loads the school events by calling a AsyncTask
+     */
     public static void loadSchoolEvents(){
 
         new LoadSchoolEvents().execute((Void) null);
 
     }
 
+    /**
+     * transforms a date as String into a date as Long in milliseconds
+     *
+     * @param date date to transform as String
+     * @return date as Long in milliseconds
+     * @throws ParseException ...
+     */
     private static long timeInMillis(String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm");
         Date datum = null;

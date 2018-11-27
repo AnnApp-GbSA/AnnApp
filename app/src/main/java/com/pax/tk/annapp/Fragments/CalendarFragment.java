@@ -139,59 +139,13 @@ public class CalendarFragment extends Fragment {
         return root;
     }
 
-    /*public void createInputDialog() {
-        final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
-
-        View mView = View.inflate(this.getContext(), R.layout.dialog_new_event, null);
-
-        final EditText eventInput = (EditText) mView.findViewById(R.id.eventInput);
-        final Button btnStartDateInput = (Button) mView.findViewById(R.id.startDateInput);
-        final Button btnEndDateInput = (Button) mView.findViewById(R.id.endDateInput);
-        final EditText locationInput = (EditText) mView.findViewById(R.id.locationInput);
-        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
-        final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
-        final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
-        final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
-
-        btnStartDateInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnEndDateInput.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnExtra.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnOK.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
-
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                bsd.cancel();
-            }
-        });
-
-        bsd.setContentView(mView);
-        bsd.show();
-    }*/
-
+    /**
+     * displays a message on the screen if eventsThisDay is empty
+     * displays all important information for every Event in eventsThisDay on the screen if not
+     *
+     * @param eventsThisDay List of Events which includes all events this day
+     * @return false if eventsThisDay is empty and true if not
+     */
     private boolean refresh(List<Event> eventsThisDay) {
         TextView event = (TextView) root.findViewById(R.id.Event);
         LinearLayout eventList = (LinearLayout) root.findViewById(R.id.eventList);
@@ -270,33 +224,18 @@ public class CalendarFragment extends Fragment {
             TextView color = eventView.findViewById(R.id.colorMarker);
             color.setBackgroundColor(eventsThisDay.get(x).getColor());
 
-            /*ImageButton deleteButton = eventView.findViewById(R.id.item_event_button_delete);
-            int i;
-            int y;
-            int z = -1;
-            for (i = 0; i < ownEvents.size(); i++) {
-                if (eventsThisDay.get(x).equals(ownEvents.get(i))) {
-                    deleteButton.setVisibility(View.VISIBLE);
-                    for (y = 0; y < events.size(); y++) {
-                        if (eventsThisDay.get(x).equals(events.get(y))) {
-                            z = y;
-                        }
-                    }
-                }
-            }
-            int posEv1 = z;
-            deleteButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    askDelete(posEv1);
-                }
-            });*/
             eventList.addView(eventView);
 
         }
         return true;
     }
 
+    /**
+     * transforms a monthName like Januar in a number like 01
+     *
+     * @param monthName name of the month as a String
+     * @return number of month as a String or null if monthName is not a name of a month
+     */
     private String monthToDate(String monthName) {
         String month;
         switch (monthName) {
@@ -341,6 +280,7 @@ public class CalendarFragment extends Fragment {
         }
         return month;
     }
+
 
     public void createInputDialog() {
         final BottomSheetDialog bsd = new BottomSheetDialog(getContext(), R.style.NewDialog);
@@ -578,6 +518,13 @@ public class CalendarFragment extends Fragment {
         bsd.show();
     }
 
+    /**
+     * creates a random number between two numbers
+     *
+     * @param rangeMin smallest possible number
+     * @param rangeMax biggest possible number
+     * @return random number between rangeMin and rangeMax
+     */
     public static int randomNumberGenerator(int rangeMin, int rangeMax) {
         Random r = new Random();
         int createdRanNum = (int) Math.round(rangeMin + (rangeMax - rangeMin) * r.nextDouble());

@@ -39,6 +39,14 @@ public class SettingsFragment extends Fragment {
 
     public static final String TAG = "SettingsFragment";
 
+    /**
+     * initializing variables and calling methods
+     *
+     * @param inflater           ...
+     * @param container          ...
+     * @param savedInstanceState ...
+     * @return root
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -288,7 +296,9 @@ public class SettingsFragment extends Fragment {
         return root;
     }
 
-
+    /**
+     * sets the SchoolLessonSystem in the manager
+     */
     void setSchoolLessonSystem() {
 
         Set s = new HashSet<Integer>();
