@@ -148,9 +148,9 @@ public class TimetableFragment extends Fragment {
         tableLayout.removeAllViews();
 
         int u;
-        System.out.println(manager.getLongestDaysLessons());
-        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12) > manager.getLongestDaysLessons())
-            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson)+1, 12);
+        System.out.println("Longest day: "+manager.getLongestDaysLessons());
+        if ((int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 12)+1 > manager.getLongestDaysLessons())
+            u = (int) getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_maxLesson), 12)+1;
         else
             u = manager.getLongestDaysLessons();
 
@@ -484,7 +484,7 @@ public class TimetableFragment extends Fragment {
         spinnerlist.add(uglyAsHellWayToCreateAOtherCoiseOption);
 
 
-        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this.getContext(), R.layout.spinner_item, spinnerlist);
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this.getContext(), R.layout.white_spinner_item, spinnerlist);
         subjectSelection.setAdapter(adapter);
         subjectSelection.setSelection(spinnerlist.indexOf(lastSubject));
         subjectSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

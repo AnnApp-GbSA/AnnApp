@@ -66,7 +66,7 @@
     <string-array name="slide_description">
         <item>Auf deinem Homescreen siehst du auf der rechten Seite alles, was du in deinen Fächern noch zu erledigen hast, auf der linken Seite welche Stunden du am heutigen Tag noch vor dir hast. Vorausgesetzt du trägst alles pflichtbewusst für jeden Tag ein.</item>
         <item>Hier kannst du deinen Stundenplan, den zugehörigen Lehrer zu jedem Fach und sogar den Raum für jede Stunde einzeln eintragen. Zusätzlich kannst du auch noch die Wertung der schriftlichen Noten im Vergleich zu den mündlichen Noten einstellen. Es ist wichtig, dass das Verhältnis stimmt, da es wichtig für die Berechnung deiner Gesamtnote ist.</item>
-        <item>In diesem Bereich siehst du deinen Gesamtdurschnitt oben links. Weiter unten siehst du deinen Durschnitt in jedem Fach, sofern du genug Noten eingetragen hast. Mit einem Klick auf das jeweilige Fach kannst du auch die einzelnen, eingetragenen Noten inkl. Wertung einsehen.</item>
+        <item>In diesem Bereich siehst du deinen Gesamtdurschnitt oben rechts. Weiter unten siehst du deinen Durschnitt in jedem Fach, sofern du genug Noten eingetragen hast. Mit einem Klick auf das jeweilige Fach kannst du auch die einzelnen, eingetragenen Noten inkl. Wertung einsehen.</item>
         <item>Mit einem Klick auf den Hinzufügen-Button unten rechts kannst du eine neue Note hinzufügen. Nachdem du das Fach ausgewählt hast, in dem du die Note bekommen hast kannst du noch unterscheiden zwischen mündlichen und schriftlichen Noten, als auch wie die Note im Fach speziell gewertet wird, bei Ratlosigkeit einfach auf das Fragezeichen am rechten Rand der Zeile tippen. Wenn du noch etwas zu dieser Note hinzufügen willst hast du auch noch die Möglichkeit eine kleine Notiz hinzuzufügen.</item>
         <item>Bei den Aufgaben kannst du sowohl Hausaufgaben, als auch Schulaufgaben und einfache Notizen für das jeweilige Fach eintragen. Diese erscheinen dann in deinem Homescreen unter dem jeweiligem Fach.</item>
         <item>Hier siehst du deinen Kalender, mit allen eingetragenen Schulterminen. Alternativ kannst du natürlich auch selbst einen neuen Termin mit Beschreibung, Ort und Enddatum/-zeit erstellen. Diese werden dir, wie die Schultermine dann im Kalender angezeigt. Bei einem Klick auf das Download-Symbol oben rechts wird der Schulkalender mit allen Terminen auf deinen Google Kalender übertragen.</item>
@@ -214,8 +214,21 @@
     <string name="colorsceme">Farbschema:</string>
     <string name="hold_to_create_new_lesson">Halten um eine Neue hinzuzufügen</string>
     <string name="show_tutorial_again">Tutorial erneut anzeigen</string>
-    <string name="feedback">Feedback</string>
     <string name="allday">Ganztägig</string>
     <string name="chooseTime">Uhrzeit auswählen</string>
+    <string name="next">weiter</string>
+    <string name="back">zurück</string>
+    <string name="finish">fertig</string>
+    <string name="accentcolor">Akzentfarbe</string>
+    <string name="orange_shades">Orangetöne</string>
+    <string name="blue_shades">Blautöne</string>
+    <string name="colorful">Bunt</string>
+    <string name="press_hold_addLesson">Lange auf einer leeren Stunde bleiben, um eine Neue hinzuzufügen</string>
+    <string name="password">passwort</string>
+    <string name="Username_point">Benutzername:</string>
+    <string name="username">benutzername</string>
+    <string name="password_point">Passwort:</string>
+    <string name="feedback">Feedback</string>
+    <string name="im_export_timetable">Stundenplan im-/exportieren</string>
 </resources>
 

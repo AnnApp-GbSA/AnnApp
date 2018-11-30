@@ -4,8 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/relativeLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/tutorial_background">
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:layout_width="1000dp"
+        android:layout_height="1000dp"
+        android:orientation="vertical"
+        android:rotation="45"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="1000dp"
+            android:layout_height="480dp"
+            android:background="?colorPrimary"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1000dp"
+            android:layout_height="230dp"
+            android:background="?colorPrimaryDark"
+            android:orientation="horizontal"></LinearLayout>
+
+        <LinearLayout
+            android:layout_width="1000dp"
+            android:layout_height="match_parent"
+            android:background="?colorPrimary"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+    </LinearLayout>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/tutorial_viewPager"
@@ -40,10 +71,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:background="@android:color/transparent"
-        android:text="Next"
+        android:text="@string/next"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -62,7 +92,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0">
-
 
 
     </LinearLayout>

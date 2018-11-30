@@ -4,10 +4,14 @@ package com.pax.tk.annapp.Fragments;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +23,20 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
+import com.pax.tk.annapp.Day;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.SchoolLessonSystem;
@@ -36,6 +50,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class SettingsFragment extends Fragment {
     View root;
+    Manager manager;
 
     public static final String TAG = "SettingsFragment";
 
@@ -55,6 +70,8 @@ public class SettingsFragment extends Fragment {
 
         getActivity().setTitle(R.string.settings);
         root = inflater.inflate(R.layout.fragment_settings, container, false);
+
+        manager = Manager.getInstance();
 
         Switch timetableDividersSwitch = root.findViewById(R.id.dividersSwitch);
 
@@ -291,6 +308,26 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        //Import/Export Timetable
+        Button btnImport = (Button) root.findViewById(R.id.btn_import_timetable);
+        btnImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+
+        Button btnExport = (Button) root.findViewById(R.id.btn_export_timetable);
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                File directory = new File("/storage/emulated/0/AnnApp");
+
+                write(getContext(), manager.getDays());
+
+            }
+        });
+
 
 
         return root;
@@ -299,6 +336,32 @@ public class SettingsFragment extends Fragment {
     /**
      * sets the SchoolLessonSystem in the manager
      */
+    public static void write(Context context, Day[] days) {
+        File directory = new File("/storage/emulated/0");
+
+        String body = "";
+        for (Day d :
+                days) {
+            body += d.toString();
+            body += "\n";
+        }
+
+        try {
+            File root = new File(directory, "AnnApp");
+            if (!root.exists()) {
+                root.mkdirs();
+            }
+            File gpxfile = new File(root, "AnnApp.timetable.txt");
+            FileWriter writer = new FileWriter(gpxfile);
+            writer.append(body);
+            writer.flush();
+            writer.close();
+            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     void setSchoolLessonSystem() {
 
         Set s = new HashSet<Integer>();

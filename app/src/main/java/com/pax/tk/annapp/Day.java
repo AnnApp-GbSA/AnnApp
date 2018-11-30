@@ -26,7 +26,7 @@ public class Day implements Serializable {
     public void setLesson(Lesson lesson) {
 
         while (lessons.size() <= lesson.getTime())
-            lessons.add(new Lesson(null, null,number, lessons.size()));
+            lessons.add(new Lesson(null, null, number, lessons.size()));
 
         lessons.set(lesson.getTime(), lesson);
     }
@@ -52,7 +52,38 @@ public class Day implements Serializable {
         return lessons;
     }
 
+    @Override
+    public String toString() {
+        String result = "{\n" +
+                "day " + String.valueOf(number);
+        for (Lesson l :
+                lessons) {
+            System.out.println("lesson: " + l);
+        }
+        result += "\nlessons:";
+        for (Lesson l : lessons) {
+            System.out.println("\nlesson: " + l);
+            if (l.getSubject()==null){
+                result += "\n    lesson " + l.getTime() + "{\n}";
+            }
+            if (l.getTime() != 0 && l.getSubject() != null) {
+                result += "\n    lesson " + l.getTime() + "{\n    " +
+                        "subject: {\n        " + "name: " + l.getSubject().getName() +
+                        "\n        room: " + l.getSubject().getRoom() +
+                        "\n        teacher: " + l.getSubject().getTeacher();
 
+                result += "\n    }";
+
+                try {
+                    result += "\n    room: " + l.getRoom();
+                } catch (NullPointerException npe) {
+                    //Nothing to do... no room specified for this lesson
+                }
+            }
+        }
+        result += "\n}";
+        return result;
+    }
 }
 
 

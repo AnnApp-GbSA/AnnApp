@@ -97,38 +97,40 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
                 shortText = grade.getNote();
             }
 
+            holder.itemLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
+                        holder.noteTxt.setText(noteTxt);
+                        changeRotate(holder.arrowButton, 0f, 180f).start();
+                    }else if(holder.noteTxt.getText().equals(noteTxt) && noteTxt != null){
+                        holder.noteTxt.setText(shortText);
+                        changeRotate(holder.arrowButton, 180f, 0f).start();
+                    }
+                }
+            });
+
+            holder.arrowButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
+                        holder.noteTxt.setText(noteTxt);
+                        changeRotate(holder.arrowButton, 0f, 180f).start();
+                    }else if(holder.noteTxt.getText().equals(noteTxt) && noteTxt != null){
+                        holder.noteTxt.setText(shortText);
+                        changeRotate(holder.arrowButton, 180f, 0f).start();
+                    }
+                }
+            });
+
         } else {
-            noteTxt = context.getResources().getString(R.string.rating) + ": " + grade.getRating() + "\n" + written;
+            holder.arrowButton.setVisibility(View.GONE);
             shortText = context.getResources().getString(R.string.rating) + ": " + grade.getRating() + ", " + written;
         }
 
         holder.noteTxt.setText(shortText);
 
-        holder.itemLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
-                    holder.noteTxt.setText(noteTxt);
-                    changeRotate(holder.arrowButton, 0f, 180f).start();
-                }else if(holder.noteTxt.getText().equals(noteTxt) && noteTxt != null){
-                    holder.noteTxt.setText(shortText);
-                    changeRotate(holder.arrowButton, 180f, 0f).start();
-                }
-            }
-        });
 
-        holder.arrowButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(holder.noteTxt.getText().equals(shortText) && noteTxt != null){
-                    holder.noteTxt.setText(noteTxt);
-                    changeRotate(holder.arrowButton, 0f, 180f).start();
-                }else if(holder.noteTxt.getText().equals(noteTxt) && noteTxt != null){
-                    holder.noteTxt.setText(shortText);
-                    changeRotate(holder.arrowButton, 180f, 0f).start();
-                }
-            }
-        });
 
         holder.deleteButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -376,7 +378,7 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     private ObjectAnimator changeRotate(ImageButton button, float to, float from){
         ObjectAnimator animator = ObjectAnimator.ofFloat(button, "rotation", from, to);
-        animator.setDuration(300);
+        animator.setDuration(200);
         animator.setInterpolator(Utils.createInterpolator(Utils.LINEAR_INTERPOLATOR));
         return animator;
     }

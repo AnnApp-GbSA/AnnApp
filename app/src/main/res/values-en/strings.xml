@@ -91,7 +91,7 @@
     <string name="ratingList">Validation:</string>
     <string name="tasks">Tasks</string>
     <string name="Home">Home</string>
-    <string name="representationPlan">Replacement plan</string>
+    <string name="representationPlan">Substitution plan</string>
     <string name="grades">Grades</string>
     <string name="warningMessage">Please fill in all necessary fields!</string>
     <string name="warning">Warning</string>
@@ -134,5 +134,47 @@
     <string name="allday">all-day</string>
     <string name="addPermissionMessage">We need the permission!</string>
     <string name="chooseTime">Choose time</string>
+    <string name="next">next</string>
+    <string name="back">back</string>
+    <string name="finish">finish</string>
+
+    <string-array name="color_schemes_array">
+        <item>accent color</item>
+        <item>orange shades</item>
+        <item>blue shades</item>
+        <item>colorful</item>
+    </string-array>
+
+    <string-array name="slide_description">
+        <item>On your homescreen your tasks will be shown on the right side, while on the left side you can see your timetable of the current day, as long as you fill it in.</item>
+        <item>In the timetable section you can enter your lessons, the teacher for each subject and even the room for each lesson individually. In addition, you can also set the scoring of the written grades in comparison to the oral grades. It is important that the ratio is correct, as it is important for the calculation of your overall score.</item>
+        <item>In this area you can see your overall average in the upper right corner. Further down you will see your average in each subject, if you have entered enough notes. With a click on each subject you can also view the individual, registered notes incl. scoring.</item>
+        <item>You can add a new note by clicking on the Add button at the bottom right. After you have selected the subject in which you got the note, you can still distinguish between oral and written notes, as well as how the note is specially rated in the subject, in case of helplessness simply tap on the question mark at the right edge of the line. If you want to add something to this note, you also have the option of adding a small text.</item>
+        <item>You can enter homework as well as tests and simple notes for each subject. These will appear on your Home screen under each subject.</item>
+        <item>Here you can see your calendar, with all the school dates. Alternatively you can of course create a new appointment yourself with description, place and end date/time. These will be shown to you in the calendar like the school dates. </item>
+        <item>You can look at the substitution plan as soon as you have entered the access data for DSBmobile.</item>
+        <item>Our new feature, where you can see all news from our school homepage directly in the app.</item>
+        <item>In the settings you can select the start of school, the length of breaks and the length of lessons. You can also specify the maximum number of hours for a day. If you want to give your app a new look, you can also choose one of the predefined color schemes!</item>
+    </string-array>
+    <string-array name="slide_headings">
+        <item>Home</item>
+        <item>Timetable</item>
+        <item>Grades</item>
+        <item>Add Grades</item>
+        <item>Tasks</item>
+        <item>Calendar</item>
+        <item>Substitution Plan</item>
+        <item>AnnaNews</item>
+        <item>Settings</item>
+    </string-array>
+    <string name="press_hold_addLesson">press and hold an empty slot to add a new lesson</string>
+    <string name="password">password</string>
+    <string name="orange_shades">orange shades</string>
+    <string name="colorful">colorful</string>
+    <string name="blue_shades">blue_shades</string>
+    <string name="accentcolor">accent color</string>
+    <string name="Username_point">Username:</string>
+    <string name="username">username</string>
+    <string name="password_point">Password:</string>
 </resources>
 

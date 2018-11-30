@@ -59,6 +59,7 @@ public class AnnanewsFragment extends Fragment {
         rv.setLayoutManager(new LinearLayoutManager(getContext()));
         rvAdapterNews = new RVAdapterNews(getContext());
         rv.setAdapter(rvAdapterNews);
+
         mSwipeLayout = root.findViewById(R.id.swipeRefreshLayout);
         manager = Manager.getInstance();
 
@@ -211,7 +212,7 @@ public class AnnanewsFragment extends Fragment {
                 article = xmlcut(article,"<p ",">");*/
 
             Drawable image = Manager.getInstance().getFromURl(imageurl);
-            items.add(new News(title,link,description,article, rawArticle, imageurl,image));
+            items.add(new News(title,link,description,article, rawArticle, imageurl));
         }
         return items;
     }

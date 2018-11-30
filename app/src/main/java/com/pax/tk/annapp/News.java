@@ -1,11 +1,8 @@
 package com.pax.tk.annapp;
 
 import android.graphics.drawable.Drawable;
-import android.os.Parcelable;
 
 import java.io.Serializable;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Petrus on 28.03.2018.
@@ -14,22 +11,21 @@ import static android.content.Context.MODE_PRIVATE;
 public class News implements Serializable{
     private String title;
     private String link;
-    private String discription;
+    private String description;
     private String article;
     private String rawArticle;
     private String imageurl;
-    private transient Drawable image;
+    private Drawable image;
 
 
 
-    public News(String title, String link , String discription, String article, String rawArticle, String imageurl, Drawable image) {
+    public News(String title, String link , String description, String article, String rawArticle, String imageurl) {
         this.title = title;
         this.link = link;
-        this.discription = discription;
+        this.description = description;
         this.article = article;
         this.rawArticle = rawArticle;
         this.imageurl = imageurl;
-        this.image = image;
     }
 
     public String getLink() {
@@ -44,12 +40,12 @@ public class News implements Serializable{
         this.title = title;
     }
 
-    public String getDiscription() {
-        return discription;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDiscription(String discription) {
-        this.discription = discription;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getArticle() {
@@ -68,14 +64,6 @@ public class News implements Serializable{
         this.imageurl = imageurl;
     }
 
-    public Drawable getImage() {
-        return image;
-    }
-
-    public void setImage(Drawable image) {
-        this.image = image;
-    }
-
     public String getRawArticle() {
         return rawArticle;
     }
@@ -83,6 +71,17 @@ public class News implements Serializable{
     public void setRawArticle(String rawArticle) {
         this.rawArticle = rawArticle;
     }
+
+    public Drawable getImage() {
+        return image;
+    }
+
+    public void setImage(Drawable image) {
+        if(image != null)
+            this.image = image;
+        System.out.println("set Image: " + image);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -105,7 +104,7 @@ public class News implements Serializable{
         return "News{" +
                 "title='" + title + '\'' +
                 ", link='" + link + '\'' +
-                ", discription='" + discription + '\'' +
+                ", description='" + description + '\'' +
                 ", article='" + article + '\'' +
                 ", imageurl='" + imageurl + '\'' +
                 '}';
@@ -114,7 +113,7 @@ public class News implements Serializable{
     public int fullHashCode() {
         int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (link != null ? link.hashCode() : 0);
-        result = 31 * result + (discription != null ? discription.hashCode() : 0);
+        result = 31 * result + (description != null ? description.hashCode() : 0);
         result = 31 * result + (article != null ? article.hashCode() : 0);
         result = 31 * result + (imageurl != null ? imageurl.hashCode() : 0);
         return result;

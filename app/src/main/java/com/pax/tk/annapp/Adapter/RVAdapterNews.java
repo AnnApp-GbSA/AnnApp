@@ -26,21 +26,21 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
 
     Context context;
     Manager manager;
-    HashMap<Integer,Integer> old = new HashMap<Integer,Integer>();
+    HashMap<Integer, Integer> old = new HashMap<Integer, Integer>();
 
     public RVAdapterNews(Context context) {
         this.context = context;
         manager = Manager.getInstance();
     }
 
-    public void update(){
+    public void update() {
         ArrayList<News> nn = manager.getNews();
-        for (int i =0; i< nn.size();i++)
+        for (int i = 0; i < nn.size(); i++)
             if (old.keySet().contains(nn.get(i).getLink().hashCode()))
                 if (old.get(nn.get(i).getLink().hashCode()).equals(nn.get(i).fullHashCode()))
                     notifyItemChanged(i);
-            else
-                notifyItemInserted(i);
+                else
+                    notifyItemInserted(i);
     }
 
     @NonNull
@@ -54,16 +54,23 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = manager.getOneNews(position);
-        old.put(news.getLink().hashCode(),news.fullHashCode());
+        holder.setIsRecyclable(true);
+        old.put(news.getLink().hashCode(), news.fullHashCode());
         holder.title.setText(news.getTitle());
-        holder.description.setText(news.getDiscription());
-        holder.image.setImageDrawable(manager.getFromURl(news.getImageurl()));
+        holder.description.setText(news.getDescription());
 
+        /*if (news.getImage() == null) {
+            if (news.getImageurl() != null) {
+                //holder.image.setImageDrawable(manager.getFromURl(news.getImageurl()));
+                news.setImage(manager.getFromURl(news.getImageurl()));
+            } else{
+                holder.image.setVisibility(View.GONE);
+            }
+        }*/
+        holder.image.setImageDrawable(news.getImage());
+        System.out.println("use Image: " + news.getImage());
 
-
-        if (news.getImage() == null)
-            holder.image.setVisibility(View.GONE);
-
+        //holder.image.setVisibility(View.GONE);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

@@ -168,14 +168,14 @@ public class TutorialFragment extends Fragment{
                 backButton.setVisibility(View.INVISIBLE);
 
                 backButton.setText("");
-                nextButton.setText("Next");
+                nextButton.setText(R.string.next);
             } else if(position == dots.length -1){
                 nextButton.setEnabled(true);
                 backButton.setEnabled(true);
                 backButton.setVisibility(View.VISIBLE);
 
-                backButton.setText("Back");
-                nextButton.setText("Finish");
+                backButton.setText(R.string.back);
+                nextButton.setText(R.string.finish);
                 System.out.println(currentPageCount);
                 System.out.println(dots.length);
             } else {
@@ -183,8 +183,8 @@ public class TutorialFragment extends Fragment{
                 backButton.setEnabled(true);
                 backButton.setVisibility(View.VISIBLE);
 
-                backButton.setText("Back");
-                nextButton.setText("Next");
+                backButton.setText(R.string.back);
+                nextButton.setText(R.string.next);
 
 
             }

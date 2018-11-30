@@ -1,6 +1,7 @@
 package com.pax.tk.annapp;
 
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -23,6 +24,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class Manager {
@@ -153,28 +155,35 @@ public class Manager {
      * @return lessons of the longest day as Integer
      */
     public int getLongestDaysLessons() {
-        int i = 0;
-        System.out.println(i);
+
+        int longestLength = 0;
+        int length;
+        int puffer;
+
         for (Day d :
                 days) {
-            int x = 0;
+
+            length = 0;
+            puffer = 0;
+
             for (Lesson l :
                     d.getLessons()) {
-                x++;
-            }
-
-            Boolean subjectExists = false;
-            for (int start = d.getLessons().size(); start > 0; start--) {
-                if (d.getLesson(start) == null && subjectExists) {
-                    x--;
+                if (l == null) {
+                    puffer += 1;
                 } else {
-                    subjectExists = true;
+                    length += 1;
+                    length += puffer;
+                    puffer = 0;
                 }
             }
-            if (x > i)
-                i = x;
+
+            if (length > longestLength) {
+                longestLength = length;
+            }
+
         }
-        return i;
+
+        return longestLength;
     }
 
     /**
@@ -205,6 +214,10 @@ public class Manager {
             System.out.println(days);
             System.out.println(news);
             ois.close();
+            for (News n :
+                    news) {
+                n.setImage(getFromURl(n.getImageurl()));
+            }
         } catch (Exception e) {
             System.out.println("loading failed ---------------------------------------------------------------------------------------------------------");
             e.printStackTrace();
@@ -419,16 +432,21 @@ public class Manager {
     public Drawable getFromURl(String url) {
         if (url == null)
             return null;
-        Drawable d = Drawable.createFromPath(context.getFilesDir().getAbsolutePath() + "/newsimage" + String.valueOf(url.hashCode()));
-        if (d == null)
-            System.out.println("Missing Image: \"" + url + "\" (" + String.valueOf(url.hashCode()) + ")");
-        else
-            return d;
-        System.out.println("Image gets loaded \"" + url + "\" (" + String.valueOf(url.hashCode()) + ")");
+        Drawable d = null;
+
         try {
+
+            d = Drawable.createFromPath(context.getFilesDir().getAbsolutePath() + "/newsimage" + String.valueOf(url.hashCode()));
+
+            if (d == null)
+                System.out.println("Missing Image: \"" + url + "\" (" + String.valueOf(url.hashCode()) + ")");
+            else
+                return d;
+            System.out.println("Image gets loaded \"" + url + "\" (" + String.valueOf(url.hashCode()) + ")");
+
             d = Util.drawableFromUrl(url);
             FileOutputStream fileOutStream = context.openFileOutput("newsimage" + String.valueOf(url.hashCode()), MODE_PRIVATE);
-            ((BitmapDrawable) d).getBitmap().compress(Bitmap.CompressFormat.PNG, 100, fileOutStream);
+            ((BitmapDrawable) d).getBitmap().compress(Bitmap.CompressFormat.PNG, 10, fileOutStream);
             fileOutStream.close();
             System.out.println("Saved \"" + url + "\" (" + String.valueOf(url.hashCode()) + ")");
             //System.out.println("Worked= : "+t2.toString());
@@ -458,8 +476,8 @@ public class Manager {
 
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy");
-            String endTime = ((String)event.getData()).split("°°")[0];
-            if(!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))){
+            String endTime = ((String) event.getData()).split("°°")[0];
+            if (!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))) {
 
                 color = Color.RED;
 
@@ -467,8 +485,9 @@ public class Manager {
                 if (!compactCalendarView.getEvents(new Date(endEvent.getTimeInMillis())).contains(endEvent))
                     compactCalendarView.addEvent(endEvent);
                 Long currentDate = Long.valueOf(endTime);
-                for (int i = 1; currentDate - i * 86400000L>event.getTimeInMillis(); i++){
-                    compactCalendarView.addEvent(new Event(color, currentDate-i*86400000L, event.getData()));
+                for (int i = 1; currentDate - i * 86400000L > event.getTimeInMillis(); i++) {
+                    if (!compactCalendarView.getEvents(currentDate - i * 86400000L).contains(new Event(color, currentDate - i * 86400000L, event.getData())))
+                        compactCalendarView.addEvent(new Event(color, currentDate - i * 86400000L, event.getData()));
                 }
             }
             //TODO check for n-day event
@@ -503,15 +522,15 @@ public class Manager {
 
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy");
-            String endTime = ((String)event.getData()).split("°°")[0];
-            if(!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))){
+            String endTime = ((String) event.getData()).split("°°")[0];
+            if (!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))) {
                 Event endEvent = new Event(event.getColor(), Long.valueOf(endTime), event.getData());
                 System.out.println("adding n-day private event");
                 if (!compactCalendarView.getEvents(new Date(endEvent.getTimeInMillis())).contains(endEvent))
                     compactCalendarView.addEvent(endEvent);
                 Long currentDate = Long.valueOf(endTime);
-                for (int i = 1; currentDate - i * 86400000L>event.getTimeInMillis(); i++){
-                    compactCalendarView.addEvent(new Event(event.getColor(), currentDate-i*86400000L, event.getData()));
+                for (int i = 1; currentDate - i * 86400000L > event.getTimeInMillis(); i++) {
+                    compactCalendarView.addEvent(new Event(event.getColor(), currentDate - i * 86400000L, event.getData()));
                 }
             }
             //TODO check for n-day event

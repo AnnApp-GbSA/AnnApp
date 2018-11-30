@@ -27,7 +27,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Farbschema:" />
+                android:text="@string/im_export_timetable" />
 
             <Spinner
                 android:id="@+id/colorSpinner"
@@ -127,7 +127,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Stundenplan"
+        android:text="@string/timetable"
         android:textColor="?colorAccent"
         android:textSize="20dp" />
 
@@ -148,7 +148,7 @@
             android:id="@+id/longClick"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Lange auf einer leeren Stunde bleiben um eine Neue hinzuzufügen"
+            android:text="@string/press_hold_addLesson"
             android:textColor="?android:textColor" />
 
         <LinearLayout
@@ -162,7 +162,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="@string/settings_max_lessons"/>
+                android:text="@string/settings_max_lessons" />
 
             <EditText
                 android:id="@+id/maxLesson"
@@ -174,9 +174,31 @@
                 android:gravity="right"
                 android:hint="@string/settings_max_lessons"
                 android:inputType="number"
-                android:theme="@style/ThemeEditText"
-                />
+                android:theme="@style/ThemeEditText" />
+
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_import_timetable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@android:color/transparent"
+            android:gravity="fill_vertical"
+            android:singleLine="false"
+            android:text="Stundenplan importieren"
+            android:textColor="?colorAccent" />
+
+        <Button
+            android:id="@+id/btn_export_timetable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@android:color/transparent"
+            android:gravity="fill_vertical"
+            android:singleLine="false"
+            android:text="Stundenplan exportieren"
+            android:textColor="?colorAccent" />
 
     </LinearLayout>
 
@@ -209,7 +231,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="Benutzername:"/>
+                android:text="@string/Username_point"/>
 
             <EditText
                 android:id="@+id/securonUsername"
@@ -219,7 +241,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="right"
-                android:hint="benutzername"
+                android:hint="@string/username"
                 android:inputType="text"
                 android:theme="@style/ThemeEditText"
                 />
@@ -234,7 +256,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:layout_weight="0"
-                android:text="Passwort:"/>
+                android:text="@string/password_point"/>
 
             <EditText
                 android:id="@+id/securonPassword"
@@ -244,7 +266,7 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="right"
-                android:hint="password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:theme="@style/ThemeEditText"
                 />
@@ -267,7 +289,7 @@
         android:background="@android:color/transparent"
         android:gravity="fill_vertical"
         android:singleLine="false"
-        android:text="Tutorial erneut anzeigen"
+        android:text="@string/show_tutorial_again"
         android:textColor="?colorAccent" />
 
 </LinearLayout>

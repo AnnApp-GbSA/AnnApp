@@ -4,6 +4,7 @@ import android.app.DatePickerDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
@@ -30,6 +31,7 @@ import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 
 import java.io.BufferedInputStream;
+import java.security.spec.ECField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -53,6 +55,11 @@ public class CalendarFragment extends Fragment {
     SimpleDateFormat ddMMMM = new SimpleDateFormat("dd. MMMM");
     Long currentDay = System.currentTimeMillis();
     Long currentDayPlusOne = currentDay;
+    TextView dateIndication;
+    ImageButton monthForward;
+    ImageButton monthBack;
+    FloatingActionButton fabAdd;
+    TextView monthIndication;
 
     /**
      * initializing variables and calling methods
@@ -67,76 +74,105 @@ public class CalendarFragment extends Fragment {
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().setTitle(getString(R.string.calendar));
         root = inflater.inflate(R.layout.fragment_calendar, container, false);
+        dateIndication = root.findViewById(R.id.dateInformation);
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);
         compactCalendarView.setUseThreeLetterAbbreviation(true);
-
-        ImageButton monthForward = root.findViewById(R.id.monthForward);
-        ImageButton monthBack = root.findViewById(R.id.monthBack);
-        FloatingActionButton fabAdd = root.findViewById(R.id.fabAddCalendar);
-        TextView monthIndication = root.findViewById(R.id.monthIndication);
-        TextView dateIndication = root.findViewById(R.id.dateInformation);
+        monthForward = root.findViewById(R.id.monthForward);
+        monthBack = root.findViewById(R.id.monthBack);
+        fabAdd = root.findViewById(R.id.fabAddCalendar);
+        fabAdd.setVisibility(View.GONE);
+        monthIndication = root.findViewById(R.id.monthIndication);
 
         manager = Manager.getInstance();
         manager.setCompactCalendarView(compactCalendarView);
 
         monthIndication.setText(month.format(compactCalendarView.getFirstDayOfCurrentMonth()) + " - " + year.format(compactCalendarView.getFirstDayOfCurrentMonth()));
 
-        EventHandler.loadSchoolEvents();
 
-
-        for (int i = 0; i<manager.getSchoolEvents().size(); i++){
-            manager.addSchoolEvent((Event) manager.getSchoolEvents().toArray()[i]);
-        }
-
-        for (int i = 0; i<manager.getPrivateEvents().size(); i++){
-            manager.addPrivateEvent((Event) manager.getPrivateEvents().toArray()[i]);
-        }
-
-
+        new LoadCalendar().execute((Void) null);
         dateIndication.setText(ddMMMM.format(new Date(System.currentTimeMillis())));
-        //TODO refresh if new event is loaded at this date
-
-        //Listener compactCalendarView
-        monthForward.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                compactCalendarView.scrollRight();
-            }
-        });
-        monthBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                compactCalendarView.scrollLeft();
-            }
-        });
-        compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
-            @Override
-            public void onDayClick(Date dateClicked) {
-                refresh(compactCalendarView.getEvents(dateClicked));
-                dateIndication.setText(ddMMMM.format(dateClicked));
-                currentDay = dateClicked.getTime();
-                currentDayPlusOne = dateClicked.getTime() + 86400000;
-            }
-
-            @Override
-            public void onMonthScroll(Date firstDayOfNewMonth) {
-                monthIndication.setText(month.format(compactCalendarView.getFirstDayOfCurrentMonth()) + " - " + year.format(compactCalendarView.getFirstDayOfCurrentMonth()));
-                refresh(compactCalendarView.getEvents(firstDayOfNewMonth));
-                dateIndication.setText(ddMMMM.format(firstDayOfNewMonth));
-                currentDay = firstDayOfNewMonth.getTime();
-                currentDayPlusOne = firstDayOfNewMonth.getTime() + 86400000;
-            }
-        });
-
-        //fabAdd Listener
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                createInputDialog();
-            }
-        });
 
         return root;
+    }
+
+    private class LoadCalendar extends AsyncTask<Void, Void, Void>{
+
+        /**
+         * Override this method to perform a computation on a background thread. The
+         * specified parameters are the parameters passed to {@link #execute}
+         * by the caller of this task.
+         * <p>
+         * This method can call {@link #publishProgress} to publish updates
+         * on the UI thread.
+         *
+         * @param voids The parameters of the task.
+         * @return A result, defined by the subclass of this task.
+         * @see #onPreExecute()
+         * @see #onPostExecute
+         * @see #publishProgress
+         */
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+
+            EventHandler.loadSchoolEvents();
+
+
+            for (int i = 0; i<manager.getSchoolEvents().size(); i++){
+                try {
+                    manager.addSchoolEvent((Event) manager.getSchoolEvents().toArray()[i]);}catch (Exception e){e.printStackTrace();}
+            }
+
+            for (int i = 0; i<manager.getPrivateEvents().size(); i++){
+                manager.addPrivateEvent((Event) manager.getPrivateEvents().toArray()[i]);
+            }
+
+
+//            dateIndication.setText(ddMMMM.format(new Date(System.currentTimeMillis())));
+            //TODO refresh if new event is loaded at this date
+
+            //Listener compactCalendarView
+            monthForward.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    compactCalendarView.scrollRight();
+                }
+            });
+            monthBack.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    compactCalendarView.scrollLeft();
+                }
+            });
+            compactCalendarView.setListener(new CompactCalendarView.CompactCalendarViewListener() {
+                @Override
+                public void onDayClick(Date dateClicked) {
+                    refresh(compactCalendarView.getEvents(dateClicked));
+                    dateIndication.setText(ddMMMM.format(dateClicked));
+                    currentDay = dateClicked.getTime();
+                    currentDayPlusOne = dateClicked.getTime() + 86400000;
+                }
+
+                @Override
+                public void onMonthScroll(Date firstDayOfNewMonth) {
+                    monthIndication.setText(month.format(compactCalendarView.getFirstDayOfCurrentMonth()) + " - " + year.format(compactCalendarView.getFirstDayOfCurrentMonth()));
+                    refresh(compactCalendarView.getEvents(firstDayOfNewMonth));
+                    dateIndication.setText(ddMMMM.format(firstDayOfNewMonth));
+                    currentDay = firstDayOfNewMonth.getTime();
+                    currentDayPlusOne = firstDayOfNewMonth.getTime() + 86400000;
+                }
+            });
+
+            //fabAdd Listener
+            fabAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    createInputDialog();
+                }
+            });
+
+            return null;
+        }
     }
 
     /**
@@ -512,6 +548,7 @@ public class CalendarFragment extends Fragment {
                 manager.addPrivateEvent(ev1);
 
                 bsd.cancel();
+                refresh(compactCalendarView.getEvents(currentDay));
             }
         });
         bsd.setContentView(mView);
