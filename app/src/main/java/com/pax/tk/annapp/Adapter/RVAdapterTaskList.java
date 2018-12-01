@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
@@ -23,7 +24,11 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.regex.Pattern;
 
+import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.SchoolLessonSystem;
@@ -41,6 +46,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private TextView taskMessage;
     private int pos;
     private boolean isPreview;
+    public Set<Event> privateEvents = new HashSet<>();
 
     public RVAdapterTaskList(Context context, TextView taskMessage, boolean isPreview) {
 
@@ -49,6 +55,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         manager = Manager.getInstance();
         this.isPreview = isPreview;
 
+        privateEvents = manager.getPrivateEvents();
         constructor();
 
     }
@@ -198,6 +205,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
         View mView = View.inflate(context, R.layout.dialog_edit_task, null);
 
+        String eventText = task.getKind() + ": " + task.getTask();
+        String uid = String.valueOf(eventText.hashCode());
+
+        removeTaskEvent(uid);
+
         Calendar now = Calendar.getInstance();
         String[] duedates;
         if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
@@ -287,6 +299,18 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     return;
                 }
 
+                String shortKind;//TODO change this... somehow
+                String s = (String) kindSelection.getSelectedItem();
+                if (s.equals(context.getString(R.string.homework))) {
+                    shortKind = context.getString(R.string.homework_short);
+                } else if (s.equals(context.getString(R.string.exam))) {
+                    shortKind = context.getString(R.string.exam_short);
+                } else if (s.equals(context.getString(R.string.note))) {
+                    shortKind = context.getString(R.string.note_short);
+                } else {
+                    shortKind = context.getString(R.string.error);
+                }
+
                 Calendar due = Calendar.getInstance();
                 SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
@@ -305,17 +329,16 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     return;
                 }
 
-                String shortKind;//TODO change this... somehow
-                String s = (String) kindSelection.getSelectedItem();
-                if (s.equals(context.getString(R.string.homework))) {
-                    shortKind = context.getString(R.string.homework_short);
-                } else if (s.equals(context.getString(R.string.exam))) {
-                    shortKind = context.getString(R.string.exam_short);
-                } else if (s.equals(context.getString(R.string.note))) {
-                    shortKind = context.getString(R.string.note_short);
-                } else {
-                    shortKind = context.getString(R.string.error);
-                }
+                due.set(Calendar.DAY_OF_MONTH, due.getTime().getDate() - 1);
+                due.set(Calendar.HOUR_OF_DAY, 24);
+                due.set(Calendar.MINUTE, 0);
+
+
+                String eventText = shortKind + ": " + taskInput.getText().toString();
+                String uid = String.valueOf(eventText.hashCode());
+                Event event = new Event(Color.CYAN, due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
+                manager.addPrivateEvent(event);
+
 
                 task.setDue(due);
                 task.setKind(shortKind);
@@ -393,6 +416,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         tasks.remove(task);
         notifyItemRemoved(index);
 
+        String eventText = task.getKind() + ": " + task.getTask();
+        String uid = String.valueOf(eventText.hashCode());
+
+        removeTaskEvent(uid);
+
         if (tasks.isEmpty()) {
             taskMessage.setVisibility(View.VISIBLE);
         }
@@ -410,6 +438,17 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             }
 
 
+        }
+    }
+
+    private void removeTaskEvent(String uid){
+        for(Event e : privateEvents){
+            String[] split = e.getData().toString().split(Pattern.quote("°°"));
+            String id = split[3];
+            if(uid.equals(id)){
+                manager.removePrivateEvent(e);
+                break;
+            }
         }
     }
 }

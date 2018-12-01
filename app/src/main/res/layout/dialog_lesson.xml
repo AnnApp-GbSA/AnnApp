@@ -27,6 +27,12 @@
             android:orientation="vertical"
             android:id="@+id/headerLayout">
 
+            <Space
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:id="@+id/edit_lesson_space"
+                android:visibility="gone"/>
+
             <Spinner
                 android:id="@+id/subjectSelection"
                 android:layout_width="wrap_content"

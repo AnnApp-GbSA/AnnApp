@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
+import android.app.usage.UsageEvents;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetDialog;
@@ -24,7 +26,10 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
+import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.pax.tk.annapp.EventHandler;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterTaskList;
 import com.pax.tk.annapp.SchoolLessonSystem;
@@ -210,7 +215,9 @@ public class TasksFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
-                if (task.getText().toString().isEmpty()) {
+                String taskText = task.getText().toString();
+
+                if (taskText.isEmpty()) {
                     Util.createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert, getContext());
                     return;
                 }
@@ -219,6 +226,21 @@ public class TasksFragment extends Fragment {
 
                 Calendar due = Calendar.getInstance();//"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche",
                 Calendar now = Calendar.getInstance();
+
+                String shortKind;
+                if (kindSelection.getSelectedItem().toString().equals(getString(R.string.homework))) {
+                    shortKind = getString(R.string.homework_short);
+                } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.exam))) {
+                    shortKind = getString(R.string.exam_short);
+                } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.note))) {
+                    shortKind = getString(R.string.note_short);
+                } else {
+                    shortKind = "";
+                    Util.createAlertDialog(getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
+                }
+
+                Event event = null;
+
 
                 SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals(getString(R.string.nextLesson))) {
@@ -235,18 +257,16 @@ public class TasksFragment extends Fragment {
                     Util.createAlertDialog(/*getString(R.string.warning)*/getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
                     return;
                 }
+                due.add(Calendar.DAY_OF_MONTH, - 1);
+                due.set(Calendar.HOUR_OF_DAY, 24);
+                due.set(Calendar.MINUTE, 0);
 
-                String shortKind;
-                if (kindSelection.getSelectedItem().toString().equals(getString(R.string.homework))) {
-                    shortKind = getString(R.string.homework_short);
-                } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.exam))) {
-                    shortKind = getString(R.string.exam_short);
-                } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.note))) {
-                    shortKind = getString(R.string.note_short);
-                } else {
-                    shortKind = "";
-                    Util.createAlertDialog(getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
-                }
+
+                String eventText = shortKind + ": " + taskText;
+                String uid = String.valueOf(eventText.hashCode());
+                event = new Event(Color.CYAN, due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
+                manager.addPrivateEvent(event);
+
                 Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);
                 subject.addTask(newTask);
                 ((RVAdapterTaskList) recyclerView.getAdapter()).addTask(newTask);
@@ -307,29 +327,4 @@ public class TasksFragment extends Fragment {
         bsd.setContentView(mView);
         bsd.show();
     }
-
-
-    /*void createAlertDialog(String title, String text, int ic) {
-        AlertDialog.Builder builder;
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            builder = new AlertDialog.Builder(this.getContext(), MainActivity.colorScheme);
-        } else {
-            builder = new AlertDialog.Builder(this.getContext());
-        }
-        builder.setTitle(title)
-                .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(ic);
-
-        AlertDialog alertDialog = builder.show();
-        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
-        lp.dimAmount = 0.7f;
-        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }
-*/
 }

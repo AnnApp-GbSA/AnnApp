@@ -514,15 +514,30 @@ public class Manager {
     }
 
     /**
+     * removes a private event
+     *
+     * @param event Event to remove
+     */
+    public void removePrivateEvent(Event event) {
+        privateEvents.remove(event);
+        //TODO test for n-day event
+        try {
+            compactCalendarView.removeEvent(event);
+        } catch (Exception e) {
+        }
+    }
+
+    /**
      * adds a private event
      *
      * @param event Event to add
      */
     public void addPrivateEvent(Event event) {
-
+        System.out.println("Adding private event:" + event.getData());
         try {
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd.mm.yyyy");
             String endTime = ((String) event.getData()).split("°°")[0];
+            System.out.println(endTime);
             if (!simpleDateFormat.format(new Date(Long.valueOf(endTime))).equals(simpleDateFormat.format(event.getTimeInMillis())) && (event.getTimeInMillis() == Long.valueOf(endTime) && (new SimpleDateFormat("kk:mm")).format(new Date(event.getTimeInMillis())).contains("24:00") || (new SimpleDateFormat("kk:mm")).format(new Date(Long.valueOf(endTime))).contains("24:00"))) {
                 Event endEvent = new Event(event.getColor(), Long.valueOf(endTime), event.getData());
                 System.out.println("adding n-day private event");

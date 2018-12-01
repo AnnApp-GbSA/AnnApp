@@ -447,6 +447,8 @@ public class TimetableFragment extends Fragment {
 
         final EditText nameEdittext = mView.findViewById(R.id.subjectNameInput);
 
+        final Space space = mView.findViewById(R.id.edit_lesson_space);
+
 
         btnRoomHelp.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -468,9 +470,8 @@ public class TimetableFragment extends Fragment {
 
         //All the stuff for editing subject
         if (subjectEdit) {
-            Space topSpace = mView.findViewById(R.id.topSpace);
-            topSpace.setMinimumHeight(20);
             subjectSelection.setVisibility(View.GONE);
+            space.setVisibility(View.VISIBLE);
             extraLayout.setVisibility(View.VISIBLE);
             nameEdittext.setText(subject.getName());
             if (subject.getRatingSub() == 1)

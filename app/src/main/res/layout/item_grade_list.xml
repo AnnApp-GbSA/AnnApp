@@ -42,7 +42,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="end|top"
-            android:paddingLeft="2dp">
+            android:paddingLeft="2dp"
+            android:paddingEnd="4dp">
 
         <ImageButton
             android:padding="4dp"

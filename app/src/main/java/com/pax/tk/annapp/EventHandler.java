@@ -40,7 +40,7 @@ public class EventHandler{
      * @return date as Long in milliseconds
      * @throws ParseException ...
      */
-    private static long timeInMillis(String date) throws ParseException {
+    public static long timeInMillis(String date) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy hh:mm");
         Date datum = null;
         try {
@@ -189,6 +189,7 @@ public class EventHandler{
                             if (((String) e.getData()).contains(uid))
                                 manager.removeSchoolEvent(e);
                         }
+
                         manager.addSchoolEvent(new Event(Color.GREEN, startDate, endDate + "°°" + location + "°°" + summary + "°°" + uid));
                     }
                 }
