@@ -336,7 +336,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                 String eventText = shortKind + ": " + taskInput.getText().toString();
                 String uid = String.valueOf(eventText.hashCode());
-                Event event = new Event(Color.CYAN, due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
+                Event event = new Event(Util.getSubjectColor(context, task.getSubject()), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
                 manager.addPrivateEvent(event);
 
 

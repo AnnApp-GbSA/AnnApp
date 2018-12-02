@@ -87,6 +87,10 @@ public class Subject implements Serializable {
         lessons.remove(lesson);
     }
 
+    public void removeAllLessons(){
+        lessons.clear();
+    }
+
     public ArrayList<Lesson> getLessons() {
         return lessons;
     }

@@ -47,10 +47,9 @@ public class Util {
 
     public static String getDateString(Calendar date, Context context) {
         Calendar now = Calendar.getInstance();
-        now.add(Calendar.DAY_OF_YEAR, 7);
         if (now.get(Calendar.YEAR) != date.get(Calendar.YEAR))
             return new SimpleDateFormat(context.getString(R.string.dateFormat_long)).format(date.getTime());
-        else if (now.get(Calendar.WEEK_OF_YEAR) != date.get(Calendar.WEEK_OF_YEAR))
+        else if (now.get(Calendar.DAY_OF_YEAR) + 7 < date.get(Calendar.DAY_OF_YEAR))
             return new SimpleDateFormat(context.getString(R.string.dateFormat_short)).format(date.getTime());
         return getWeekDayShort(date, context);
     }

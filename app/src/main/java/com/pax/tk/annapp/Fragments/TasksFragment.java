@@ -264,7 +264,7 @@ public class TasksFragment extends Fragment {
 
                 String eventText = shortKind + ": " + taskText;
                 String uid = String.valueOf(eventText.hashCode());
-                event = new Event(Color.CYAN, due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
+                event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
                 manager.addPrivateEvent(event);
 
                 Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);

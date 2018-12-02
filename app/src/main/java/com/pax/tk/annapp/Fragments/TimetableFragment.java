@@ -811,11 +811,13 @@ public class TimetableFragment extends Fragment {
                         switch (i) {
                             case 0:
                                 manager.deleteLesson(lesson);
+                                lesson.getSubject().removeLesson(lesson);
                                 //manager.save();
                                 initializeTableView();
                                 break;
                             case 1:
                                 manager.deleteAllLessons(lesson);
+                                lesson.getSubject().removeAllLessons();
                                 //manager.save();
                                 initializeTableView();
                                 break;
