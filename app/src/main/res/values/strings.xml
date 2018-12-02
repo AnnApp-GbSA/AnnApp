@@ -230,5 +230,6 @@
     <string name="password_point">Passwort:</string>
     <string name="feedback">Feedback</string>
     <string name="im_export_timetable">Stundenplan im-/exportieren</string>
+    <string name="push_notification">Push Nachrichten</string>
 </resources>
 

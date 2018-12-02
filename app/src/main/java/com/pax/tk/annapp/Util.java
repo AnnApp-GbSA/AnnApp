@@ -1,6 +1,8 @@
 package com.pax.tk.annapp;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,6 +15,7 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.TypedValue;
@@ -29,7 +32,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -110,13 +112,11 @@ public class Util {
         return null;
     }
 
-    public static void createPushNotification(Date date, Context context, int ID, String title, String subject, int smallIcon) {
-
-
+    public static void createPushNotificationAtDate(Calendar date, Context context, Notification notification, int notID) {
 
     }
 
-    public static void createPushNotification(Context context, int ID, String title, String subject, int smallIcon/*, Bitmap largeIcon*/) {
+    public static void createPushNotification(Context context, int ID, String Description, String subject, int smallIcon/*, Bitmap largeIcon*/) {
 
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
@@ -134,10 +134,10 @@ public class Util {
 
             mBuilder = new NotificationCompat.Builder(context);
             mBuilder.setSmallIcon(smallIcon);
-            mBuilder.setContentTitle(title)
-                    .setContentText(subject)
+            mBuilder.setContentTitle(subject)
+                    .setContentText(Description)
                     .setStyle(new NotificationCompat.BigTextStyle()
-                            .bigText(subject))
+                            .bigText(Description))
                     .setAutoCancel(false)
                     .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
                     .setContentIntent(resultPendingIntent);
@@ -159,17 +159,18 @@ public class Util {
             mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
 
 
+
         } else {
             NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setSmallIcon(smallIcon)
                     //.setLargeIcon(largeIcon)
-                    .setContentTitle(title)
-                    .setContentText(subject);
+                    .setContentTitle(subject)
+                    .setContentText(Description);
 
             NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
             notificationManager.notify(ID, notif.build());
+
         }
 
     }

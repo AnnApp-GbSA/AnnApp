@@ -26,16 +26,23 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.Manager;
+import com.pax.tk.annapp.NotificationWorker;
 import com.pax.tk.annapp.SchoolLessonSystem;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
 import com.pax.tk.annapp.Util;
+
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.Worker;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -209,6 +216,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         String uid = String.valueOf(eventText.hashCode());
 
         removeTaskEvent(uid);
+        removeTaskWorkManager(uid);
 
         Calendar now = Calendar.getInstance();
         String[] duedates;
@@ -312,6 +320,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 }
 
                 Calendar due = Calendar.getInstance();
+                Calendar now = (Calendar) due.clone();
+
                 SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
                     due = task.getSubject().getNextLessonAfter(due, sls);
@@ -329,13 +339,40 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     return;
                 }
 
-                due.set(Calendar.DAY_OF_MONTH, due.getTime().getDate() - 1);
+                due.add(Calendar.DAY_OF_MONTH, - 1);
                 due.set(Calendar.HOUR_OF_DAY, 24);
                 due.set(Calendar.MINUTE, 0);
 
+                Calendar notidate = (Calendar) due.clone();
+
+                if (shortKind.equals(context.getString(R.string.exam_short))){
+                    notidate.add(Calendar.DAY_OF_YEAR, -7);
+                }
+
+                notidate.set(Calendar.HOUR_OF_DAY, 15);
+                notidate.set(Calendar.MINUTE, 0);
+                notidate.set(Calendar.SECOND, 0);
 
                 String eventText = shortKind + ": " + taskInput.getText().toString();
                 String uid = String.valueOf(eventText.hashCode());
+
+                Data myData = new Data.Builder()
+                        .putString("eventText", eventText)
+                        .putString("subjectName", task.getSubject().getName())
+                        // ... and build the actual Data object:
+                        .build();
+
+                System.out.println("Time: " + String.valueOf(notidate.getTimeInMillis() - now.getTimeInMillis()));
+
+                OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                        .setInitialDelay(notidate.getTimeInMillis() - now.getTimeInMillis(), TimeUnit.MILLISECONDS)
+                        .addTag(uid)
+                        .setInputData(myData)
+                        .build();
+
+                WorkManager.getInstance().enqueue(notificationWork);
+
+
                 Event event = new Event(Util.getSubjectColor(context, task.getSubject()), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
                 manager.addPrivateEvent(event);
 
@@ -419,6 +456,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         String eventText = task.getKind() + ": " + task.getTask();
         String uid = String.valueOf(eventText.hashCode());
 
+        removeTaskWorkManager(uid);
         removeTaskEvent(uid);
 
         if (tasks.isEmpty()) {
@@ -450,5 +488,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 break;
             }
         }
+    }
+
+    private void removeTaskWorkManager(String uid){
+        WorkManager.getInstance().cancelAllWorkByTag(uid);
     }
 }

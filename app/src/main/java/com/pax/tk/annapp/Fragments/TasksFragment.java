@@ -9,6 +9,8 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,12 +26,16 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.pax.tk.annapp.Day;
 import com.pax.tk.annapp.EventHandler;
+import com.pax.tk.annapp.NotificationWorker;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterTaskList;
 import com.pax.tk.annapp.SchoolLessonSystem;
@@ -37,6 +43,10 @@ import com.pax.tk.annapp.Subject;
 import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.Util;
+
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 
 public class TasksFragment extends Fragment {
@@ -225,7 +235,7 @@ public class TasksFragment extends Fragment {
                 Subject subject = (Subject) subjectSelection.getSelectedItem();
 
                 Calendar due = Calendar.getInstance();//"Nächste Stunde","Übernächste Stunde","Morgen","Nächste Woche",
-                Calendar now = Calendar.getInstance();
+                Calendar now = (Calendar) due.clone();
 
                 String shortKind;
                 if (kindSelection.getSelectedItem().toString().equals(getString(R.string.homework))) {
@@ -257,13 +267,46 @@ public class TasksFragment extends Fragment {
                     Util.createAlertDialog(/*getString(R.string.warning)*/getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
                     return;
                 }
-                due.add(Calendar.DAY_OF_MONTH, - 1);
+                due.add(Calendar.DAY_OF_YEAR, - 1);
                 due.set(Calendar.HOUR_OF_DAY, 24);
                 due.set(Calendar.MINUTE, 0);
 
-
                 String eventText = shortKind + ": " + taskText;
                 String uid = String.valueOf(eventText.hashCode());
+
+                int id = eventText.hashCode();
+
+                Calendar notidate = (Calendar) due.clone();
+
+                if (shortKind.equals(getString(R.string.exam_short))){
+                    notidate.add(Calendar.DAY_OF_YEAR, -7);
+                }
+
+                notidate.set(Calendar.HOUR_OF_DAY, 15);
+                notidate.set(Calendar.MINUTE, 0);
+                notidate.set(Calendar.SECOND, 0);
+
+                /*Util.createPushNotificationAtDate(notidate, getContext(), Util.createPushNotification(getContext(), id, eventText, subject.getName(), getContext().getResources().getIdentifier("anna_logo",
+                        "mipmap", getContext().getPackageName())), id);*/
+
+
+                // Create the Data object:
+                Data myData = new Data.Builder()
+                        .putString("eventText", eventText)
+                        .putString("subjectName", subject.getName())
+                        // ... and build the actual Data object:
+                        .build();
+
+                System.out.println("Time: " + String.valueOf(notidate.getTimeInMillis() - now.getTimeInMillis()));
+
+                OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
+                        .setInitialDelay(notidate.getTimeInMillis() - now.getTimeInMillis(), TimeUnit.MILLISECONDS)
+                        .addTag(uid)
+                        .setInputData(myData)
+                        .build();
+
+                WorkManager.getInstance().enqueue(notificationWork);
+
                 event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
                 manager.addPrivateEvent(event);
 

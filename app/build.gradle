@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.android.support:design:27.+'
     implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
+    implementation "android.arch.work:work-runtime:1.0.0-alpha11"
 
     //testCompile 'junit:junit:4.12' Das macht mir nur Probleme
 //
