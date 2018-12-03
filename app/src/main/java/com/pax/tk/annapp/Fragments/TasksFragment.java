@@ -272,9 +272,9 @@ public class TasksFragment extends Fragment {
                 due.set(Calendar.MINUTE, 0);
 
                 String eventText = shortKind + ": " + taskText;
-                String uid = String.valueOf(eventText.hashCode());
 
-                int id = eventText.hashCode();
+                String stringID = shortKind + taskText + due.getTimeInMillis();
+                int id = stringID.hashCode();
 
                 Calendar notidate = (Calendar) due.clone();
 
@@ -294,6 +294,7 @@ public class TasksFragment extends Fragment {
                 Data myData = new Data.Builder()
                         .putString("eventText", eventText)
                         .putString("subjectName", subject.getName())
+                        .putInt("ID", id)
                         // ... and build the actual Data object:
                         .build();
 
@@ -301,13 +302,13 @@ public class TasksFragment extends Fragment {
 
                 OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
                         .setInitialDelay(notidate.getTimeInMillis() - now.getTimeInMillis(), TimeUnit.MILLISECONDS)
-                        .addTag(uid)
+                        .addTag(String.valueOf(id))
                         .setInputData(myData)
                         .build();
 
                 WorkManager.getInstance().enqueue(notificationWork);
 
-                event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
+                event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));
                 manager.addPrivateEvent(event);
 
                 Task newTask = new Task(task.getText().toString(), Calendar.getInstance(), shortKind, subject, due);

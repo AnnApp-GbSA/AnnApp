@@ -213,10 +213,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         View mView = View.inflate(context, R.layout.dialog_edit_task, null);
 
         String eventText = task.getKind() + ": " + task.getTask();
-        String uid = String.valueOf(eventText.hashCode());
 
-        removeTaskEvent(uid);
-        removeTaskWorkManager(uid);
+        String stringID = task.getKind() + task.getTask()+ task.getDue().getTimeInMillis();
+        int id = stringID.hashCode();
+
+        removeTaskEvent(id);
+        removeTaskWorkManager(id);
 
         Calendar now = Calendar.getInstance();
         String[] duedates;
@@ -345,20 +347,23 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                 Calendar notidate = (Calendar) due.clone();
 
+                String stringID = shortKind + task.getTask()+ due.getTimeInMillis();
+                int id = stringID.hashCode();
+
                 if (shortKind.equals(context.getString(R.string.exam_short))){
                     notidate.add(Calendar.DAY_OF_YEAR, -7);
                 }
 
-                notidate.set(Calendar.HOUR_OF_DAY, 15);
-                notidate.set(Calendar.MINUTE, 0);
+                notidate.set(Calendar.HOUR_OF_DAY, 18);
+                notidate.set(Calendar.MINUTE, 18);
                 notidate.set(Calendar.SECOND, 0);
 
                 String eventText = shortKind + ": " + taskInput.getText().toString();
-                String uid = String.valueOf(eventText.hashCode());
 
                 Data myData = new Data.Builder()
                         .putString("eventText", eventText)
                         .putString("subjectName", task.getSubject().getName())
+                        .putInt("ID", id)
                         // ... and build the actual Data object:
                         .build();
 
@@ -366,14 +371,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
                 OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
                         .setInitialDelay(notidate.getTimeInMillis() - now.getTimeInMillis(), TimeUnit.MILLISECONDS)
-                        .addTag(uid)
+                        .addTag(String.valueOf(id))
                         .setInputData(myData)
                         .build();
 
                 WorkManager.getInstance().enqueue(notificationWork);
 
 
-                Event event = new Event(Util.getSubjectColor(context, task.getSubject()), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + uid);
+                Event event = new Event(Util.getSubjectColor(context, task.getSubject()), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));
                 manager.addPrivateEvent(event);
 
 
@@ -453,11 +458,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         tasks.remove(task);
         notifyItemRemoved(index);
 
-        String eventText = task.getKind() + ": " + task.getTask();
-        String uid = String.valueOf(eventText.hashCode());
+        String stringID = task.getKind() + task.getTask()+ task.getDue().getTimeInMillis();
+        int id = stringID.hashCode();
 
-        removeTaskWorkManager(uid);
-        removeTaskEvent(uid);
+        removeTaskEvent(id);
+        removeTaskWorkManager(id);
 
         if (tasks.isEmpty()) {
             taskMessage.setVisibility(View.VISIBLE);
@@ -479,18 +484,18 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
-    private void removeTaskEvent(String uid){
+    private void removeTaskEvent(int uid){
         for(Event e : privateEvents){
             String[] split = e.getData().toString().split(Pattern.quote("°°"));
             String id = split[3];
-            if(uid.equals(id)){
+            if(id.equals(String.valueOf(uid))){
                 manager.removePrivateEvent(e);
                 break;
             }
         }
     }
 
-    private void removeTaskWorkManager(String uid){
-        WorkManager.getInstance().cancelAllWorkByTag(uid);
+    private void removeTaskWorkManager(int id){
+        WorkManager.getInstance().cancelAllWorkByTag(String.valueOf(id));
     }
 }

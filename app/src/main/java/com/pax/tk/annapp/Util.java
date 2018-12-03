@@ -118,6 +118,8 @@ public class Util {
 
     public static void createPushNotification(Context context, int ID, String Description, String subject, int smallIcon/*, Bitmap largeIcon*/) {
 
+        final String CHANNEL_1_ID = "channel1";
+
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -132,7 +134,7 @@ public class Util {
                     0 /* Request code */, resultIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT);
 
-            mBuilder = new NotificationCompat.Builder(context);
+            mBuilder = new NotificationCompat.Builder(context, CHANNEL_1_ID);
             mBuilder.setSmallIcon(smallIcon);
             mBuilder.setContentTitle(subject)
                     .setContentText(Description)
@@ -146,17 +148,17 @@ public class Util {
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_HIGH;
-                NotificationChannel notificationChannel = new NotificationChannel(String.valueOf(ID), "NOTIFICATION_CHANNEL_NAME", importance);
+                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_1_ID, "NOTIFICATION_CHANNEL_NAME", importance);
                 notificationChannel.enableLights(true);
-                notificationChannel.setLightColor(Color.RED);
+                notificationChannel.setLightColor(Color.YELLOW);
                 notificationChannel.enableVibration(true);
                 notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
                 assert mNotificationManager != null;
-                mBuilder.setChannelId(String.valueOf(ID));
+                mBuilder.setChannelId(String.valueOf(CHANNEL_1_ID));
                 mNotificationManager.createNotificationChannel(notificationChannel);
             }
             assert mNotificationManager != null;
-            mNotificationManager.notify(0 /* Request Code */, mBuilder.build());
+            mNotificationManager.notify(ID /* Request Code */, mBuilder.build());
 
 
 
@@ -164,6 +166,7 @@ public class Util {
             NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
                     .setSmallIcon(smallIcon)
+                    .setCategory(NotificationCompat.CATEGORY_REMINDER)
                     //.setLargeIcon(largeIcon)
                     .setContentTitle(subject)
                     .setContentText(Description);

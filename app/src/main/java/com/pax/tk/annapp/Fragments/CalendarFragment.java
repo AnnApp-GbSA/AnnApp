@@ -6,6 +6,7 @@ import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.util.TypedValue;
@@ -127,6 +128,12 @@ public class CalendarFragment extends Fragment {
                 manager.addPrivateEvent((Event) manager.getPrivateEvents().toArray()[i]);
             }
 
+            getActivity().runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    refresh(compactCalendarView.getEvents(new Date(System.currentTimeMillis())));
+                }
+            });
 
 //            dateIndication.setText(ddMMMM.format(new Date(System.currentTimeMillis())));
             //TODO refresh if new event is loaded at this date
@@ -162,6 +169,7 @@ public class CalendarFragment extends Fragment {
                     currentDayPlusOne = firstDayOfNewMonth.getTime() + 86400000;
                 }
             });
+
 
             //fabAdd Listener
             fabAdd.setOnClickListener(new View.OnClickListener() {

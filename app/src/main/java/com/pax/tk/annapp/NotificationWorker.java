@@ -14,6 +14,7 @@ public class NotificationWorker extends Worker {
 
     private static final String SUBJECTKEY = "subjectName";
     private static final String EVENTKEY = "eventText";
+    private static final String IDKEY = "ID";
 
     private Context context;
 
@@ -29,7 +30,7 @@ public class NotificationWorker extends Worker {
 
         String eventText = getInputData().getString(EVENTKEY);
         String subjectName = getInputData().getString(SUBJECTKEY);
-        int ID = eventText.hashCode();
+        int ID = getInputData().getInt(IDKEY, 0);
 
         Util.createPushNotification(getApplicationContext(), ID, eventText, subjectName, getApplicationContext().getResources().getIdentifier("anna_logo",
                 "mipmap", getApplicationContext().getPackageName()));
