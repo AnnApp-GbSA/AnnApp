@@ -4,12 +4,12 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.graphics.Color;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -26,23 +26,19 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.Manager;
-import com.pax.tk.annapp.NotificationWorker;
+import com.pax.tk.annapp.Notification.AlertReceiver;
+import com.pax.tk.annapp.Notification.Notification;
+import com.pax.tk.annapp.Notification.NotificationStorage;
 import com.pax.tk.annapp.SchoolLessonSystem;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Subject;
 import com.pax.tk.annapp.Util;
-
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-import androidx.work.Worker;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 
@@ -54,6 +50,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private int pos;
     private boolean isPreview;
     public Set<Event> privateEvents = new HashSet<>();
+    private Util util = new Util();
 
     public RVAdapterTaskList(Context context, TextView taskMessage, boolean isPreview) {
 
@@ -217,9 +214,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         String stringID = task.getKind() + task.getTask()+ task.getDue().getTimeInMillis();
         int id = stringID.hashCode();
 
-        removeTaskEvent(id);
-        removeTaskWorkManager(id);
-
         Calendar now = Calendar.getInstance();
         String[] duedates;
         if (task.getDue().get(Calendar.YEAR) == now.get(Calendar.YEAR) & task.getDue().get(Calendar.WEEK_OF_YEAR) == now.get(Calendar.WEEK_OF_YEAR))
@@ -241,6 +235,15 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         final FloatingActionButton okBtn = mView.findViewById(R.id.edit_task_btnOK);
 
         final Spinner kindSelection = (Spinner) mView.findViewById(R.id.edit_spinner_task_input_kind);
+        kindSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout_editTask), context);
+                return false;
+            }
+        });
+
         ArrayAdapter<String> adapterKind = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, kinds);
         kindSelection.setAdapter(adapterKind);
         if (task.getKind().equals(context.getString(R.string.homework_short))) {
@@ -255,6 +258,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
 
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.edit_spinner_task_input_time);
+        timeSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout_editTask), context);
+                return false;
+            }
+        });
         ArrayAdapter<String> adapterTime = new ArrayAdapter<String>(context, simple_spinner_dropdown_item, duedates);
         timeSelection.setAdapter(adapterTime);
         timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -309,6 +320,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     return;
                 }
 
+                removeTaskEvent(id);
+                cancelAlarmReceiver(eventText, task.getSubject().getName(), id);
+
                 String shortKind;//TODO change this... somehow
                 String s = (String) kindSelection.getSelectedItem();
                 if (s.equals(context.getString(R.string.homework))) {
@@ -322,7 +336,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 }
 
                 Calendar due = Calendar.getInstance();
-                Calendar now = (Calendar) due.clone();
 
                 SchoolLessonSystem sls = manager.getSchoolLessonSystem();
                 if (timeSelection.getSelectedItem().toString().equals("Nächste Stunde")) {
@@ -354,28 +367,17 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     notidate.add(Calendar.DAY_OF_YEAR, -7);
                 }
 
-                notidate.set(Calendar.HOUR_OF_DAY, 18);
-                notidate.set(Calendar.MINUTE, 18);
+                notidate.set(Calendar.HOUR_OF_DAY, 15);
+                notidate.set(Calendar.MINUTE, 0);
                 notidate.set(Calendar.SECOND, 0);
 
                 String eventText = shortKind + ": " + taskInput.getText().toString();
 
-                Data myData = new Data.Builder()
-                        .putString("eventText", eventText)
-                        .putString("subjectName", task.getSubject().getName())
-                        .putInt("ID", id)
-                        // ... and build the actual Data object:
-                        .build();
+                if(!notidate.before(Calendar.getInstance())) {
 
-                System.out.println("Time: " + String.valueOf(notidate.getTimeInMillis() - now.getTimeInMillis()));
-
-                OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                        .setInitialDelay(notidate.getTimeInMillis() - now.getTimeInMillis(), TimeUnit.MILLISECONDS)
-                        .addTag(String.valueOf(id))
-                        .setInputData(myData)
-                        .build();
-
-                WorkManager.getInstance().enqueue(notificationWork);
+                    util.setAlarm(context, eventText, task.getSubject().getName(), id, notidate.getTimeInMillis());
+                    (new NotificationStorage(context)).saveNotification(new Notification(eventText, task.getSubject().getName(), id, notidate.getTimeInMillis()));
+                }
 
 
                 Event event = new Event(Util.getSubjectColor(context, task.getSubject()), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));
@@ -399,25 +401,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         bsd.show();
     }
 
-
-    void createAlertDialog(String title, String text, int ic) {
-
-        final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
-
-        builder.setTitle(title)
-                .setMessage(text)
-                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                    }
-                })
-                .setIcon(ic);
-
-        AlertDialog alertDialog = builder.show();
-        alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
-        lp.dimAmount = 0.7f;
-        alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-    }
 
     public void askDelete(final Task task) {
 
@@ -461,8 +444,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         String stringID = task.getKind() + task.getTask()+ task.getDue().getTimeInMillis();
         int id = stringID.hashCode();
 
+        String eventText = task.getKind() + ": " + task.getTask();
+
         removeTaskEvent(id);
-        removeTaskWorkManager(id);
+        cancelAlarmReceiver(eventText, task.getSubject().getName(), id);
 
         if (tasks.isEmpty()) {
             taskMessage.setVisibility(View.VISIBLE);
@@ -485,6 +470,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     }
 
     private void removeTaskEvent(int uid){
+        privateEvents = manager.getPrivateEvents();
         for(Event e : privateEvents){
             String[] split = e.getData().toString().split(Pattern.quote("°°"));
             String id = split[3];
@@ -495,7 +481,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
-    private void removeTaskWorkManager(int id){
-        WorkManager.getInstance().cancelAllWorkByTag(String.valueOf(id));
+    private void cancelAlarmReceiver(String eventText, String subjectName, int ID){
+        (new NotificationStorage(context)).deleteNotification(ID);
+        util.cancelAlarm(context, eventText, subjectName, ID);
     }
 }

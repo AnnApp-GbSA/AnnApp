@@ -1,9 +1,7 @@
 package com.pax.tk.annapp;
 
 
-import android.app.ActivityManager;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,6 +9,7 @@ import android.graphics.drawable.Drawable;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
+import com.pax.tk.annapp.Notification.Notification;
 
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -18,13 +17,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.MODE_PRIVATE;
 
 public class Manager {
@@ -223,6 +220,7 @@ public class Manager {
             e.printStackTrace();
         }
     }
+
 
     /**
      * saves subjects, days and news
@@ -575,4 +573,5 @@ public class Manager {
     public void setCompactCalendarView(CompactCalendarView compactCalendarView) {
         this.compactCalendarView = compactCalendarView;
     }
+
 }

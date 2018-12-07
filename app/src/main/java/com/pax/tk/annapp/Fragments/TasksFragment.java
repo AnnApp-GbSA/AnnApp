@@ -4,13 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Fragment;
-import android.app.usage.UsageEvents;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.SystemClock;
-import android.support.annotation.RequiresApi;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.LinearLayoutManager;
@@ -26,16 +22,14 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
-import com.pax.tk.annapp.Day;
-import com.pax.tk.annapp.EventHandler;
-import com.pax.tk.annapp.NotificationWorker;
+
+import com.pax.tk.annapp.Notification.AlertReceiver;
+import com.pax.tk.annapp.Notification.Notification;
+import com.pax.tk.annapp.Notification.NotificationStorage;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterTaskList;
 import com.pax.tk.annapp.SchoolLessonSystem;
@@ -44,10 +38,6 @@ import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.Util;
 
-import androidx.work.Data;
-import androidx.work.OneTimeWorkRequest;
-import androidx.work.WorkManager;
-
 
 public class TasksFragment extends Fragment {
     View root;
@@ -55,6 +45,8 @@ public class TasksFragment extends Fragment {
     RecyclerView recyclerView;
 
     public static final String TAG = "TaskFragment";
+
+    private AlertReceiver alertReceiver = new AlertReceiver();
 
     /**
      * initializing variables and calling methods
@@ -152,6 +144,7 @@ public class TasksFragment extends Fragment {
         });
         ArrayAdapter<Subject> adapterSubject = new ArrayAdapter<>(getContext(), R.layout.white_spinner_item, subjects);
         subjectSelection.setAdapter(adapterSubject);
+
         final Spinner timeSelection = (Spinner) mView.findViewById(R.id.spinner_task_input_time);
         timeSelection.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -161,6 +154,8 @@ public class TasksFragment extends Fragment {
                 return false;
             }
         });
+
+
         ArrayAdapter<String> adapterTime = new ArrayAdapter<>(this.getContext(), R.layout.spinner_item, duedates);
         timeSelection.setAdapter(adapterTime);
         timeSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -282,31 +277,15 @@ public class TasksFragment extends Fragment {
                     notidate.add(Calendar.DAY_OF_YEAR, -7);
                 }
 
+
                 notidate.set(Calendar.HOUR_OF_DAY, 15);
                 notidate.set(Calendar.MINUTE, 0);
                 notidate.set(Calendar.SECOND, 0);
 
-                /*Util.createPushNotificationAtDate(notidate, getContext(), Util.createPushNotification(getContext(), id, eventText, subject.getName(), getContext().getResources().getIdentifier("anna_logo",
-                        "mipmap", getContext().getPackageName())), id);*/
 
+                (new Util()).setAlarm(getContext(), eventText, subject.getName(), id, notidate.getTimeInMillis());
 
-                // Create the Data object:
-                Data myData = new Data.Builder()
-                        .putString("eventText", eventText)
-                        .putString("subjectName", subject.getName())
-                        .putInt("ID", id)
-                        // ... and build the actual Data object:
-                        .build();
-
-                System.out.println("Time: " + String.valueOf(notidate.getTimeInMillis() - now.getTimeInMillis()));
-
-                OneTimeWorkRequest notificationWork = new OneTimeWorkRequest.Builder(NotificationWorker.class)
-                        .setInitialDelay(notidate.getTimeInMillis() - now.getTimeInMillis(), TimeUnit.MILLISECONDS)
-                        .addTag(String.valueOf(id))
-                        .setInputData(myData)
-                        .build();
-
-                WorkManager.getInstance().enqueue(notificationWork);
+                (new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate.getTimeInMillis()));
 
                 event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));
                 manager.addPrivateEvent(event);

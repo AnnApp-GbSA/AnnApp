@@ -2,7 +2,6 @@ package com.pax.tk.annapp;
 
 import android.app.AlarmManager;
 import android.app.AlertDialog;
-import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -15,7 +14,6 @@ import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
-import android.os.SystemClock;
 import android.provider.Settings;
 import android.support.v4.app.NotificationCompat;
 import android.util.TypedValue;
@@ -23,6 +21,10 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.LinearLayout;
+
+import com.pax.tk.annapp.Notification.AlertReceiver;
+import com.pax.tk.annapp.Notification.Notification;
+import com.pax.tk.annapp.Notification.NotificationStorage;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,6 +39,10 @@ import static android.content.Context.MODE_PRIVATE;
 
 //Utility Class
 public class Util {
+
+    private static final String SUBJECTKEY = "subjectName";
+    private static final String EVENTKEY = "eventText";
+    private static final String IDKEY = "ID";
 
     //fastest way to round a float to a certain scale
     public static float round(float number, int scale) {
@@ -110,72 +116,6 @@ public class Util {
             return ret;
         }
         return null;
-    }
-
-    public static void createPushNotificationAtDate(Calendar date, Context context, Notification notification, int notID) {
-
-    }
-
-    public static void createPushNotification(Context context, int ID, String Description, String subject, int smallIcon/*, Bitmap largeIcon*/) {
-
-        final String CHANNEL_1_ID = "channel1";
-
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationManager mNotificationManager;
-            NotificationCompat.Builder mBuilder;
-
-            /**Creates an explicit intent for an Activity in your app**/
-            Intent resultIntent = new Intent(context, MainActivity.class);
-            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
-                    0 /* Request code */, resultIntent,
-                    PendingIntent.FLAG_UPDATE_CURRENT);
-
-            mBuilder = new NotificationCompat.Builder(context, CHANNEL_1_ID);
-            mBuilder.setSmallIcon(smallIcon);
-            mBuilder.setContentTitle(subject)
-                    .setContentText(Description)
-                    .setStyle(new NotificationCompat.BigTextStyle()
-                            .bigText(Description))
-                    .setAutoCancel(false)
-                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                    .setContentIntent(resultPendingIntent);
-
-            mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                int importance = NotificationManager.IMPORTANCE_HIGH;
-                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_1_ID, "NOTIFICATION_CHANNEL_NAME", importance);
-                notificationChannel.enableLights(true);
-                notificationChannel.setLightColor(Color.YELLOW);
-                notificationChannel.enableVibration(true);
-                notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
-                assert mNotificationManager != null;
-                mBuilder.setChannelId(String.valueOf(CHANNEL_1_ID));
-                mNotificationManager.createNotificationChannel(notificationChannel);
-            }
-            assert mNotificationManager != null;
-            mNotificationManager.notify(ID /* Request Code */, mBuilder.build());
-
-
-
-        } else {
-            NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
-                    .setDefaults(NotificationCompat.DEFAULT_ALL)
-                    .setSmallIcon(smallIcon)
-                    .setCategory(NotificationCompat.CATEGORY_REMINDER)
-                    //.setLargeIcon(largeIcon)
-                    .setContentTitle(subject)
-                    .setContentText(Description);
-
-            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(ID, notif.build());
-
-        }
-
     }
 
     public static int getSubjectColor(Context context, Subject subject) {
@@ -297,5 +237,96 @@ public class Util {
     public static void closeKeyboard(LinearLayout layout, Context context){
         InputMethodManager inputMethodManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(layout.getWindowToken(), 0);
+    }
+
+    public void setAlarm(Context context, String eventText, String subjectName, int id, long time)
+    {
+        Manager manager = Manager.getInstance();
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent inte = new Intent(context, AlertReceiver.class);
+        inte.putExtra(EVENTKEY, eventText)
+                .putExtra(SUBJECTKEY, subjectName)
+                .putExtra(IDKEY, id);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, inte, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+    }
+
+    public void cancelAlarm(Context context, String eventText, String subjectName, int id)
+    {
+        Manager manager = Manager.getInstance();
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        Intent inte = new Intent(context, AlertReceiver.class);
+        inte.putExtra("eventText", eventText)
+                .putExtra("subjectName", subjectName)
+                .putExtra("ID", id);
+
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, inte, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.cancel(pendingIntent);
+    }
+
+    public static void createPushNotification(Context context, int ID, String Description, String subject, int smallIcon/*, Bitmap largeIcon*/) {
+
+        final String CHANNEL_1_ID = "channel1";
+
+        // Create the NotificationChannel, but only on API 26+ because
+        // the NotificationChannel class is new and not in the support library
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager mNotificationManager;
+            NotificationCompat.Builder mBuilder;
+
+            /**Creates an explicit intent for an Activity in your app**/
+            Intent resultIntent = new Intent(context, MainActivity.class);
+            resultIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            PendingIntent resultPendingIntent = PendingIntent.getActivity(context,
+                    0 /* Request code */, resultIntent,
+                    PendingIntent.FLAG_UPDATE_CURRENT);
+
+            mBuilder = new NotificationCompat.Builder(context, CHANNEL_1_ID);
+            mBuilder.setSmallIcon(smallIcon);
+            mBuilder.setContentTitle(subject)
+                    .setContentText(Description)
+                    .setStyle(new NotificationCompat.BigTextStyle()
+                            .bigText(Description))
+                    .setAutoCancel(false)
+                    .setSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                    .setContentIntent(resultPendingIntent);
+
+            mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                int importance = NotificationManager.IMPORTANCE_HIGH;
+                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_1_ID, "NOTIFICATION_CHANNEL_NAME", importance);
+                notificationChannel.enableLights(true);
+                notificationChannel.setLightColor(Color.YELLOW);
+                notificationChannel.enableVibration(true);
+                notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+                assert mNotificationManager != null;
+                mBuilder.setChannelId(String.valueOf(CHANNEL_1_ID));
+                mNotificationManager.createNotificationChannel(notificationChannel);
+            }
+            assert mNotificationManager != null;
+            mNotificationManager.notify(ID /* Request Code */, mBuilder.build());
+
+
+
+        } else {
+            NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
+                    .setDefaults(NotificationCompat.DEFAULT_ALL)
+                    .setSmallIcon(smallIcon)
+                    .setCategory(NotificationCompat.CATEGORY_REMINDER)
+                    //.setLargeIcon(largeIcon)
+                    .setContentTitle(subject)
+                    .setContentText(Description);
+
+            NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.notify(ID, notif.build());
+
+        }
+
+        (new NotificationStorage(context)).deleteNotification(ID);
     }
 }
