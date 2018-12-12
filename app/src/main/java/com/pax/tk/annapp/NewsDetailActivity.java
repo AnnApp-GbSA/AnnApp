@@ -25,6 +25,11 @@ public class NewsDetailActivity extends AppCompatActivity {
     WebView webView;
     boolean whiteText = false;
 
+    /**
+     * creates the NewsDetailActivity, sets it up and calls methods
+     *
+     * @param savedInstanceState ...
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
