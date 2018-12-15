@@ -34,13 +34,13 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
     }
 
     public void update() {
-        ArrayList<News> nn = manager.getNews();
+        /*ArrayList<News> nn = manager.getNews();
         for (int i = 0; i < nn.size(); i++)
             if (old.keySet().contains(nn.get(i).getLink().hashCode()))
                 if (old.get(nn.get(i).getLink().hashCode()).equals(nn.get(i).fullHashCode()))
                     notifyItemChanged(i);
                 else
-                    notifyItemInserted(i);
+                    notifyItemInserted(i);*/
     }
 
     @NonNull

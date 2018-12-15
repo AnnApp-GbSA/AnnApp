@@ -121,6 +121,10 @@ public class Manager {
         return news;
     }
 
+    public void addNews(News news){
+        this.news.add(news);
+    }
+
     /**
      * get the grade average of all subjects
      *
@@ -387,6 +391,8 @@ public class Manager {
      * @return size of news
      */
     public int getNewsCount() {
+        if (news == null)
+            return 0;
         return news.size();
     }
 
@@ -518,7 +524,6 @@ public class Manager {
      */
     public void removePrivateEvent(Event event) {
         privateEvents.remove(event);
-        //TODO test for n-day event
         try {
             compactCalendarView.removeEvent(event);
         } catch (Exception e) {
@@ -546,7 +551,7 @@ public class Manager {
                     compactCalendarView.addEvent(new Event(event.getColor(), currentDate - i * 86400000L, event.getData()));
                 }
             }
-            //TODO check for n-day event
+
             if (!compactCalendarView.getEvents(new Date(event.getTimeInMillis())).contains(event))
                 compactCalendarView.addEvent(new Event(event.getColor(), event.getTimeInMillis(), event.getData()));
         } catch (Exception e) {

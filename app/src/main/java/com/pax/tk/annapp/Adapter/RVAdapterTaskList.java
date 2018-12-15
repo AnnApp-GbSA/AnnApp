@@ -8,6 +8,7 @@ import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -51,6 +53,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private boolean isPreview;
     public Set<Event> privateEvents = new HashSet<>();
     private Util util = new Util();
+    private TypedValue backgroundColor;
 
     public RVAdapterTaskList(Context context, TextView taskMessage, boolean isPreview) {
 
@@ -58,6 +61,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         this.taskMessage = taskMessage;
         manager = Manager.getInstance();
         this.isPreview = isPreview;
+
+        TypedValue a = new TypedValue();
+        context.getTheme().resolveAttribute(android.R.attr.background, a, true);
+        backgroundColor = a;
 
         privateEvents = manager.getPrivateEvents();
         constructor();
@@ -129,6 +136,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             return;
         } else {
 
+
+            holder.cardViewTask.setCardBackgroundColor(backgroundColor.data);
             holder.content.setVisibility(View.VISIBLE);
             holder.subjectTxt.setVisibility(View.GONE);
             holder.space.setVisibility(View.VISIBLE);

@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
+import android.view.InflateException;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -51,7 +52,18 @@ public class HomeFragment extends Fragment {
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.Home));
-        root = inflater.inflate(R.layout.fragment_home, container, false);
+        //root = inflater.inflate(R.layout.fragment_home, container, false);
+
+        if (root != null) {
+            ViewGroup parent = (ViewGroup) root.getParent();
+            if (parent != null)
+                parent.removeView(root);
+        }
+        try {
+            root = inflater.inflate(R.layout.fragment_home, container, false);
+        } catch (InflateException e) {
+            /* map is already there, just return view as it is */
+        }
 
         manager = Manager.getInstance();
 
@@ -167,6 +179,7 @@ public class HomeFragment extends Fragment {
      */
     CardView getCellCardView(Subject subject, String position) {
         CardView cardView = new CardView(this.getContext());
+        cardView.setRadius(20);
 
         //general Settings for Cells
         //cardView.setTextColor(getResources().getColor(R.color.default_background_color));
@@ -218,6 +231,7 @@ public class HomeFragment extends Fragment {
      */
     CardView getEmptyCellButton(String position) {
         CardView btn = new CardView(this.getContext());
+
 
         //general Settings for empty cells
 

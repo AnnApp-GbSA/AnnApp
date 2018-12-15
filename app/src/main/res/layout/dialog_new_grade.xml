@@ -42,6 +42,7 @@
             android:hint="@string/grade"
             android:inputType="number"
             android:theme="@style/ThemeEditText"
+            android:maxLength="2"
             />
 
         <RadioGroup

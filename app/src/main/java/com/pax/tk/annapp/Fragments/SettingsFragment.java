@@ -329,6 +329,54 @@ public class SettingsFragment extends Fragment {
         });
 
 
+        //Securon saving
+        EditText securonUsername = root.findViewById(R.id.securonUsername);
+        EditText securonPassword = root.findViewById(R.id.securonPassword);
+
+        securonUsername.setText(getActivity().getPreferences(MODE_PRIVATE).getString(getString(R.string.key_username), ""));
+        securonPassword.setText(getActivity().getPreferences(MODE_PRIVATE).getString(getString(R.string.key_password), ""));
+
+        securonUsername.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()){
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), s.toString()).commit();
+                }
+                else
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), "");
+            }
+        });
+
+        securonPassword.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()){
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), s.toString()).commit();
+                }
+                else
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), "");
+            }
+        });
+
+
 
         return root;
     }

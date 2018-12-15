@@ -81,7 +81,7 @@
             app:compactCalendarBackgroundColor="?android:colorBackground"
             app:compactCalendarCurrentDayBackgroundColor="?colorPrimary"
             app:compactCalendarCurrentSelectedDayBackgroundColor="?colorAccent"
-            app:compactCalendarMultiEventIndicatorColor="#fff"
+            app:compactCalendarMultiEventIndicatorColor="?colorAccent"
             app:compactCalendarTargetHeight="250dp"
             app:compactCalendarTextColor="?android:textColorPrimary"
             app:compactCalendarTextSize="12sp" />

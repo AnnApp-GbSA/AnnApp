@@ -1,5 +1,6 @@
 package com.pax.tk.annapp;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
@@ -15,12 +16,25 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.provider.Settings;
+import android.support.design.widget.BottomSheetDialog;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.NotificationCompat;
+import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
+import android.view.ContextThemeWrapper;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.Spinner;
+import android.widget.TextView;
 
 import com.pax.tk.annapp.Notification.AlertReceiver;
 import com.pax.tk.annapp.Notification.Notification;
@@ -34,6 +48,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -239,6 +254,20 @@ public class Util {
         inputMethodManager.hideSoftInputFromWindow(layout.getWindowToken(), 0);
     }
 
+    /**
+     * creates a random number between two numbers
+     *
+     * @param rangeMin smallest possible number
+     * @param rangeMax biggest possible number
+     * @return random number between rangeMin and rangeMax
+     */
+    public static int randomNumberGenerator(int rangeMin, int rangeMax)
+    {
+        Random r = new Random();
+        int createdRanNum = (int) Math.round(rangeMin + (rangeMax - rangeMin) * r.nextDouble());
+        return(createdRanNum);
+    }
+
     public void setAlarm(Context context, String eventText, String subjectName, int id, long time)
     {
         Manager manager = Manager.getInstance();
@@ -328,5 +357,121 @@ public class Util {
         }
 
         (new NotificationStorage(context)).deleteNotification(ID);
+    }
+
+    /**
+     * creates an input dialog, sets it up and calls methods
+     */
+    public void createInputDialog(Context context, Activity activity, RecyclerView recyclerView, Integer position) {
+
+        //AlertDialog.Builder ad = new  AlertDialog.Builder(this.context);
+        final BottomSheetDialog bsd = new BottomSheetDialog(context,R.style.NewDialog);
+
+        Manager manager = Manager.getInstance();
+
+
+
+
+        View mView = View.inflate(context, R.layout.dialog_new_grade, null);
+        //mView.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+
+
+        final EditText gradeInput = (EditText) mView.findViewById(R.id.gradeInput);
+        final EditText ratingInput = (EditText) mView.findViewById(R.id.ratingInput);
+        final EditText note = (EditText) mView.findViewById(R.id.note);
+        final ImageView btnHelp = (ImageView) mView.findViewById(R.id.btnRoomHelp);
+        final Button btnExtra = (Button) mView.findViewById(R.id.btnExtra);
+        final LinearLayout extraLayout = (LinearLayout) mView.findViewById(R.id.extraLayout);
+        final FloatingActionButton btnOK = (FloatingActionButton) mView.findViewById(R.id.btnOK);
+        final FloatingActionButton btnCancel = (FloatingActionButton) mView.findViewById(R.id.btnCancel);
+
+        btnExtra.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (extraLayout.getVisibility() != View.VISIBLE)
+                    extraLayout.setVisibility(View.VISIBLE);
+                else
+                    extraLayout.setVisibility(View.GONE);
+            }
+        });
+
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bsd.cancel();
+            }
+        });
+
+
+        btnHelp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Util.createAlertDialog(context.getString(R.string.rating), context.getString(R.string.ratingExplanation), 0, context);
+            }
+        });
+
+
+        final Spinner subjectSelection = (Spinner) mView.findViewById(R.id.subjectSelection);
+
+        subjectSelection.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+
+                Util.closeKeyboard(mView.findViewById(R.id.headerLayout), context);
+                return false;
+            }
+        });
+
+        Context wrappedContext = new ContextThemeWrapper(context, R.style.BasicTheme);
+        ArrayAdapter<Subject> adapter = new ArrayAdapter<>(wrappedContext, R.layout.white_spinner_item, manager.getSubjects());
+
+        adapter.setDropDownViewTheme(context.getTheme());
+
+        subjectSelection.setAdapter(adapter);
+
+        if (position!=null)
+            subjectSelection.setSelection(position);
+
+
+        final RadioButton isWritten = mView.findViewById(R.id.isWritten);
+
+        final RadioButton isNotWritten = mView.findViewById(R.id.isNotWritten);
+
+
+        bsd.setTitle(R.string.addGrade);
+
+        final Boolean[] isWrittenBool = new Boolean[1];
+
+        btnOK.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                float rating = 1;
+
+                //testing which button is active for decision whether your Grade is written or whether it's not
+                if(isWritten.isChecked())
+                    isWrittenBool[0] = true;
+                else if(isNotWritten.isChecked())
+                    isWrittenBool[0] = false;
+
+                if(gradeInput.getText().toString().isEmpty()){
+                    Util.createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), 0, context);
+                    return;
+                }
+
+                if(!ratingInput.getText().toString().isEmpty())
+                    rating = Float.parseFloat(ratingInput.getText().toString());
+
+
+                Subject subject = (Subject) subjectSelection.getSelectedItem();
+                Grade newGrade =new Grade(subject, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool[0], rating, note.getText().toString());
+                subject.addGrade(newGrade);
+                recyclerView.getAdapter().notifyItemChanged(manager.getSubjects().indexOf(subject));
+                ((TextView)activity.findViewById(R.id.grade)).setText(String.valueOf(manager.getWholeGradeAverage()));
+                //((RVAdapterSubjectList)recyclerView.getAdapter()).addGrade(newGrade);
+                bsd.cancel();
+            }
+        });
+        bsd.setContentView(mView);
+        bsd.show();
     }
 }

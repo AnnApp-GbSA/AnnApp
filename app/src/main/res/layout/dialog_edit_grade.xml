@@ -44,7 +44,8 @@
             android:inputType="number"
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
-            android:theme="@style/ThemeEditText"/>
+            android:theme="@style/ThemeEditText"
+            android:maxLength="2"/>
 
         <RadioGroup
             android:layout_width="match_parent"

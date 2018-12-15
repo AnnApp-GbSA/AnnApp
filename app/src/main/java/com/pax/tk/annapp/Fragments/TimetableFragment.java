@@ -468,6 +468,7 @@ public class TimetableFragment extends Fragment {
             }
         });
 
+
         //All the stuff for editing subject
         if (subjectEdit) {
             subjectSelection.setVisibility(View.GONE);
@@ -485,9 +486,11 @@ public class TimetableFragment extends Fragment {
         spinnerlist.add(uglyAsHellWayToCreateAOtherCoiseOption);
 
 
+
+
         ArrayAdapter<Subject> adapter = new ArrayAdapter<>(this.getContext(), R.layout.white_spinner_item, spinnerlist);
         subjectSelection.setAdapter(adapter);
-        subjectSelection.setSelection(spinnerlist.indexOf(lastSubject));
+        subjectSelection.setSelection(spinnerlist.size()-1);
         subjectSelection.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int pos, long l) {

@@ -231,5 +231,8 @@
     <string name="feedback">Feedback</string>
     <string name="im_export_timetable">Stundenplan im-/exportieren</string>
     <string name="push_notification">Push Nachrichten</string>
+    <string name="key_username">username</string>
+    <string name="key_password">password</string>
+    <string name="set_username_and_password">Bitte Benutzernamen und Passwort in den Einstellungen eingeben!</string>
 </resources>
 

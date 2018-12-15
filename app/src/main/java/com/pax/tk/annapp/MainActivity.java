@@ -29,12 +29,15 @@ import com.pax.tk.annapp.Fragments.TasksFragment;
 import com.pax.tk.annapp.Fragments.TimetableFragment;
 import com.pax.tk.annapp.Fragments.TutorialFragment;
 
+import java.util.List;
+
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
 
     private Manager manager;
 
     private String currentFragmentTag = null;
+    private Fragment currentFragment = null;
     private String prevFragmentTag = null;
     private Bundle currentFragmentBundle = null;
 
@@ -149,6 +152,12 @@ public class MainActivity extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else if (fm.getBackStackEntryCount() > 1) {
+
+            if (currentFragmentTag.equals(SecuronFragment.TAG)){
+
+                ((SecuronFragment)currentFragment).onBackPressed();
+                return;
+            }
 
             fm.popBackStack();
 
@@ -311,6 +320,7 @@ public class MainActivity extends AppCompatActivity
                 .commit();
 
         currentFragmentTag = tag;
+        currentFragment = fragment;
         return true;
     }
 

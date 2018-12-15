@@ -25,6 +25,7 @@ import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.News;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Adapter.RVAdapterNews;
+import com.pax.tk.annapp.Util;
 
 /**
  * Created by Tobi on 20.09.2017.
@@ -36,6 +37,7 @@ public class AnnanewsFragment extends Fragment {
     private ArrayList<News> mFeedModelList;
     private Manager manager;
     private RVAdapterNews rvAdapterNews;
+    Boolean cancelled;
 
     public static final String TAG = "AnnanewsFragment";
 
@@ -64,41 +66,62 @@ public class AnnanewsFragment extends Fragment {
         manager = Manager.getInstance();
 
         new FetchFeedTask().execute((Void) null);
+        new NewNewsListener().execute((Void) null);
+
         rvAdapterNews.update();
 
         TypedValue a = new TypedValue();
         getContext().getTheme().resolveAttribute(R.attr.backgroundTint, a, true);
         mSwipeLayout.setProgressBackgroundColorSchemeColor(a.data);
 
-        mSwipeLayout.setColorSchemeColors(randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000),randomNumberGenerator(0,1000000000));
+        mSwipeLayout.setColorSchemeColors(Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000));
 
         mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
                 new FetchFeedTask().execute((Void) null);
+                new NewNewsListener().execute((Void) null);
+
                 rvAdapterNews.update();
                 System.out.println("onRefresh");
             }
         });
 
 
-
-
         return root;
     }
 
-    /**
-     * creates a random number between two numbers
-     *
-     * @param rangeMin smallest possible number
-     * @param rangeMax biggest possible number
-     * @return random number between rangeMin and rangeMax
-     */
-    public static int randomNumberGenerator(int rangeMin, int rangeMax)
-    {
-        Random r = new Random();
-        int createdRanNum = (int) Math.round(rangeMin + (rangeMax - rangeMin) * r.nextDouble());
-        return(createdRanNum);
+
+    private class NewNewsListener extends AsyncTask<Void, Void, Void> {
+
+        int currentLength;
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            currentLength = manager.getNewsCount();
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            while (manager.getNewsCount() == currentLength) {
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            if (!cancelled) {
+
+                synchronized (rvAdapterNews){
+                    System.out.println("notifying");
+                    rvAdapterNews.notify();
+                }
+
+                new NewNewsListener().execute((Void) null);
+            }
+        }
     }
 
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {
@@ -129,20 +152,20 @@ public class AnnanewsFragment extends Fragment {
         protected Boolean doInBackground(Void... voids) {
             for (String urlLink :
                     urlLinks) {
-            try {
-                if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
-                    urlLink = "http://" + urlLink;
+                try {
+                    if (!urlLink.startsWith("http://") && !urlLink.startsWith("https://"))
+                        urlLink = "http://" + urlLink;
 
-                URL url = new URL(urlLink);
-                InputStream inputStream = url.openConnection().getInputStream();
-                ArrayList<News> news = parseFeed(inputStream);
-                manager.mergeNews(news);
-                return true;
-            } catch (IOException e) {
-                Log.e(TAG, "Error", e);
-                Looper.prepare();
-                Toast.makeText(getContext(), R.string.noConnection, Toast.LENGTH_SHORT).show();
-            }
+                    URL url = new URL(urlLink);
+                    InputStream inputStream = url.openConnection().getInputStream();
+                    ArrayList<News> news = parseFeed(inputStream);
+                    //manager.mergeNews(news);
+                    return true;
+                } catch (IOException e) {
+                    Log.e(TAG, "Error", e);
+                    Looper.prepare();
+                    Toast.makeText(getContext(), R.string.noConnection, Toast.LENGTH_SHORT).show();
+                }
                 return false;
 
             }
@@ -158,20 +181,21 @@ public class AnnanewsFragment extends Fragment {
         @Override
         protected void onPostExecute(Boolean success) {
             mSwipeLayout.setRefreshing(false);
+            cancelled = true;
         }
     }
 
     /**
      * finds the text between two xmlTags
      *
-     * @param content xmlText which in the text should be found
+     * @param content  xmlText which in the text should be found
      * @param startTag ...
-     * @param endTag ...
+     * @param endTag   ...
      * @return text between the two xmlTags
      */
-    private String xmlget(String content, String startTag, String endTag){
-        String ret = content.substring(content.indexOf(startTag)+startTag.length());
-        return ret.substring(0,ret.indexOf(endTag));
+    private String xmlget(String content, String startTag, String endTag) {
+        String ret = content.substring(content.indexOf(startTag) + startTag.length());
+        return ret.substring(0, ret.indexOf(endTag));
     }
 
     /**
@@ -184,23 +208,22 @@ public class AnnanewsFragment extends Fragment {
     public ArrayList<News> parseFeed(InputStream inputStream) throws IOException {
         ArrayList<News> items = new ArrayList<>();
         java.util.Scanner s = new java.util.Scanner(inputStream).useDelimiter("\\A");
-        String content =  s.hasNext() ? s.next() : "";
+        String content = s.hasNext() ? s.next() : "";
         //content = content.replaceAll("\n","");
         content = htmlToString(content);
 
         inputStream.close();
-        while (content.contains("<item>")){
-            String item = xmlget(content,"<item>","</item>");
-            content = content.substring(content.indexOf("</item>")+"</item>".length());
-            String title = xmlget(item,"<title>","</title>");
-            String link = xmlget(item,"<link>","</link>");
-            String description = xmlget(item,"<description><![CDATA[","]]></description>");
-            String imageurl = item.contains("<content:encoded><![CDATA[<p><a href=\"") ? xmlget(item,"<content:encoded><![CDATA[<p><a href=\"","\">"):null;
-            String article = xmlget(item,"<content:encoded><![CDATA[","]]></content:encoded>");
-            article = article.replaceAll("</p><p>","\n\n");
+        while (content.contains("<item>")) {
+            String item = xmlget(content, "<item>", "</item>");
+            content = content.substring(content.indexOf("</item>") + "</item>".length());
+            String title = xmlget(item, "<title>", "</title>");
+            String link = xmlget(item, "<link>", "</link>");
+            String description = xmlget(item, "<description><![CDATA[", "]]></description>");
+            String imageurl = item.contains("<content:encoded><![CDATA[<p><a href=\"") ? xmlget(item, "<content:encoded><![CDATA[<p><a href=\"", "\">") : null;
+            String article = xmlget(item, "<content:encoded><![CDATA[", "]]></content:encoded>");
+            article = article.replaceAll("</p><p>", "\n\n");
             String rawArticle = article;
             rawArticle = rawArticle.replace("<span style=\"background-color: #99cc00;\">", "<span style=\"background-color: #555555;\">");
-            System.out.println("rawArticle:\n"+rawArticle);
 
             /*while (article.contains("<a"))
                 article = xmlcut(article, "<a","</a>");
@@ -212,16 +235,21 @@ public class AnnanewsFragment extends Fragment {
                 article = xmlcut(article,"<p ",">");*/
 
             Drawable image = Manager.getInstance().getFromURl(imageurl);
-            items.add(new News(title,link,description,article, rawArticle, imageurl));
+            items.add(new News(title, link, description, article, rawArticle, imageurl));
+            manager.addNews(new News(title, link, description, article, rawArticle, imageurl));
+            synchronized(rvAdapterNews){
+                rvAdapterNews.notify();
+            }
         }
-        return items;
+        //return items;
+        return null;
     }
 
     /**
      * replaces html shortcuts with Strings
      *
      * @param string input String with html shortcuts in it
-     * @return edited String with no html shortcuts in it
+     * @return edited String with hopefully no html shortcuts in it
      */
     public String htmlToString(String string) {
         String edit;

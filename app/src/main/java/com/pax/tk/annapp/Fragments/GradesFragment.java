@@ -72,8 +72,10 @@ public class GradesFragment extends Fragment {
 
                 if (manager.getSubjects().isEmpty()) {
                     Util.createAlertDialog(getContext().getString(R.string.warning), getString(R.string.addSubjectMessage), android.R.drawable.ic_dialog_alert, getContext());
-                } else
-                    createInputDialog();
+                } else{
+                    //createInputDialog();
+                    (new Util()).createInputDialog(getContext(), getActivity(), recyclerView, null);
+                    }
             }
         });
         TextView missingSubjectsWarning = (TextView) root.findViewById(R.id.missingSubjectsWarning);
