@@ -97,6 +97,7 @@
     </string-array>
 
     <string name="key_schoolstart" translatable="false">schoolstart</string>
+    <string name="key_notificationTime" translatable="false">notificationTime</string>
     <string name="schoolCalendar">Schulkalender</string>
     <string name="AnnaNews">AnnaNews</string>
     <string name="loading">Es lädt...</string>
@@ -148,6 +149,7 @@
     <string name="newSubject">Neues Fach</string>
     <string name="key_timetableGaps" translatable="false">timetableDividers</string>
     <string name="key_maxLesson" translatable="false">maxlessons</string>
+    <string name="key_daysbeforetestnotification" translatable="false">daysBeforeTestNotification</string>
     <string name="monday">Montag</string>
     <string name="tuesday">Dienstag</string>
     <string name="wednesday">Mittwoch</string>
@@ -231,6 +233,8 @@
     <string name="feedback">Feedback</string>
     <string name="im_export_timetable">Stundenplan im-/exportieren</string>
     <string name="push_notification">Push Nachrichten</string>
+    <string name="notificationtime">Uhrzeit für Benachrichtigungen</string>
+    <string name="days_before_test_notification">Tage vor einer Schulaufgabe informieren:</string>
     <string name="key_username">username</string>
     <string name="key_password">password</string>
     <string name="set_username_and_password">Bitte Benutzernamen und Passwort in den Einstellungen eingeben!</string>

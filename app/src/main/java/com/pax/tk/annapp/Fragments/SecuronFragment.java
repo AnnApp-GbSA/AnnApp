@@ -1,5 +1,6 @@
 package com.pax.tk.annapp.Fragments;
 
+import android.Manifest;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;*/
+import com.koushikdutta.ion.builder.Builders;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 import com.pax.tk.annapp.onBackPressed;
@@ -288,6 +290,7 @@ public class SecuronFragment extends Fragment implements onBackPressed {
     }
 
     private void saveFile(File file, InputStream input) {
+        Util.checkStoragePermissions(getContext());
         System.out.println("saving at " + file.getAbsolutePath());
 
         if (!file.exists()) {
@@ -321,6 +324,7 @@ public class SecuronFragment extends Fragment implements onBackPressed {
 
     public void openFile(File file) {
 
+        //Util.checkStoragePermissions(getContext());
        /* System.out.println("File: "+file);
 
         try {
@@ -332,6 +336,7 @@ public class SecuronFragment extends Fragment implements onBackPressed {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             */// no Activity to handle this kind of files
+
 
 
     }

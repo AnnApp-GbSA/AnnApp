@@ -101,7 +101,6 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-
         findViewById(R.id.include).findViewById(R.id.toolbar).setVisibility(View.VISIBLE);
 
         findViewById(R.id.nav_view).setVisibility(View.VISIBLE);
@@ -120,6 +119,7 @@ public class MainActivity extends AppCompatActivity
         toggle.syncState();
 
         if (getPreferences(MODE_PRIVATE).getBoolean("firstLaunch", true)) {
+            Util.checkStoragePermissions(this);
             setFragment(TutorialFragment.TAG);
         } else {
 

@@ -6,7 +6,6 @@ import android.app.TimePickerDialog;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
 import android.util.TypedValue;
@@ -27,12 +26,11 @@ import android.widget.Toast;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.github.sundeepk.compactcalendarview.domain.Event;
 import com.pax.tk.annapp.EventHandler;
+import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 
-import java.io.BufferedInputStream;
-import java.security.spec.ECField;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -453,7 +451,7 @@ public class CalendarFragment extends Fragment {
                 String month = new java.text.SimpleDateFormat("MM").format(new java.util.Date(currentDay));
                 String year = new java.text.SimpleDateFormat("yyyy").format(new java.util.Date(currentDay));
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(), R.style.TimePickerTheme, onStartDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                        getContext(), R.style.DatePickerTheme, onStartDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
                 datePickerDialog.setTitle(getString(R.string.chooseDate));
                 datePickerDialog.setCanceledOnTouchOutside(false);
                 datePickerDialog.show();
@@ -468,7 +466,7 @@ public class CalendarFragment extends Fragment {
 
 
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        getContext(), R.style.TimePickerTheme, onStartTimeSetListener, hour, minute, true);
+                        getContext(), R.style.DatePickerTheme, onStartTimeSetListener, hour, minute, true);
                 timePickerDialog.setTitle(getString(R.string.chooseTime));
                 timePickerDialog.setCanceledOnTouchOutside(false);
                 timePickerDialog.show();
@@ -482,7 +480,7 @@ public class CalendarFragment extends Fragment {
                 String month = new java.text.SimpleDateFormat("MM").format(start);
                 String year = new java.text.SimpleDateFormat("yyyy").format(start);
                 DatePickerDialog datePickerDialog = new DatePickerDialog(
-                        getContext(), R.style.TimePickerTheme, onEndDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
+                        getContext(), R.style.DatePickerTheme, onEndDateSetListener, Integer.valueOf(year), Integer.valueOf(month) - 1, Integer.valueOf(day));
                 datePickerDialog.setTitle(getString(R.string.chooseDate));
                 datePickerDialog.setCanceledOnTouchOutside(false);
                 datePickerDialog.show();
@@ -497,7 +495,7 @@ public class CalendarFragment extends Fragment {
 
 
                 TimePickerDialog timePickerDialog = new TimePickerDialog(
-                        getContext(), R.style.TimePickerTheme, onEndTimeSetListener, hour, minute, true);
+                        getContext(), MainActivity.colorScheme, onEndTimeSetListener, hour, minute, true);
                 timePickerDialog.setTitle(getString(R.string.chooseTime));
                 timePickerDialog.setCanceledOnTouchOutside(false);
                 timePickerDialog.show();

@@ -30,6 +30,10 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="accent">@color/colorAccent</item>
 
+        <item name="colorBackground">@android:color/white</item>
+
+        <item name="android:headerBackground">@color/colorPrimary</item>
+
         <item name="android:textColor">@android:color/black</item>
         <item name="android:popupBackground">@android:color/white</item>
         <item name="android:textColorHint">#9e9e9e</item>
@@ -38,6 +42,7 @@
         <item name="android:textColorPrimary">@android:color/black</item>
         <item name="android:colorBackground">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/black</item>
+        <item name="android:numbersBackgroundColor">#D3D3D3</item>
 
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Default</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Default</item>
@@ -86,6 +91,11 @@
         <item name="accent">@color/cs1.accent</item>
         <item name="bootLogo">@color/cs1.0</item>
 
+        <item name="colorBackground">@color/dark_background_color</item>
+
+        <item name="android:headerBackground">@color/cs1.accent</item>
+
+        <item name="android:numbersBackgroundColor">#454545</item>
 
         <item name="colorTimetableHeader">#616161</item>
 
@@ -146,7 +156,9 @@
         <item name="accent">@color/cs2.accent</item>
         <item name="bootLogo">@android:color/white</item>
 
+        <item name="colorBackground">@android:color/white</item>
 
+        <item name="android:headerBackground">@color/cs2.primary</item>
 
         <item name="android:textColor">@android:color/black</item>
         <item name="android:popupBackground">@android:color/white</item>
@@ -159,6 +171,8 @@
 
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Blue</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Blue</item>
+
+        <item name="android:numbersBackgroundColor">#D3D3D3</item>
 
         <item name="android:theme">@style/NavStyle_Blue</item>
     </style>
@@ -203,6 +217,7 @@
         <item name="accent">@color/cs3.accent</item>
         <item name="bootLogo">@color/cs3.accent</item>
 
+        <item name="colorBackground">@color/dark_background_color</item>
 
         <item name="android:textColor">#ffffff</item>
         <item name="android:popupBackground">@color/dark_background_color</item>
@@ -212,6 +227,10 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:colorBackground">@color/dark_background_color</item>
         <item name="android:textColorSecondary">@android:color/white</item>
+
+        <item name="android:headerBackground">@color/cs3.accent</item>
+
+        <item name="android:numbersBackgroundColor">#454545</item>
 
         <item name="android:buttonBarNegativeButtonStyle">@style/ButtonStyle_Color</item>
         <item name="android:buttonBarPositiveButtonStyle">@style/ButtonStyle_Color</item>
@@ -274,14 +293,47 @@
         <item name="android:textColor">@android:color/black</item>
     </style>
 
-    <style name="TimePickerTheme" parent="Theme.AppCompat.Dialog">
-        <item name="colorAccent">?accent</item>
+    <style name="TimePickerDialogTheme" parent="@style/Theme.AppCompat.Dialog">
+        <item name="android:timePickerStyle">@style/TimePickerStyle</item>
+        <item name="android:textColor">?android:headerBackground</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="colorControlActivated">?android:headerBackground</item>
+
+    </style>
+
+    <style name="TimePickerStyle" parent="@android:style/Widget.Material.TimePicker">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:headerBackground">?android:headerBackground</item>
+        <item name="android:background">?colorBackground</item>
+
+        <item name="android:numbersTextColor">?android:calendarTextColor</item>
+        <item name="android:numbersInnerTextColor">?android:calendarTextColor</item>
+        <item name="android:numbersSelectorColor">?android:headerBackground</item>
+
+        <item name="android:numbersBackgroundColor">?android:numbersBackgroundColor</item>
+    </style>
+
+
+    <style name="DatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
+        <item name="android:headerBackground">?android:headerBackground</item>
+        <item name="android:textColor">?android:calendarTextColor</item>
+        <item name="android:textColorPrimary">?android:calendarTextColor</item>
+        <item name="android:colorAccent">?colorAccent</item>
+        <item name="android:textColorSecondary">?android:calendarTextColor</item>
+        <item name="android:background">?colorBackground</item>
+    </style>
+
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Dialog">
+        <item name="android:background">?colorBackground</item>
+        <item name="android:datePickerStyle">@style/DatePickerStyle</item>
         <item name="android:textColor">?android:calendarTextColor</item>
         <item name="android:textColorPrimary">?android:calendarTextColor</item>
         <item name="android:textColorSecondary">?android:calendarTextColor</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:backgroundTint">?android:popupBackground</item>
+        <item name="colorControlActivated">?android:headerBackground</item>
     </style>
 
     <!--<style name="TimePickerThemeOld" parent="Theme.AppCompat.Light.Dialog" >

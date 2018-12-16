@@ -1,6 +1,5 @@
 package com.pax.tk.annapp;
 
-import android.support.annotation.Nullable;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
@@ -59,7 +58,6 @@ public class CustomEvent implements Serializable {
      *
      * @return extra information
      */
-    @Nullable
     public Object getData() {
         return data;
     }

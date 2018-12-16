@@ -38,6 +38,8 @@ import com.pax.tk.annapp.Manager;
 import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.Util;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class TasksFragment extends Fragment {
     View root;
@@ -178,8 +180,7 @@ public class TasksFragment extends Fragment {
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
-                            getContext(), R.style.TimePickerTheme, onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
-                    datePickerDialog.setTitle(getString(R.string.chooseDate));
+                            getContext(),R.style.DatePickerTheme, onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
                     datePickerDialog.setCanceledOnTouchOutside(false);
                     datePickerDialog.show();
                 }
@@ -274,12 +275,14 @@ public class TasksFragment extends Fragment {
                 Calendar notidate = (Calendar) due.clone();
 
                 if (shortKind.equals(getString(R.string.exam_short))){
-                    notidate.add(Calendar.DAY_OF_YEAR, -7);
+                    notidate.add(Calendar.DAY_OF_YEAR, -(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_daysbeforetestnotification), 7)));
                 }
 
+                int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
+                int hourofDay = (int) Math.floor(notiTime / 60);
 
-                notidate.set(Calendar.HOUR_OF_DAY, 15);
-                notidate.set(Calendar.MINUTE, 0);
+                notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
+                notidate.set(Calendar.MINUTE,  notiTime % 60);
                 notidate.set(Calendar.SECOND, 0);
 
 

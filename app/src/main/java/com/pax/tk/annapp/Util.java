@@ -1,5 +1,6 @@
 package com.pax.tk.annapp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
@@ -9,6 +10,7 @@ import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -18,7 +20,9 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
@@ -58,6 +62,7 @@ public class Util {
     private static final String SUBJECTKEY = "subjectName";
     private static final String EVENTKEY = "eventText";
     private static final String IDKEY = "ID";
+    private static final int STORAGE_PERMISSION_CODE = 2015;
 
     //fastest way to round a float to a certain scale
     public static float round(float number, int scale) {
@@ -188,6 +193,13 @@ public class Util {
         }
         return a.data;
     }
+
+    public static  int getBackgroundColor(Context context){
+        TypedValue a = new TypedValue();
+        context.getTheme().resolveAttribute(R.attr.colorBackground, a, true);
+        return a.data;
+    }
+
 
     public static Drawable drawableFromUrl(String url) throws Exception {
         Bitmap x;
@@ -473,5 +485,23 @@ public class Util {
         });
         bsd.setContentView(mView);
         bsd.show();
+    }
+
+    public static void checkPermission(Context context, String permission){
+        if(ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
+            askforPermission((Activity) context, permission);
+        }
+    }
+
+    private static void askforPermission(Activity activity, String permission){
+        //if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
+            //optional Dialog to explain why the permission is necessary
+        //}
+        ActivityCompat.requestPermissions(activity, new String[]{permission}, STORAGE_PERMISSION_CODE);
+    }
+
+    public static void checkStoragePermissions(Context context){
+        Util.checkPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
+        Util.checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 }

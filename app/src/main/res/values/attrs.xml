@@ -18,4 +18,5 @@
     <attr name="subject14" format="color"/>
     <attr name="accent" format="color"/>
     <attr name="bootLogo" format="color"/>
+    <attr name="colorBackground" format="color"/>
 </resources>

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -130,44 +131,43 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        Button notificationTimeBtn = root.findViewById(R.id.btnNotificationTime);
 
-        //GENERAL Settings
-        Button btnSchoolStart = root.findViewById(R.id.btnSchoolStart);
         try {
-            int ss = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480);
-            btnSchoolStart.setText(String.valueOf((int) Math.floor(ss / 60)) + ":" + String.format("%02d", ss % 60));
-        } catch (Exception e) {
+            int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
+            notificationTimeBtn.setText(String.valueOf((int) Math.floor(notiTime / 60)) + ":" + String.format("%02d", notiTime % 60));
+        }catch (Exception e) {
             e.printStackTrace();
         }
-
-
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_schoolstart), hourOfDay * 60 + minute).commit();
-                //save("schoolStartHour", hourOfDay);
-                //save("schoolStartMinute", minute);
-                btnSchoolStart.setText(String.valueOf(hourOfDay) + ":" + String.format("%02d", minute));
-                setSchoolLessonSystem();
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_notificationTime), hourOfDay * 60 + minute).commit();
+                notificationTimeBtn.setText(String.valueOf(hourOfDay) + ":" + String.format("%02d", minute));
             }
         };
 
-        btnSchoolStart.setOnClickListener(new View.OnClickListener() {
+        notificationTimeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                int minute = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480) % 60;
+                int minute = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480) % 60;
 
                 System.out.println(minute);
-                int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_schoolstart), 480) / 60);
+                int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480) / 60);
 
-                TimePickerDialog tpd = new TimePickerDialog(getContext(), R.style.TimePickerTheme, onTimeSetListener, hourOfDay, minute, true);
+                TimePickerDialog tpd = new TimePickerDialog(getContext(),R.style.TimePickerDialogTheme, onTimeSetListener, hourOfDay, minute, true);
 
                 tpd.show();
+
+                tpd.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                WindowManager.LayoutParams lp = tpd.getWindow().getAttributes();
+                lp.dimAmount = 0.7f;
+                tpd.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
             }
         });
 
-        EditText breakTime = root.findViewById(R.id.breakTime);
+        /*EditText breakTime = root.findViewById(R.id.breakTime);
 
         breakTime.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_breakTime), 30)));
 
@@ -225,6 +225,32 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+
+*/
+
+        EditText daysbeforetestnotification = root.findViewById(R.id.days_before_test_notification);
+
+        daysbeforetestnotification.setText(String.valueOf(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_daysbeforetestnotification), 7)));
+
+        daysbeforetestnotification.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (s.toString().isEmpty() || Integer.parseInt(s.toString()) <= 0)
+                    return;
+
+                getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_daysbeforetestnotification), Integer.parseInt(s.toString())).apply();
+            }
+        });
 
         //Timetable max Lessons stuff
         EditText maxLessons = (EditText) root.findViewById(R.id.maxLesson);

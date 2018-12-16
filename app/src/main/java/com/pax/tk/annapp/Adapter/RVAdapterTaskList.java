@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -43,6 +42,7 @@ import com.pax.tk.annapp.Subject;
 import com.pax.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
+import static android.content.Context.MODE_PRIVATE;
 
 public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.RecyclerVHTask> {
     private Context context;
@@ -53,7 +53,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     private boolean isPreview;
     public Set<Event> privateEvents = new HashSet<>();
     private Util util = new Util();
-    private TypedValue backgroundColor;
 
     public RVAdapterTaskList(Context context, TextView taskMessage, boolean isPreview) {
 
@@ -61,10 +60,6 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         this.taskMessage = taskMessage;
         manager = Manager.getInstance();
         this.isPreview = isPreview;
-
-        TypedValue a = new TypedValue();
-        context.getTheme().resolveAttribute(android.R.attr.background, a, true);
-        backgroundColor = a;
 
         privateEvents = manager.getPrivateEvents();
         constructor();
@@ -135,12 +130,10 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
             holder.subjectTxt.setTextColor(context.getColor(android.R.color.white));
             return;
         } else {
-
-
-            holder.cardViewTask.setCardBackgroundColor(backgroundColor.data);
             holder.content.setVisibility(View.VISIBLE);
             holder.subjectTxt.setVisibility(View.GONE);
             holder.space.setVisibility(View.VISIBLE);
+            holder.cardViewTask.setCardBackgroundColor(Util.getBackgroundColor(context));
         }
         holder.dateTxt.setText(Util.getDateString(tasks.get(position).getDue(), context)); //When the Task is due
         holder.taskTxt.setText(tasks.get(position).getTask());
@@ -297,7 +290,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                         }
                     };
                     DatePickerDialog datePickerDialog = new DatePickerDialog(
-                            context, onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+                            context, R.style.DatePickerTheme, onDateSetListener, date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
                     datePickerDialog.setTitle("Datum auswählen");
                     datePickerDialog.setCanceledOnTouchOutside(false);
                     datePickerDialog.show();
@@ -363,24 +356,28 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     return;
                 }
 
-                due.add(Calendar.DAY_OF_MONTH, - 1);
+                due.add(Calendar.DAY_OF_YEAR, - 1);
                 due.set(Calendar.HOUR_OF_DAY, 24);
                 due.set(Calendar.MINUTE, 0);
 
-                Calendar notidate = (Calendar) due.clone();
+                String eventText = shortKind + ": " + taskInput.getText().toString();
 
-                String stringID = shortKind + task.getTask()+ due.getTimeInMillis();
+                String stringID = shortKind + taskInput.getText().toString() + due.getTimeInMillis();
                 int id = stringID.hashCode();
 
+                Calendar notidate = (Calendar) due.clone();
+
                 if (shortKind.equals(context.getString(R.string.exam_short))){
-                    notidate.add(Calendar.DAY_OF_YEAR, -7);
+                    notidate.add(Calendar.DAY_OF_YEAR, -(((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_daysbeforetestnotification), 7)));
                 }
 
-                notidate.set(Calendar.HOUR_OF_DAY, 15);
-                notidate.set(Calendar.MINUTE, 0);
+                int notiTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_notificationTime), 480);
+                int hourofDay = (int) Math.floor(notiTime / 60);
+
+                notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
+                notidate.set(Calendar.MINUTE,  notiTime % 60);
                 notidate.set(Calendar.SECOND, 0);
 
-                String eventText = shortKind + ": " + taskInput.getText().toString();
 
                 if(!notidate.before(Calendar.getInstance())) {
                     util.setAlarm(context, eventText, task.getSubject().getName(), id, notidate.getTimeInMillis());
