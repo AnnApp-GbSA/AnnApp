@@ -238,5 +238,6 @@
     <string name="key_username">username</string>
     <string name="key_password">password</string>
     <string name="set_username_and_password">Bitte Benutzernamen und Passwort in den Einstellungen eingeben!</string>
+    <string name="open_file">Datei öffnen</string>
 </resources>
 

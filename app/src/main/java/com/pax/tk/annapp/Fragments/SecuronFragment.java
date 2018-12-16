@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutCompat;
@@ -25,6 +26,8 @@ import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;*/
 import com.koushikdutta.ion.builder.Builders;
+import com.pax.tk.annapp.BuildConfig;
+import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 import com.pax.tk.annapp.onBackPressed;
@@ -336,10 +339,32 @@ public class SecuronFragment extends Fragment implements onBackPressed {
             startActivity(intent);
         } catch (ActivityNotFoundException e) {
             */// no Activity to handle this kind of files
+        Uri fileURI = FileProvider.getUriForFile(getContext(),
+                BuildConfig.APPLICATION_ID + ".provider",
+                file);
 
+        Intent target = new Intent(Intent.ACTION_VIEW);
+        target.setDataAndType(fileURI,getMimeType(fileURI.getPath()));
+        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        Intent intent = Intent.createChooser(target, getString(R.string.open_file));
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // Instruct the user to install a file reader here, or something
+        }
 
 
     }
 
+    // url = file path or whatever suitable URL you want.
+    public static String getMimeType(String url) {
+        String type = null;
+        String extension = MimeTypeMap.getFileExtensionFromUrl(url);
+        if (extension != null) {
+            type = MimeTypeMap.getSingleton().getMimeTypeFromExtension(extension);
+        }
+        return type;
+    }
 
 }

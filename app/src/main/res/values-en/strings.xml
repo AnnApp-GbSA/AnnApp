@@ -176,5 +176,6 @@
     <string name="Username_point">Username:</string>
     <string name="username">username</string>
     <string name="password_point">Password:</string>
+    <string name="open_file">Open file</string>
 </resources>
 
