@@ -146,30 +146,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginLeft="20dp">
+
+        <Switch
+            android:id="@+id/notificationSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/receive_notification"
+            android:textColor="?android:textColor" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:text="@string/notificationtime"
-                android:textColor="?android:textColor"/>
+                android:textColor="?android:textColor"
+                />
 
             <Button
                 android:id="@+id/btnNotificationTime"
                 android:layout_width="match_parent"
-                android:layout_height="26dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
+                android:textAlignment="center"
                 android:layout_weight="0"
                 android:background="@android:color/transparent"
-                android:gravity="right"
-                android:paddingRight="8dp"
                 android:text="@string/short_blindtext"
                 android:textColor="?colorAccent"
                 android:textSize="20dp" />
@@ -179,8 +186,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginLeft="20dp">
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -194,6 +200,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
+                android:maxLength="2"
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="right"

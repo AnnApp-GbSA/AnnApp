@@ -24,6 +24,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import com.github.sundeepk.compactcalendarview.domain.Event;
 
@@ -39,6 +40,7 @@ import com.pax.tk.annapp.Task;
 import com.pax.tk.annapp.Util;
 
 import static android.content.Context.MODE_PRIVATE;
+import static com.pax.tk.annapp.Util.setAlarm;
 
 
 public class TasksFragment extends Fragment {
@@ -278,18 +280,18 @@ public class TasksFragment extends Fragment {
                     notidate.add(Calendar.DAY_OF_YEAR, -(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_daysbeforetestnotification), 7)));
                 }
 
-                //int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
-                //int hourofDay = (int) Math.floor(notiTime / 60);
+                int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
+                int hourofDay = (int) Math.floor(notiTime / 60);
 
                 notidate.add(Calendar.DAY_OF_YEAR, -1);
-                //notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
-                //notidate.set(Calendar.MINUTE,  notiTime % 60);
-                //notidate.set(Calendar.SECOND, 0);
+                notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
+                notidate.set(Calendar.MINUTE,  notiTime % 60);
+                notidate.set(Calendar.SECOND, 0);
 
 
-                if(!notidate.before(Calendar.getInstance())) {
-                    (new Util()).setAlarm(getContext(), eventText, subject.getName(), id, notidate);
-                    (new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate.getTimeInMillis()));
+                if(!notidate.before(Calendar.getInstance()) && getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_notification), true)) {
+                    setAlarm(getContext(), eventText, subject.getName(), id, notidate);
+                    (new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate));
                 }
                 event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));
                 manager.addPrivateEvent(event);

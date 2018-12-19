@@ -52,6 +52,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -280,10 +281,8 @@ public class Util {
         return(createdRanNum);
     }
 
-    public void setAlarm(Context context, String eventText, String subjectName, int id, Calendar notidate)
+    public static void setAlarm(Context context, String eventText, String subjectName, int id, Calendar notidate)
     {
-        Manager manager = Manager.getInstance();
-
         int notiTime = ((MainActivity)context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_notificationTime), 480);
         int hourofDay = (int) Math.floor(notiTime / 60);
 
@@ -301,7 +300,7 @@ public class Util {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notidate.getTimeInMillis(), pendingIntent);
     }
 
-    public void cancelAlarm(Context context, String eventText, String subjectName, int id)
+    public static void cancelAlarm(Context context, String eventText, String subjectName, int id)
     {
         Manager manager = Manager.getInstance();
 
@@ -510,5 +509,31 @@ public class Util {
     public static void checkStoragePermissions(Context context){
         Util.checkPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         Util.checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+    }
+
+    public static void refreshNotificationTime(int hourofday, int minute, Context context){
+
+        NotificationStorage notificationStorage = new NotificationStorage(context);
+
+        for (Notification notification : notificationStorage.getNotifications()) {
+
+            Calendar notidate = notification.getDate();
+            notidate.set(Calendar.HOUR_OF_DAY, hourofday);
+            notidate.set(Calendar.MINUTE, minute);
+
+            cancelAlarm(context, notification.getEventText(), notification.getSubjectName(), notification.getID());
+            setAlarm(context, notification.getEventText(), notification.getSubjectName(), notification.getID(), notidate);
+        }
+
+
+    }
+
+    public static void cancelAllAlarms(Context context){
+        NotificationStorage notificationStorage = new NotificationStorage(context);
+
+        for (Notification notification : notificationStorage.getNotifications()){
+            cancelAlarm(context, notification.getEventText(), notification.getSubjectName(), notification.getID());
+        }
+
     }
 }

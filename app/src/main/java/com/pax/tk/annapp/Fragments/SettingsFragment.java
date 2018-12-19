@@ -37,6 +37,7 @@ import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.SchoolLessonSystem;
 import com.pax.tk.annapp.Manager;
+import com.pax.tk.annapp.Util;
 
 import static android.content.Context.MODE_PRIVATE;
 
@@ -126,6 +127,22 @@ public class SettingsFragment extends Fragment {
             }
         });
 
+        Switch notificationSwitch = root.findViewById(R.id.notificationSwitch);
+
+        Boolean notificationBool = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_notification), true);
+        notificationSwitch.setChecked(notificationBool);
+
+
+        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_notification), b).apply();
+                if(!b) {
+                    Util.cancelAllAlarms(getContext());
+                }
+            }
+        });
+
         Button notificationTimeBtn = root.findViewById(R.id.btnNotificationTime);
 
         try {
@@ -134,10 +151,12 @@ public class SettingsFragment extends Fragment {
         }catch (Exception e) {
             e.printStackTrace();
         }
+
         TimePickerDialog.OnTimeSetListener onTimeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 getActivity().getPreferences(MODE_PRIVATE).edit().putInt(getString(R.string.key_notificationTime), hourOfDay * 60 + minute).commit();
+                Util.refreshNotificationTime(hourOfDay, minute, getContext());
                 notificationTimeBtn.setText(String.valueOf(hourOfDay) + ":" + String.format("%02d", minute));
             }
         };

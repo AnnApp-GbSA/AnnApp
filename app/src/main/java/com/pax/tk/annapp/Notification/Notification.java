@@ -53,10 +53,10 @@ public class Notification implements Serializable {
         return date;
     }
 
-    public void setDate(long date) {
-        Date calendarDate = new Date(date);
-
-        this.date = date;
+    public void setDate(long date){
+        Calendar now = Calendar.getInstance();
+        now.setTime(new Date(date));
+        this.date = now;
     }
 
     @Override
@@ -74,7 +74,7 @@ public class Notification implements Serializable {
         try {
             jsonObject.put("ID", ID);
             jsonObject.put("subjectName", subjectName);
-            jsonObject.put("date", date);
+            jsonObject.put("date", date.getTimeInMillis());
             jsonObject.put("eventText", eventText);
         } catch (JSONException e) {
             throw new IllegalStateException("Failed to convert the object to JSON");

@@ -240,5 +240,7 @@
     <string name="set_username_and_password">Bitte Benutzernamen und Passwort in den Einstellungen eingeben!</string>
     <string name="open_file">Datei öffnen</string>
     <string name="annapp_notification_channel" translatable="false">ANNAPP</string>
+    <string name="key_notification" translatable="false">notificationBool</string>
+    <string name="receive_notification">Benachrichtigungen bekommen:</string>
 </resources>
 

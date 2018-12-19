@@ -25,6 +25,7 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.regex.Pattern;
@@ -43,6 +44,7 @@ import com.pax.tk.annapp.Util;
 
 import static android.R.layout.simple_spinner_dropdown_item;
 import static android.content.Context.MODE_PRIVATE;
+import static com.pax.tk.annapp.Util.setAlarm;
 
 public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.RecyclerVHTask> {
     private Context context;
@@ -374,14 +376,14 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 int notiTime = ((MainActivity) context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_notificationTime), 480);
                 int hourofDay = (int) Math.floor(notiTime / 60);
 
+                notidate.add(Calendar.DAY_OF_YEAR, -1);
                 notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
                 notidate.set(Calendar.MINUTE,  notiTime % 60);
                 notidate.set(Calendar.SECOND, 0);
 
-
-                if(!notidate.before(Calendar.getInstance())) {
-                    util.setAlarm(context, eventText, task.getSubject().getName(), id, notidate.getTimeInMillis());
-                    (new NotificationStorage(context)).saveNotification(new Notification(eventText, task.getSubject().getName(), id, notidate.getTimeInMillis()));
+                if(!notidate.before(Calendar.getInstance()) && ((MainActivity) context).getPreferences(MODE_PRIVATE).getBoolean(context.getString(R.string.key_notification), true)) {
+                    setAlarm(context, eventText, task.getSubject().getName(), id, notidate);
+                    (new NotificationStorage(context)).saveNotification(new Notification(eventText, task.getSubject().getName(), id, notidate));
                 }
 
 

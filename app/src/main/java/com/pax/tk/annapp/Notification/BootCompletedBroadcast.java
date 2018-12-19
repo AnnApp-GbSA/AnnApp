@@ -7,7 +7,12 @@ import android.support.v4.os.BuildCompat;
 import android.support.v4.os.UserManagerCompat;
 import android.util.Log;
 
+import com.pax.tk.annapp.MainActivity;
+import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.pax.tk.annapp.Util.setAlarm;
 
 public class BootCompletedBroadcast extends BroadcastReceiver {
 
@@ -28,10 +33,11 @@ public class BootCompletedBroadcast extends BroadcastReceiver {
             return;
         }
 
-        Util util = new Util();
-        NotificationStorage notificationStorage = new NotificationStorage(context);
-        for (Notification notification : notificationStorage.getNotifications()) {
-            util.setAlarm(context, notification.getEventText(), notification.getSubjectName(), notification.getID(), notification.getDate());
+        if (((MainActivity) context).getPreferences(MODE_PRIVATE).getBoolean(context.getString(R.string.key_notification), true)) {
+            NotificationStorage notificationStorage = new NotificationStorage(context);
+            for (Notification notification : notificationStorage.getNotifications()) {
+                setAlarm(context, notification.getEventText(), notification.getSubjectName(), notification.getID(), notification.getDate());
+            }
         }
     }
 }
