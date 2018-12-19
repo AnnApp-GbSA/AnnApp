@@ -4,14 +4,10 @@ package com.pax.tk.annapp.Fragments;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +22,17 @@ import android.widget.Switch;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
 import com.pax.tk.annapp.Day;
+import com.pax.tk.annapp.FileChooser;
+import com.pax.tk.annapp.Lesson;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.SchoolLessonSystem;
@@ -340,6 +335,15 @@ public class SettingsFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+
+
+                new FileChooser(getActivity()).setFileListener(new FileChooser.FileSelectedListener() {
+                    @Override
+                    public void fileSelected(File file) {
+                        parseFileToTimetable(file);
+                    }
+                }).showDialog();
+
             }
         });
 
@@ -374,11 +378,11 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()){
+                if (!s.toString().equals("")){
                     getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), s.toString()).commit();
                 }
                 else
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), "");
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), "").commit();
             }
         });
 
@@ -398,13 +402,72 @@ public class SettingsFragment extends Fragment {
                     getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), s.toString()).commit();
                 }
                 else
-                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), "");
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), "").commit();
             }
         });
 
 
 
         return root;
+    }
+
+    private void parseFileToTimetable(File file) {
+        StringBuilder text = new StringBuilder();
+
+        int day = 0;
+        int lesson = 0;
+        int stage = 0;
+
+        Lesson newLesson = new Lesson(null, null, 0, 0);
+
+        String subjectName = "";
+        String subjectRoom = "";
+
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+                text.append(line);
+                text.append('\n');
+
+                int currentStage = 0;
+                while(line.startsWith(" ")){
+                    line = line.substring(1);
+                    currentStage++;
+                }
+                currentStage /= 4;
+                System.out.println("stage: "+currentStage);
+
+                if (line.startsWith("day")){
+                    day=Integer.valueOf(line.replace("day", "").replace("{", "").replace(" ", ""));
+                    System.out.println("day: " + day);
+                }
+                if (line.contains("lesson") && !line.contains("lessons")){
+                    lesson= Integer.valueOf(line.replace(" ","").replace("lesson", "").replace("{", ""));
+                    System.out.println("lesson: " + lesson);
+                }
+                if (currentStage == 4){
+                    if (line.replace(" ","").startsWith("name:")){
+                        subjectName = line.replace("name:", "").replace(" ","");
+                        System.out.println("name: "+subjectName);
+                    } else if (line.replace(" ","").startsWith("room")){
+                        subjectRoom = line.replace("room:", "").replace(" ","");
+                        System.out.println("room: "+subjectRoom);
+                    }
+
+                }
+
+                stage = currentStage;
+            }
+            br.close();
+        }
+        catch (IOException e) {
+            //You'll need to add proper error handling here
+        }
+
+        //text.toString gives you the result
     }
 
     /**

@@ -278,16 +278,17 @@ public class TasksFragment extends Fragment {
                     notidate.add(Calendar.DAY_OF_YEAR, -(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_daysbeforetestnotification), 7)));
                 }
 
-                int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
-                int hourofDay = (int) Math.floor(notiTime / 60);
+                //int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
+                //int hourofDay = (int) Math.floor(notiTime / 60);
 
-                notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
-                notidate.set(Calendar.MINUTE,  notiTime % 60);
-                notidate.set(Calendar.SECOND, 0);
+                notidate.add(Calendar.DAY_OF_YEAR, -1);
+                //notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
+                //notidate.set(Calendar.MINUTE,  notiTime % 60);
+                //notidate.set(Calendar.SECOND, 0);
 
 
                 if(!notidate.before(Calendar.getInstance())) {
-                    (new Util()).setAlarm(getContext(), eventText, subject.getName(), id, notidate.getTimeInMillis());
+                    (new Util()).setAlarm(getContext(), eventText, subject.getName(), id, notidate);
                     (new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate.getTimeInMillis()));
                 }
                 event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));

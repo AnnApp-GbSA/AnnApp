@@ -280,9 +280,16 @@ public class Util {
         return(createdRanNum);
     }
 
-    public void setAlarm(Context context, String eventText, String subjectName, int id, long time)
+    public void setAlarm(Context context, String eventText, String subjectName, int id, Calendar notidate)
     {
         Manager manager = Manager.getInstance();
+
+        int notiTime = ((MainActivity)context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_notificationTime), 480);
+        int hourofDay = (int) Math.floor(notiTime / 60);
+
+        notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
+        notidate.set(Calendar.MINUTE,  notiTime % 60);
+        notidate.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Intent inte = new Intent(context, AlertReceiver.class);
@@ -291,7 +298,7 @@ public class Util {
                 .putExtra(IDKEY, id);
 
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, inte, PendingIntent.FLAG_UPDATE_CURRENT);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, time, pendingIntent);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notidate.getTimeInMillis(), pendingIntent);
     }
 
     public void cancelAlarm(Context context, String eventText, String subjectName, int id)
@@ -340,7 +347,7 @@ public class Util {
 
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                 int importance = NotificationManager.IMPORTANCE_HIGH;
-                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_1_ID, "NOTIFICATION_CHANNEL_NAME", importance);
+                NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_1_ID, context.getString(R.string.annapp_notification_channel), importance);
                 notificationChannel.enableLights(true);
                 notificationChannel.setLightColor(Color.YELLOW);
                 notificationChannel.enableVibration(true);

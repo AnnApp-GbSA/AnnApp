@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -70,7 +72,7 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
         holder.image.setImageDrawable(news.getImage());
         System.out.println("use Image: " + news.getImage());
 
-        //holder.image.setVisibility(View.GONE);
+        holder.image.setVisibility(View.GONE);
 
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
@@ -81,7 +83,12 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
                 intent.putExtra(context.getString(R.string.bundlekey_news), news);
                 intent.putExtra(context.getString(R.string.bundleKey_colorThemePosition), ((MainActivity) context).getPreferences(Context.MODE_PRIVATE).getInt("colorSchemePosition", 0));
 
-                context.startActivity(intent);
+                try{
+                context.startActivity(intent);}
+                catch (RuntimeException e){
+                    e.printStackTrace();
+                    Toast.makeText(context, context.getString(R.string.error), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 

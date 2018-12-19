@@ -66,7 +66,6 @@ public class AnnanewsFragment extends Fragment {
         manager = Manager.getInstance();
 
         new FetchFeedTask().execute((Void) null);
-        new NewNewsListener().execute((Void) null);
 
         rvAdapterNews.update();
 
@@ -80,7 +79,6 @@ public class AnnanewsFragment extends Fragment {
             @Override
             public void onRefresh() {
                 new FetchFeedTask().execute((Void) null);
-                new NewNewsListener().execute((Void) null);
 
                 rvAdapterNews.update();
                 System.out.println("onRefresh");
@@ -89,39 +87,6 @@ public class AnnanewsFragment extends Fragment {
 
 
         return root;
-    }
-
-
-    private class NewNewsListener extends AsyncTask<Void, Void, Void> {
-
-        int currentLength;
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-            currentLength = manager.getNewsCount();
-        }
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-            while (manager.getNewsCount() == currentLength) {
-            }
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void aVoid) {
-            super.onPostExecute(aVoid);
-            if (!cancelled) {
-
-                synchronized (rvAdapterNews){
-                    System.out.println("notifying");
-                    rvAdapterNews.notify();
-                }
-
-                new NewNewsListener().execute((Void) null);
-            }
-        }
     }
 
     private class FetchFeedTask extends AsyncTask<Void, Void, Boolean> {

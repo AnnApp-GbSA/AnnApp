@@ -33,8 +33,7 @@ public class NotificationStorage {
         } else {
             storageContext = context;
         }
-        mSharedPreferences = storageContext
-                .getSharedPreferences(ALARM_PREFERENCES_NAME, Context.MODE_PRIVATE);
+        mSharedPreferences = storageContext.getSharedPreferences(ALARM_PREFERENCES_NAME, Context.MODE_PRIVATE);
     }
 
     public Notification saveNotification(Notification notification) {

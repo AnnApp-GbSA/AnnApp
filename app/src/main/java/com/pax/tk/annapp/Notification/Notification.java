@@ -1,6 +1,8 @@
 package com.pax.tk.annapp.Notification;
 
 import java.io.Serializable;
+import java.util.Calendar;
+import java.util.Date;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -9,10 +11,10 @@ public class Notification implements Serializable {
 
     private String eventText;
     private String subjectName;
-    private long date;
+    private Calendar date;
     private int ID;
 
-    public Notification (String eventText, String subjectName, int ID, long date){
+    public Notification (String eventText, String subjectName, int ID, Calendar date){
         this.eventText = eventText;
         this.ID = ID;
         this.subjectName = subjectName;
@@ -47,11 +49,13 @@ public class Notification implements Serializable {
         this.ID = ID;
     }
 
-    public long getDate() {
+    public Calendar getDate() {
         return date;
     }
 
     public void setDate(long date) {
+        Date calendarDate = new Date(date);
+
         this.date = date;
     }
 

@@ -235,9 +235,10 @@
     <string name="push_notification">Push Nachrichten</string>
     <string name="notificationtime">Uhrzeit für Benachrichtigungen</string>
     <string name="days_before_test_notification">Tage vor einer Schulaufgabe informieren:</string>
-    <string name="key_username">username</string>
-    <string name="key_password">password</string>
+    <string name="key_username">Benutzername</string>
+    <string name="key_password">Passwort</string>
     <string name="set_username_and_password">Bitte Benutzernamen und Passwort in den Einstellungen eingeben!</string>
     <string name="open_file">Datei öffnen</string>
+    <string name="annapp_notification_channel" translatable="false">ANNAPP</string>
 </resources>
 

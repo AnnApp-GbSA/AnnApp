@@ -54,34 +54,33 @@ public class Day implements Serializable {
 
     @Override
     public String toString() {
-        String result = "{\n" +
-                "day " + String.valueOf(number);
-        for (Lesson l :
-                lessons) {
-            System.out.println("lesson: " + l);
-        }
-        result += "\nlessons:";
+        String result = "day " + String.valueOf(number) + " {";
+
+        result += "\n    lessons {";
         for (Lesson l : lessons) {
-            System.out.println("\nlesson: " + l);
+            result += "\n";
             if (l.getSubject()==null){
-                result += "\n    lesson " + l.getTime() + "{\n}";
+                result += "\n        lesson " + l.getTime() + "{\n        }";
             }
             if (l.getTime() != 0 && l.getSubject() != null) {
-                result += "\n    lesson " + l.getTime() + "{\n    " +
-                        "subject: {\n        " + "name: " + l.getSubject().getName() +
-                        "\n        room: " + l.getSubject().getRoom() +
-                        "\n        teacher: " + l.getSubject().getTeacher();
+                result += "\n        lesson " + l.getTime() +
+                        "{\n            subject: {\n                " + "name: " + l.getSubject().getName() +
+                        "\n                room: " + l.getSubject().getRoom() +
+                        "\n                teacher: " + l.getSubject().getTeacher();
 
-                result += "\n    }";
+                result += "\n            }";
 
                 try {
-                    result += "\n    room: " + l.getRoom();
+                    result += "\n            room: " + l.getRoom();
                 } catch (NullPointerException npe) {
                     //Nothing to do... no room specified for this lesson
                 }
+
+                result += "\n        }";
             }
         }
-        result += "\n}";
+        result += "\n    }";
+        result+="\n}";
         return result;
     }
 }

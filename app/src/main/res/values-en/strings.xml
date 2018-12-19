@@ -177,5 +177,12 @@
     <string name="username">username</string>
     <string name="password_point">Password:</string>
     <string name="open_file">Open file</string>
+    <string name="im_export_timetable">Im-/Export Timetable</string>
+    <string name="push_notification">Push notifications</string>
+    <string name="notificationtime">Time for notifications</string>
+    <string name="days_before_test_notification">Inform days before test:</string>
+    <string name="key_username">username</string>
+    <string name="key_password">password</string>
+    <string name="set_username_and_password">Please insert username and password in settings</string>
 </resources>
 
