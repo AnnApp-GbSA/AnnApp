@@ -20,6 +20,11 @@ public class SliderAdapter extends PagerAdapter {
     Context c;
     LayoutInflater layoutInflater;
 
+    /**
+     * creates a slider adapter
+     *
+     * @param c ...
+     */
     public SliderAdapter(Context c){
         this.c = c;
         slide_images = c.getResources().obtainTypedArray(R.array.slide_images);
@@ -34,16 +39,35 @@ public class SliderAdapter extends PagerAdapter {
 
     public String[] slide_description;
 
+    /**
+     * gets the slide heading length
+     *
+     * @return length of the slide heading
+     */
     @Override
     public int getCount() {
         return slide_headings.length;
     }
 
+    /**
+     * checks if a view is from an object
+     *
+     * @param view view which shall be checked
+     * @param object object to check with
+     * @return true if object casted to a View is the view, false if not
+     */
     @Override
     public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == (View) object;
     }
 
+    /**
+     * instantiates a item
+     *
+     * @param container container ViewGroup
+     * @param position position of the item as int
+     * @return view
+     */
     @NonNull
     @Override
     public Object instantiateItem(@NonNull ViewGroup container, int position) {
@@ -66,7 +90,13 @@ public class SliderAdapter extends PagerAdapter {
         return view;
     }
 
-
+    /**
+     * destroys a item
+     *
+     * @param container container ViewGroup
+     * @param position position of the item
+     * @param object object to destroy
+     */
     @Override
     public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         container.removeView((LinearLayout) object);

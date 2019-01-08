@@ -21,6 +21,11 @@ public class AlertReceiver extends BroadcastReceiver {
     private static final String EVENTKEY = "eventText";
     private static final String IDKEY = "ID";
 
+    /**
+     *
+     * @param context
+     * @param intent
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         String eventText = intent.getStringExtra(EVENTKEY);

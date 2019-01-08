@@ -51,6 +51,13 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     private SparseBooleanArray expandedState = new SparseBooleanArray();
 
+    /**
+     * creates a adapter grade list
+     *
+     * @param context ...
+     * @param subject subject of the grades
+     * @param gradeMessage TextView of the grades
+     */
     public RVAdapterGradeList(Context context, Subject subject, TextView gradeMessage) {
         this.context = context;
         manager = Manager.getInstance();
@@ -63,6 +70,13 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         }
     }
 
+    /**
+     * creates the ViewHolder
+     *
+     * @param parent parent ViewGroup
+     * @param viewType type of the view
+     * @return created ViewHolder
+     */
     @Override
     public RecyclerVH onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
@@ -70,6 +84,12 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         return new RecyclerVH(view);
     }
 
+    /**
+     * binds the ViewHolder
+     *
+     * @param holder ViewHolder
+     * @param position position as int
+     */
     @Override
     public void onBindViewHolder(RecyclerVH holder, int position) {
         Grade grade = grades.get(position);
@@ -147,6 +167,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         });
     }
 
+    /**
+     * gets the size of the grades
+     *
+     * @return size
+     */
     @Override
     public int getItemCount() {
         return grades.size();
@@ -174,6 +199,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         }
     }
 
+    /**
+     * creates an edit dialog for a grade
+     *
+     * @param grade grade to be edited
+     */
     public void createEditDialog(final Grade grade) {
         BottomSheetDialog bsd = new BottomSheetDialog(context, R.style.NewDialog);
 
@@ -334,6 +364,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }*/
 
+    /**
+     * ask to delete a grade
+     *
+     * @param grade grade which shall be deleted
+     */
     public void askDelete(final Grade grade) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
@@ -360,6 +395,11 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
 
     }
 
+    /**
+     * deletes a grade
+     *
+     * @param grade grade to delete
+     */
     public void delete(Grade grade) {
         int formerIndex = grades.indexOf(grade);
         grades.remove(formerIndex);
@@ -371,11 +411,24 @@ public class RVAdapterGradeList extends RecyclerView.Adapter<RVAdapterGradeList.
         }
     }
 
+    /**
+     * adds a grade to the list
+     *
+     * @param grade grade to add
+     */
     public void addGrade(Grade grade) {
         if (grades.contains(grade))
             notifyItemInserted(grades.indexOf(grade));
     }
 
+    /**
+     * changes the Rotation
+     *
+     * @param button button
+     * @param to to what shall be rotated
+     * @param from from where shall be rotated
+     * @return object animator
+     */
     private ObjectAnimator changeRotate(ImageButton button, float to, float from){
         ObjectAnimator animator = ObjectAnimator.ofFloat(button, "rotation", from, to);
         animator.setDuration(200);

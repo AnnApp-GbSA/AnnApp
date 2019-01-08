@@ -26,17 +26,36 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
     private ArrayList<Subject> subjects = new ArrayList<>();
     private Manager manager = Manager.getInstance();
 
+    /**
+     * creates a subjectList adapter
+     *
+     * @param context ...
+     * @param subjects subjects in the subjectsList
+     */
     public RVAdapterSubjectList(Context context,  ArrayList<Subject> subjects){
         this.context = context;
         this.subjects = subjects;
     }
 
+    /**
+     * creates the ViewHolder
+     *
+     * @param parent parent ViewGroup
+     * @param viewType type of the view
+     * @return created ViewHolder
+     */
     @Override
     public RecyclerVH onCreateViewHolder(ViewGroup parent, final int viewType) {
         View v = LayoutInflater.from(context).inflate(R.layout.item_subject_list, parent, false);
         return new RecyclerVH(v);
     }
 
+    /**
+     * binds the ViewHolder
+     *
+     * @param holder ViewHolder
+     * @param position position as int
+     */
     @Override
     public void onBindViewHolder(RecyclerVH holder, final int position) {
         holder.nameTxt.setText(subjects.get(position).getName());
@@ -55,6 +74,11 @@ public class RVAdapterSubjectList extends RecyclerView.Adapter<RVAdapterSubjectL
         holder.gradeTxt.setText( String.valueOf(subjects.get(position).getGradePointAverage()));
     }
 
+    /**
+     * gets the subject count
+     *
+     * @return counted subjects
+     */
     @Override
     public int getItemCount() {
         return subjects.size();

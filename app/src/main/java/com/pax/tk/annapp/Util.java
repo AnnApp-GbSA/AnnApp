@@ -65,7 +65,13 @@ public class Util {
     private static final String IDKEY = "ID";
     private static final int STORAGE_PERMISSION_CODE = 2015;
 
-    //fastest way to round a float to a certain scale
+    /**
+     * fastest way to round a float to a certain scale
+     *
+     * @param number float to be round
+     * @param scale scale to which the number shall be round
+     * @return round number
+     */
     public static float round(float number, int scale) {
         int pow = 10;
         for (int i = 1; i < scale; i++)
@@ -74,6 +80,13 @@ public class Util {
         return ((float) ((int) ((tmp - (int) tmp) >= 0.5f ? tmp + 1 : tmp))) / pow;
     }
 
+    /**
+     * converts a date into a String with format dd.MM.yyyy
+     *
+     * @param date date to convert
+     * @param context ...
+     * @return date as String
+     */
     public static String getDateString(Calendar date, Context context) {
         Calendar now = Calendar.getInstance();
         if (now.get(Calendar.YEAR) != date.get(Calendar.YEAR))
@@ -83,6 +96,13 @@ public class Util {
         return getWeekDayShort(date, context);
     }
 
+    /**
+     * converts a date into a weekDayShort like "MO" for Monday
+     *
+     * @param date date to convert
+     * @param context ...
+     * @return weekDayShort as String
+     */
     public static String getWeekDayShort(Calendar date, Context context) {
         switch (date.get(Calendar.DAY_OF_WEEK)) {
             case Calendar.MONDAY:
@@ -104,6 +124,12 @@ public class Util {
         }
     }
 
+    /**
+     * converts a day number into a weekday
+     *
+     * @param day day number to convert
+     * @return weekday
+     */
     public static int calendarWeekdayByDayIndex(int day) {
         switch (day) {
             case 0:
@@ -125,10 +151,22 @@ public class Util {
         }
     }
 
+    /**
+     * converts a date into the format dd.MM.yyyy
+     *
+     * @param calendar date to convert
+     * @return date converted
+     */
     public static String getFullDate(Calendar calendar) {
         return new SimpleDateFormat("dd.MM.yyyy").format(calendar.getTime());
     }
 
+    /**
+     * converts a String into a date
+     *
+     * @param fullCalendar String to convert
+     * @return String converted
+     */
     public static Calendar getCalendarFromFullString(String fullCalendar) {
         if (fullCalendar.matches("\\d*\\.\\d*\\.\\d*")) {
             String[] datest = fullCalendar.split("\\.");
@@ -139,6 +177,13 @@ public class Util {
         return null;
     }
 
+    /**
+     * gets the color of a subject
+     *
+     * @param context ...
+     * @param subject subject
+     * @return color as int
+     */
     public static int getSubjectColor(Context context, Subject subject) {
         Manager manager = Manager.getInstance();
         int index = manager.getSubjects().indexOf(subject);
@@ -195,6 +240,12 @@ public class Util {
         return a.data;
     }
 
+    /**
+     * gets the background color
+     *
+     * @param context ...
+     * @return background color as int
+     */
     public static  int getBackgroundColor(Context context){
         TypedValue a = new TypedValue();
         context.getTheme().resolveAttribute(R.attr.colorBackground, a, true);
@@ -202,6 +253,12 @@ public class Util {
     }
 
 
+    /**
+     *
+     * @param url
+     * @return
+     * @throws Exception
+     */
     public static Drawable drawableFromUrl(String url) throws Exception {
         Bitmap x;
         HttpURLConnection connection;
@@ -214,6 +271,13 @@ public class Util {
         return new BitmapDrawable(x);
     }
 
+    /**
+     * loads the saved elements
+     *
+     * @param context ...
+     * @param key key of an element
+     * @return saved element
+     */
     public Object load(Context context, String key) {
         System.out.println("load---------------- " + key);
         try {
@@ -228,6 +292,13 @@ public class Util {
         }
     }
 
+    /**
+     * saves elements
+     *
+     * @param context ...
+     * @param object object to save
+     * @param key key of the object
+     */
     public void save(Context context, Object object, String key){
         System.out.println("save---------------- " + key);
         try {
@@ -239,6 +310,14 @@ public class Util {
         }
     }
 
+    /**
+     * creates an alert dialog
+     *
+     * @param title title of the dialog
+     * @param text text of the dialog
+     * @param ic alert icon
+     * @param context ...
+     */
     public static  void createAlertDialog(String title, String text, int ic, Context context) {
         AlertDialog.Builder builder;
 
@@ -262,6 +341,12 @@ public class Util {
         alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
+    /**
+     * closes the keyboard
+     *
+     * @param layout layout in which the keyboard is
+     * @param context ...
+     */
     public static void closeKeyboard(LinearLayout layout, Context context){
         InputMethodManager inputMethodManager = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
         inputMethodManager.hideSoftInputFromWindow(layout.getWindowToken(), 0);
@@ -281,6 +366,15 @@ public class Util {
         return(createdRanNum);
     }
 
+    /**
+     * sets an alarm
+     *
+     * @param context ...
+     * @param eventText text of the alarm
+     * @param subjectName name of the subject of the alarm
+     * @param id id of the alarm
+     * @param notidate date at which the notification shall be
+     */
     public static void setAlarm(Context context, String eventText, String subjectName, int id, Calendar notidate)
     {
         int notiTime = ((MainActivity)context).getPreferences(MODE_PRIVATE).getInt(context.getString(R.string.key_notificationTime), 480);
@@ -300,6 +394,14 @@ public class Util {
         alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, notidate.getTimeInMillis(), pendingIntent);
     }
 
+    /**
+     * cancels an alarm
+     *
+     * @param context ...
+     * @param eventText text of the alarm
+     * @param subjectName name of the subject of the alarm
+     * @param id id of the alarm
+     */
     public static void cancelAlarm(Context context, String eventText, String subjectName, int id)
     {
         Manager manager = Manager.getInstance();
@@ -314,6 +416,15 @@ public class Util {
         alarmManager.cancel(pendingIntent);
     }
 
+    /**
+     * creates a push notification
+     *
+     * @param context ...
+     * @param ID id of the notification
+     * @param Description description of the notification
+     * @param subject subject in which the notification shall be
+     * @param smallIcon icon which will be shown with the notification
+     */
     public static void createPushNotification(Context context, int ID, String Description, String subject, int smallIcon/*, Bitmap largeIcon*/) {
 
         final String CHANNEL_1_ID = "channel1";
@@ -493,12 +604,24 @@ public class Util {
         bsd.show();
     }
 
+    /**
+     * checks a permission
+     *
+     * @param context ...
+     * @param permission permission to check
+     */
     public static void checkPermission(Context context, String permission){
         if(ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED){
             askforPermission((Activity) context, permission);
         }
     }
 
+    /**
+     * asks for a permission
+     *
+     * @param activity activity
+     * @param permission permission to ask for
+     */
     private static void askforPermission(Activity activity, String permission){
         //if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
             //optional Dialog to explain why the permission is necessary
@@ -506,11 +629,23 @@ public class Util {
         ActivityCompat.requestPermissions(activity, new String[]{permission}, STORAGE_PERMISSION_CODE);
     }
 
+    /**
+     * checks the StoragePermission
+     *
+     * @param context ...
+     */
     public static void checkStoragePermissions(Context context){
         Util.checkPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE);
         Util.checkPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE);
     }
 
+    /**
+     * refreshs the notification time
+     *
+     * @param hourofday hour of the day
+     * @param minute minute of the hour
+     * @param context ...
+     */
     public static void refreshNotificationTime(int hourofday, int minute, Context context){
 
         NotificationStorage notificationStorage = new NotificationStorage(context);
@@ -528,6 +663,11 @@ public class Util {
 
     }
 
+    /**
+     * cancels all alarms
+     *
+     * @param context ...
+     */
     public static void cancelAllAlarms(Context context){
         NotificationStorage notificationStorage = new NotificationStorage(context);
 

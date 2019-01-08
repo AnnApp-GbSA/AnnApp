@@ -56,6 +56,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     public Set<Event> privateEvents = new HashSet<>();
     private Util util = new Util();
 
+    /**
+     * creates the taskList adapter
+     *
+     * @param context ...
+     * @param taskMessage TextView of the tasks
+     * @param isPreview true if it is the Preview, false if not
+     */
     public RVAdapterTaskList(Context context, TextView taskMessage, boolean isPreview) {
 
         this.context = context;
@@ -68,6 +75,9 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     }
 
+    /**
+     * constructs
+     */
     void constructor() {
         Calendar yesterday = Calendar.getInstance();
         yesterday.add(Calendar.DAY_OF_YEAR, -1);
@@ -111,6 +121,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
+    /**
+     * creates the ViewHolder
+     *
+     * @param parent parent ViewGroup
+     * @param viewType type of the view
+     * @return created ViewHolder
+     */
     @Override
     public RecyclerVHTask onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
@@ -121,6 +138,12 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         return new RecyclerVHTask(v);
     }
 
+    /**
+     * binds the ViewHolder
+     *
+     * @param holder ViewHolder
+     * @param position position as int
+     */
     @Override
     public void onBindViewHolder(RecyclerVHTask holder, int position) {
         if (tasks.get(position) == null) {
@@ -147,6 +170,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
+    /**
+     * gets the count of the tasks
+     *
+     * @return counted tasks
+     */
     @Override
     public int getItemCount() {
         return tasks.size();
@@ -206,6 +234,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
+    /**
+     * creates an edit dialog for the tasks
+     *
+     * @param task task to be edited
+     */
     public void createEditDialog(final Task task) {
         BottomSheetDialog bsd = new BottomSheetDialog(context, R.style.NewDialog);
 
@@ -409,6 +442,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
     }
 
 
+    /**
+     * asks to delete a task
+     *
+     * @param task task which shall be deleted
+     */
     public void askDelete(final Task task) {
 
         final AlertDialog.Builder builder = new AlertDialog.Builder(context, MainActivity.colorScheme);
@@ -436,6 +474,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
 
     }
 
+    /**
+     * deletes a task
+     *
+     * @param task task to be deleted
+     */
     private void delete(Task task) {
         int index = tasks.indexOf(task);
         task.getSubject().removeTask(task);
@@ -461,6 +504,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
+    /**
+     * adds a task to the list
+     *
+     * @param task task to add
+     */
     public void addTask(Task task) {
         constructor();
         if (tasks.contains(task)) {
@@ -476,6 +524,11 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
+    /**
+     * removes a private event
+     *
+     * @param uid uid of the event
+     */
     private void removeTaskEvent(int uid){
         privateEvents = manager.getPrivateEvents();
         for(Event e : privateEvents){
@@ -488,6 +541,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
         }
     }
 
+    /**
+     * cancels the alarm receiver
+     *
+     * @param eventText eventText
+     * @param subjectName name of the subject
+     * @param ID id of the alarm
+     */
     private void cancelAlarmReceiver(String eventText, String subjectName, int ID){
         (new NotificationStorage(context)).deleteNotification(ID);
         util.cancelAlarm(context, eventText, subjectName, ID);

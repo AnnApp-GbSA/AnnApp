@@ -23,11 +23,24 @@ public class RVSAdapterSecuron extends RecyclerView.Adapter {
     Context context;
     List<DavResource> resources;
 
+    /**
+     * creates a securon adapter
+     *
+     * @param context ...
+     * @param resources resources
+     */
     public RVSAdapterSecuron(Context context, List<DavResource> resources ) {
         this.context = context;
         this.resources = resources;
     }
 
+    /**
+     * creates the ViewHolder
+     *
+     * @param parent parent ViewGroup
+     * @param viewType type of the View
+     * @return created ViewHolder
+     */
     @NonNull
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,6 +48,12 @@ public class RVSAdapterSecuron extends RecyclerView.Adapter {
         return new RecyclerVHSecuron(v);
     }
 
+    /**
+     * binds the ViewHolder
+     *
+     * @param holder ViewHolder
+     * @param position position as int
+     */
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         ((RecyclerVHSecuron)holder).name.setText(resources.get(position).getName());
@@ -43,6 +62,11 @@ public class RVSAdapterSecuron extends RecyclerView.Adapter {
 
     }
 
+    /**
+     * returns 0
+     *
+     * @return 0
+     */
     @Override
     public int getItemCount() {
         return 0;

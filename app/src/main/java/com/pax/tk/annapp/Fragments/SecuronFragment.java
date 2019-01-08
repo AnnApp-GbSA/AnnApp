@@ -1,18 +1,14 @@
 package com.pax.tk.annapp.Fragments;
 
-import android.Manifest;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutCompat;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,9 +21,7 @@ import android.widget.Toast;
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;*/
-import com.koushikdutta.ion.builder.Builders;
 import com.pax.tk.annapp.BuildConfig;
-import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 import com.pax.tk.annapp.onBackPressed;

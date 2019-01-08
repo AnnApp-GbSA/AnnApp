@@ -30,11 +30,19 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
     Manager manager;
     HashMap<Integer, Integer> old = new HashMap<Integer, Integer>();
 
+    /**
+     * creates a news adapter
+     *
+     * @param context ...
+     */
     public RVAdapterNews(Context context) {
         this.context = context;
         manager = Manager.getInstance();
     }
 
+    /**
+     * does nothing
+     */
     public void update() {
         /*ArrayList<News> nn = manager.getNews();
         for (int i = 0; i < nn.size(); i++)
@@ -45,6 +53,12 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
                     notifyItemInserted(i);*/
     }
 
+    /**
+     * creates the ViewHolder
+     * @param parent parent ViewGroup
+     * @param viewType type of the view
+     * @return created ViewHolder
+     */
     @NonNull
     @Override
     public NewsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -53,6 +67,12 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
     }
 
 
+    /**
+     * binds the ViewHolder
+     *
+     * @param holder ViewHolder
+     * @param position position as int
+     */
     @Override
     public void onBindViewHolder(@NonNull NewsViewHolder holder, int position) {
         News news = manager.getOneNews(position);
@@ -100,6 +120,11 @@ public class RVAdapterNews extends RecyclerView.Adapter<RVAdapterNews.NewsViewHo
         });
     }
 
+    /**
+     * gets the news count
+     *
+     * @return counted news
+     */
     @Override
     public int getItemCount() {
         return manager.getNewsCount();

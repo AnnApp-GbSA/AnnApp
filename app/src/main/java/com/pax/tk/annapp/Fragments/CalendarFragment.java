@@ -99,7 +99,8 @@ public class CalendarFragment extends Fragment {
         /**
          * Override this method to perform a computation on a background thread. The
          * specified parameters are the parameters passed to {@link #execute}
-         * by the caller of this task.
+         * by the caller of this task. Loads the events from the ICS-File into the compactCalendarView
+         * and calls methods if any Button on the compactCalendarView is pressed
          * <p>
          * This method can call {@link #publishProgress} to publish updates
          * on the UI thread.
@@ -185,7 +186,7 @@ public class CalendarFragment extends Fragment {
      * displays a message on the screen if eventsThisDay is empty
      * displays all important information for every Event in eventsThisDay on the screen if not
      *
-     * @param eventsThisDay List of Events which includes all events this day
+     * @param eventsThisDay List of Events which includes all events for this day
      * @return false if eventsThisDay is empty and true if not
      */
     private boolean refresh(List<Event> eventsThisDay) {
