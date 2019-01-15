@@ -103,6 +103,7 @@ public class TimetableFragment extends Fragment {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.timetable));
         View root = inflater.inflate(R.layout.fragment_timetable, container, false);

@@ -1,9 +1,12 @@
 
 package com.pax.tk.annapp.Fragments;
 
+import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.TimePickerDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
@@ -17,6 +20,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TimePicker;
@@ -48,6 +52,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SettingsFragment extends Fragment {
     View root;
     Manager manager;
+    private ImageButton informationButton;
 
     public static final String TAG = "SettingsFragment";
 
@@ -69,6 +74,19 @@ public class SettingsFragment extends Fragment {
         root = inflater.inflate(R.layout.fragment_settings, container, false);
 
         manager = Manager.getInstance();
+
+        informationButton = getActivity().findViewById(R.id.appInformationBtn);
+        informationButton.setVisibility(View.VISIBLE);
+
+        informationButton.setOnClickListener(
+                new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Toast.makeText(getContext(), "Open App Information", Toast.LENGTH_LONG).show();
+                        ((MainActivity) getContext()).setFragment(AppInformationFragment.TAG);
+                    }
+                }
+        );
 
         Switch timetableDividersSwitch = root.findViewById(R.id.dividersSwitch);
 
@@ -101,6 +119,16 @@ public class SettingsFragment extends Fragment {
         });
 
 
+        Button openNotificationSettings = root.findViewById(R.id.btn_PushSettings);
+
+        openNotificationSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ViewDialog alert = new ViewDialog();
+                alert.showDialog(getActivity());
+            }
+        });
+
         Switch longClickSwitch = root.findViewById(R.id.longClick);
 
         //Setting Switch to actual setting
@@ -127,7 +155,7 @@ public class SettingsFragment extends Fragment {
             }
         });
 
-        Switch notificationSwitch = root.findViewById(R.id.notificationSwitch);
+        /*Switch notificationSwitch = root.findViewById(R.id.notificationSwitch);
 
         Boolean notificationBool = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_notification), true);
         notificationSwitch.setChecked(notificationBool);
@@ -141,7 +169,7 @@ public class SettingsFragment extends Fragment {
                     Util.cancelAllAlarms(getContext());
                 }
             }
-        });
+        });*/
 
         Button notificationTimeBtn = root.findViewById(R.id.btnNotificationTime);
 
@@ -534,6 +562,107 @@ public class SettingsFragment extends Fragment {
 
         Manager manager = Manager.getInstance();
         manager.setSchoolLessonSystem(schoolLessonSystem);
+    }
+
+    public class ViewDialog {
+
+        public void showDialog(Activity activity){
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), MainActivity.colorScheme);
+            // Get the layout inflater
+            LayoutInflater inflater = getActivity().getLayoutInflater();
+
+            // Inflate and set the layout for the dialog
+            // Pass null as the parent view because its going in the dialog layout
+            builder.setView(inflater.inflate(R.layout.dialog_notification_settings, null))
+                    // Add action buttons
+                    .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+
+                        }
+                    })
+                    .setTitle("Einstellungen");
+
+            AlertDialog alertDialog = builder.show();
+
+            Boolean notiHomework = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_homework), true);
+            Boolean notiGeneral = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_general), true);
+            Boolean notiTest = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_test), true);
+            Boolean notiNote = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_note), true);
+
+            System.out.println("isChecked: " + notiGeneral);
+
+            Switch switchHomework = alertDialog.findViewById(R.id.not_homework);
+            switchHomework.setChecked(notiHomework);
+
+            switchHomework.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    setSpecificSwitchChecked(switchHomework, isChecked, getString(R.string.key_not_homework));
+                }
+            });
+
+            Switch switchTest = alertDialog.findViewById(R.id.not_test);
+            switchTest.setChecked(notiTest);
+
+            switchTest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    setSpecificSwitchChecked(switchTest, isChecked, getString(R.string.key_not_test));
+                }
+            });
+
+            Switch switchNote = alertDialog.findViewById(R.id.not_note);
+            switchNote.setChecked(notiNote);
+
+            switchNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    setSpecificSwitchChecked(switchNote, isChecked, getString(R.string.key_not_note));
+                }
+            });
+
+            Switch switchGeneral = alertDialog.findViewById(R.id.not_general);
+            switchGeneral.setChecked(notiGeneral);
+
+            switchGeneral.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    setSpecificSwitchChecked(switchGeneral, isChecked, getString(R.string.key_not_general));
+                    setAllSwitches(isChecked, new Switch[]{switchHomework, switchNote, switchTest});
+
+                    System.out.println("isChecked: " + isChecked);
+
+                    if(!isChecked) {
+                        Util.cancelAllAlarms(getContext());
+                    }
+                }
+            });
+
+
+
+            alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
+            lp.dimAmount = 0.7f;
+            alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
+        }
+    }
+
+    private void setSpecificSwitchChecked(Switch sw, boolean state, String key){
+        sw.setChecked(state);
+        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(key, state).commit();
+    }
+
+    private void setAllSwitches(boolean state, Switch[] switches){
+        for (Switch sw: switches) {
+            sw.setChecked(state);
+        }
+
+        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_general), state).commit();
+        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_homework), state).commit();
+        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_test), state).commit();
+        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_note), state).commit();
     }
 }
 

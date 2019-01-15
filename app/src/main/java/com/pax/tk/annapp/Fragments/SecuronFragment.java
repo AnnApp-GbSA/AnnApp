@@ -70,6 +70,7 @@ public class SecuronFragment extends Fragment implements onBackPressed {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
         getActivity().setTitle("Securon");
         root = inflater.inflate(R.layout.fragment_securon, container, false);

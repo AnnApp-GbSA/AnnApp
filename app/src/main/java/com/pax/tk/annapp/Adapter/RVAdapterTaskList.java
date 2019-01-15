@@ -357,6 +357,8 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                     return;
                 }
 
+                String boolKey = null;
+
                 removeTaskEvent(id);
                 cancelAlarmReceiver(eventText, task.getSubject().getName(), id);
 
@@ -364,10 +366,13 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 String s = (String) kindSelection.getSelectedItem();
                 if (s.equals(context.getString(R.string.homework))) {
                     shortKind = context.getString(R.string.homework_short);
+                    boolKey = context.getString(R.string.key_not_homework);
                 } else if (s.equals(context.getString(R.string.exam))) {
                     shortKind = context.getString(R.string.exam_short);
+                    boolKey = context.getString(R.string.key_not_test);
                 } else if (s.equals(context.getString(R.string.note))) {
                     shortKind = context.getString(R.string.note_short);
+                    boolKey = context.getString(R.string.key_not_note);
                 } else {
                     shortKind = context.getString(R.string.error);
                 }
@@ -414,7 +419,7 @@ public class RVAdapterTaskList extends RecyclerView.Adapter<RVAdapterTaskList.Re
                 notidate.set(Calendar.MINUTE,  notiTime % 60);
                 notidate.set(Calendar.SECOND, 0);
 
-                if(!notidate.before(Calendar.getInstance()) && ((MainActivity) context).getPreferences(MODE_PRIVATE).getBoolean(context.getString(R.string.key_notification), true)) {
+                if(!notidate.before(Calendar.getInstance()) && ((MainActivity) context).getPreferences(MODE_PRIVATE).getBoolean(boolKey, true)) {
                     setAlarm(context, eventText, task.getSubject().getName(), id, notidate);
                     (new NotificationStorage(context)).saveNotification(new Notification(eventText, task.getSubject().getName(), id, notidate));
                 }

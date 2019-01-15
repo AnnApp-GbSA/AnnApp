@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'com.google.android.gms.oss-licenses-plugin'
 
 android {
     compileSdkVersion 27
@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.github.sundeepk:compact-calendar-view:3.0.0'
     implementation 'com.github.aakira:expandable-layout:1.6.0@aar'
     implementation "android.arch.work:work-runtime:1.0.0-alpha11"
+    implementation 'com.google.android.gms:play-services-oss-licenses:16.0.1'
 
     implementation 'com.koushikdutta.ion:ion:2.1.8'
 

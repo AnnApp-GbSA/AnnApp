@@ -65,6 +65,7 @@ public class TasksFragment extends Fragment {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.tasks));
         root = inflater.inflate(R.layout.fragment_tasks, container, false);
@@ -224,6 +225,7 @@ public class TasksFragment extends Fragment {
             public void onClick(View v) {
 
                 String taskText = task.getText().toString();
+                String boolKey = null;
 
                 if (taskText.isEmpty()) {
                     Util.createAlertDialog(getString(R.string.warning), getString(R.string.warningMessage), android.R.drawable.ic_dialog_alert, getContext());
@@ -238,10 +240,13 @@ public class TasksFragment extends Fragment {
                 String shortKind;
                 if (kindSelection.getSelectedItem().toString().equals(getString(R.string.homework))) {
                     shortKind = getString(R.string.homework_short);
+                    boolKey = getString(R.string.key_not_homework);
                 } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.exam))) {
                     shortKind = getString(R.string.exam_short);
+                    boolKey = getString(R.string.key_not_test);
                 } else if (kindSelection.getSelectedItem().toString().equals(getString(R.string.note))) {
                     shortKind = getString(R.string.note_short);
+                    boolKey = getString(R.string.key_not_note);
                 } else {
                     shortKind = "";
                     Util.createAlertDialog(getString(R.string.warning), getString(R.string.appRestartMessage), android.R.drawable.ic_dialog_alert, getContext());
@@ -289,7 +294,7 @@ public class TasksFragment extends Fragment {
                 notidate.set(Calendar.SECOND, 0);
 
 
-                if(!notidate.before(Calendar.getInstance()) && getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_notification), true)) {
+                if(!notidate.before(Calendar.getInstance()) && getActivity().getPreferences(MODE_PRIVATE).getBoolean(boolKey, true)) {
                     setAlarm(getContext(), eventText, subject.getName(), id, notidate);
                     (new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate));
                 }

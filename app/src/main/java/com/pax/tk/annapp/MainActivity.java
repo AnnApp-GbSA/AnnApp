@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.pax.tk.annapp.Fragments.AnnanewsFragment;
+import com.pax.tk.annapp.Fragments.AppInformationFragment;
 import com.pax.tk.annapp.Fragments.CalendarFragment;
 import com.pax.tk.annapp.Fragments.FeedbackFragment;
 import com.pax.tk.annapp.Fragments.GradeChildFragment;
@@ -302,6 +303,9 @@ public class MainActivity extends AppCompatActivity
                 break;
             case TutorialFragment.TAG:
                 fragment = new TutorialFragment();
+                break;
+            case AppInformationFragment.TAG:
+                fragment = new AppInformationFragment();
                 break;
         }
 

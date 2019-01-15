@@ -54,6 +54,7 @@ public class AnnanewsFragment extends Fragment {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.AnnaNews));
         root = inflater.inflate(R.layout.fragment_annanews, container, false);

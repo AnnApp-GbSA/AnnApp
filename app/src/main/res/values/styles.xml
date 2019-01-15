@@ -295,9 +295,10 @@
 
     <style name="TimePickerDialogTheme" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:timePickerStyle">@style/TimePickerStyle</item>
+        <item name="android:timePickerMode">clock</item>
         <item name="android:textColor">?android:headerBackground</item>
         <item name="android:textColorPrimary">@android:color/white</item>
-        <item name="android:textColorSecondary">@android:color/white</item>
+        <item name="android:popupBackground">@android:color/transparent</item>
         <item name="colorControlActivated">?android:headerBackground</item>
 
     </style>
@@ -359,6 +360,24 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:textColorTertiary">@android:color/white</item>
+    </style>
+
+    <style name="LicenseStyle" parent="Theme.AppCompat">
+        <item name="colorPrimary">?colorPrimary</item>
+        <item name="colorPrimaryDark">?colorPrimaryDark</item>
+        <item name="colorAccent">?colorAccent</item>
+        <item name="accent">?accent</item>
+
+        <item name="colorBackground">?colorBackground</item>
+
+        <item name="android:textColor">?android:textColor</item>
+        <item name="android:popupBackground">?android:popupBackground</item>
+        <item name="android:textColorPrimary">?android:textColorPrimary</item>
+        <item name="android:colorBackground">?android:colorBackground</item>
+        <item name="android:textColorSecondary">?android:textColorSecondary</item>
+
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="ThemeOverlay.AppCompat.navTheme">

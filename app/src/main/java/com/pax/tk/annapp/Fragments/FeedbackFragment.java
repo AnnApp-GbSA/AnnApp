@@ -36,6 +36,7 @@ public class FeedbackFragment extends Fragment {
 
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
+        getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.feedback));
         root = inflater.inflate(R.layout.fragment_feedback, container, false);

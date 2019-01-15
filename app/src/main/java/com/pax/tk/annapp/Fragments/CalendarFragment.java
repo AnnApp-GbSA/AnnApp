@@ -72,6 +72,8 @@ public class CalendarFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().setTitle(getString(R.string.calendar));
+        getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
+
         root = inflater.inflate(R.layout.fragment_calendar, container, false);
         dateIndication = root.findViewById(R.id.dateInformation);
         compactCalendarView = root.findViewById(R.id.compactcalendar_view);

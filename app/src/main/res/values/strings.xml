@@ -242,5 +242,14 @@
     <string name="annapp_notification_channel" translatable="false">ANNAPP</string>
     <string name="key_notification" translatable="false">notificationBool</string>
     <string name="receive_notification">Benachrichtigungen bekommen:</string>
+    <string name="key_not_general" translatable="false">notification_general</string>
+    <string name="key_not_homework" translatable="false">notification_homework</string>
+    <string name="key_not_test" translatable="false">notification_test</string>
+    <string name="key_not_note" translatable="false">notification_note</string>
+    <string name="app_information_general">AnnApp des Gymnasiums bei St.Anna, entwickelt von dem P-Seminar “Weiterentwicklung der AnnApp” 2017 - 2019</string>
+    <string name="app_information_teacher">Seminarlehrer: Heinrich Ding</string>
+    <string name="app_information_developer">Leitende Entwickler: Tobias Kiehnlein, Kevin Pfisterer und Jakob Maisch</string>
+    <string name="app_information_projectleader">Projektleitung: Tobias Kiehnlein und Luca Becher</string>
+    <string name="app_information_pupils">Mitwirkende: Luca Becher, Julian Beilner, Simon Berchtold, Simon Brosdetzko, Elias Gartmann, Tim Janocha, Jan Jaumann, Tobias Kiehnlein, Jochen Köhler, Jimmy Lechleuthner, Jakob Maisch, Kevin Pfisterer, Elias Weigand</string>
 </resources>
 

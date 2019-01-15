@@ -28,6 +28,14 @@
                 android:resource="@xml/provider_paths"/>
         </provider>
 
+        <activity android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:screenOrientation="portrait"
+            android:theme="?android:theme"/>
+
+        <activity android:name="com.google.android.gms.oss.licenses.OssLicensesActivity"
+            android:screenOrientation="portrait"
+            android:theme="?android:theme"/>
+
         <!-- Splash screen -->
         <activity
             android:name=".SplashScreen"
