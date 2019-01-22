@@ -565,7 +565,7 @@ public class SettingsFragment extends Fragment {
                 stage = currentStage;
             }
             br.close();
-            if (lessonCount==addedLessons)
+            if (lessonCount == addedLessons)
                 Util.createSnackbar(getContext(), "Stundenplan erfolgreich importiert", Snackbar.LENGTH_LONG, Color.WHITE);
             else
                 Util.createSnackbar(getContext(), "Stundenplan konnte leider nicht importiert werden", Snackbar.LENGTH_LONG, Color.rgb(234, 82, 65));
@@ -627,7 +627,19 @@ public class SettingsFragment extends Fragment {
 
     public class ViewDialog {
 
+        Switch switchGeneral;
+        Switch switchHomework;
+        Switch switchNote;
+        Switch switchTest;
+
+        Boolean notiHomework;
+        Boolean notiGeneral;
+        Boolean notiTest;
+        Boolean notiNote;
+
         public void showDialog(Activity activity) {
+
+
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), MainActivity.colorScheme);
             // Get the layout inflater
             LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -641,20 +653,22 @@ public class SettingsFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int id) {
 
                         }
-                    })
-                    .setTitle("Einstellungen");
+                    });
 
             AlertDialog alertDialog = builder.show();
 
-            Boolean notiHomework = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_homework), true);
-            Boolean notiGeneral = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_general), true);
-            Boolean notiTest = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_test), true);
-            Boolean notiNote = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_note), true);
+            notiHomework = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_homework), true);
+            notiGeneral = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_general), true);
+            notiTest = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_test), true);
+            notiNote = getActivity().getPreferences(MODE_PRIVATE).getBoolean(getString(R.string.key_not_note), true);
+
+            switchGeneral = alertDialog.findViewById(R.id.not_general);
+            switchHomework = alertDialog.findViewById(R.id.not_homework);
+            switchNote = alertDialog.findViewById(R.id.not_note);
+            switchTest = alertDialog.findViewById(R.id.not_test);
 
             System.out.println("isChecked: " + notiGeneral);
 
-            Switch switchHomework = alertDialog.findViewById(R.id.not_homework);
-            switchHomework.setChecked(notiHomework);
 
             switchHomework.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -663,8 +677,6 @@ public class SettingsFragment extends Fragment {
                 }
             });
 
-            Switch switchTest = alertDialog.findViewById(R.id.not_test);
-            switchTest.setChecked(notiTest);
 
             switchTest.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
@@ -673,9 +685,6 @@ public class SettingsFragment extends Fragment {
                 }
             });
 
-            Switch switchNote = alertDialog.findViewById(R.id.not_note);
-            switchNote.setChecked(notiNote);
-
             switchNote.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -683,14 +692,11 @@ public class SettingsFragment extends Fragment {
                 }
             });
 
-            Switch switchGeneral = alertDialog.findViewById(R.id.not_general);
-            switchGeneral.setChecked(notiGeneral);
-
             switchGeneral.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    setSpecificSwitchChecked(switchGeneral, isChecked, getString(R.string.key_not_general));
                     setAllSwitches(isChecked, new Switch[]{switchHomework, switchNote, switchTest});
+                    setSpecificSwitchChecked(switchGeneral, isChecked, getString(R.string.key_not_general));
 
                     System.out.println("isChecked: " + isChecked);
 
@@ -700,28 +706,51 @@ public class SettingsFragment extends Fragment {
                 }
             });
 
+            if (!notiGeneral) {
+                setSpecificSwitchChecked(switchGeneral, notiGeneral, getString(R.string.key_not_general));
+                setAllSwitches(notiGeneral, new Switch[]{switchHomework, switchNote, switchTest});
+            } else {
+                switchGeneral.setChecked(notiGeneral);
+                switchHomework.setChecked(notiHomework);
+                switchTest.setChecked(notiTest);
+                switchNote.setChecked(notiNote);
+            }
 
             alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             WindowManager.LayoutParams lp = alertDialog.getWindow().getAttributes();
             lp.dimAmount = 0.7f;
             alertDialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
-
         }
-    }
 
-    private void setSpecificSwitchChecked(Switch sw, boolean state, String key) {
-        sw.setChecked(state);
-        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(key, state).commit();
-    }
 
-    private void setAllSwitches(boolean state, Switch[] switches) {
-        for (Switch sw : switches) {
+        private void setSpecificSwitchChecked(Switch sw, boolean state, String key) {
             sw.setChecked(state);
+
+            if (!switchTest.isChecked() && !switchHomework.isChecked() && !switchNote.isChecked()) {
+                switchGeneral.setChecked(false);
+                getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_general), state).commit();
+            }
+
+            getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(key, state).commit();
         }
 
-        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_general), state).commit();
-        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_homework), state).commit();
-        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_test), state).commit();
-        getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_note), state).commit();
+        private void setAllSwitches(boolean state, Switch[] switches) {
+            for (Switch sw : switches) {
+                if (!state) {
+                    sw.setAlpha(0.33f);
+                    sw.setClickable(false);
+                } else {
+                    sw.setAlpha(1f);
+                    sw.setClickable(true);
+                }
+
+                sw.setChecked(state);
+            }
+
+            getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_general), state).commit();
+            getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_homework), state).commit();
+            getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_test), state).commit();
+            getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_note), state).commit();
+        }
     }
 }
