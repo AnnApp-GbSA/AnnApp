@@ -226,9 +226,9 @@
     <string name="blue_shades">Blautöne</string>
     <string name="colorful">Bunt</string>
     <string name="press_hold_addLesson">Lange auf einer leeren Stunde bleiben, um eine Neue hinzuzufügen</string>
-    <string name="password">passwort</string>
+    <string name="password">Passwort</string>
     <string name="Username_point">Benutzername:</string>
-    <string name="username">benutzername</string>
+    <string name="username">Benutzername</string>
     <string name="password_point">Passwort:</string>
     <string name="feedback">Feedback</string>
     <string name="im_export_timetable">Stundenplan im-/exportieren</string>

@@ -11,6 +11,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -86,6 +87,7 @@ public class SettingsFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        Toast.makeText(getContext(), "Open App Information", Toast.LENGTH_LONG).show();
                         ((MainActivity) getContext()).setFragment(AppInformationFragment.TAG);
                     }
                 }
@@ -179,7 +181,7 @@ public class SettingsFragment extends Fragment {
         try {
             int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
             notificationTimeBtn.setText(String.valueOf((int) Math.floor(notiTime / 60)) + ":" + String.format("%02d", notiTime % 60));
-        } catch (Exception e) {
+        }catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -386,6 +388,7 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
 
 
+
                 new FileChooser(getActivity()).setFileListener(new FileChooser.FileSelectedListener() {
                     @Override
                     public void fileSelected(File file) {
@@ -410,7 +413,7 @@ public class SettingsFragment extends Fragment {
 
         //Securon saving
         EditText securonUsername = root.findViewById(R.id.securonUsername);
-        EditText securonPassword = root.findViewById(R.id.securonPassword);
+        TextInputEditText securonPassword = root.findViewById(R.id.securonPassword);
 
         securonUsername.setText(getActivity().getPreferences(MODE_PRIVATE).getString(getString(R.string.key_username), ""));
         securonPassword.setText(getActivity().getPreferences(MODE_PRIVATE).getString(getString(R.string.key_password), ""));
@@ -653,7 +656,8 @@ public class SettingsFragment extends Fragment {
                         public void onClick(DialogInterface dialog, int id) {
 
                         }
-                    });
+                    })
+            .setTitle(getContext().getString(R.string.settings));
 
             AlertDialog alertDialog = builder.show();
 
@@ -739,7 +743,7 @@ public class SettingsFragment extends Fragment {
                 if (!state) {
                     sw.setAlpha(0.33f);
                     sw.setClickable(false);
-                } else {
+                }else{
                     sw.setAlpha(1f);
                     sw.setClickable(true);
                 }

@@ -197,7 +197,7 @@ public class CalendarFragment extends Fragment {
         eventList.removeAllViews();
         if (eventsThisDay.isEmpty()) {
             event.setVisibility(View.VISIBLE);
-            event.setText("    "+R.string.noEventMessage);
+            event.setText("    " + getString(R.string.noEventMessage));
             return false;
         }
         event.setVisibility(View.GONE);

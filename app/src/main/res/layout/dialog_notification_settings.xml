@@ -8,30 +8,17 @@
         android:orientation="vertical"
         android:background="?colorBackground">
 
-    <LinearLayout
+    <Space
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?android:headerBackground">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings"
-            android:textSize="28sp"
-            android:textColor="@android:color/white"
-            android:background="?android:headerBackground"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginStart="4dp"/>
-
-    </LinearLayout>
+        android:layout_height="8dp" />
 
         <Switch
             android:layout_marginTop="4dp"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="Benachrichtigungen erhalten"
             android:textColor="?android:textColor"
             android:id="@+id/not_general"/>
@@ -40,34 +27,39 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom="5dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
             android:layout_marginTop="5dp"
             android:background="?android:attr/listDivider" />
 
         <Switch
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:id="@+id/not_homework"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="Hausaufgabe"
             android:textColor="?android:textColor"/>
 
         <Switch
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:id="@+id/not_test"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="Test"
             android:textColor="?android:textColor"/>
 
 
         <Switch
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:id="@+id/not_note"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:text="Notiz"
             android:textColor="?android:textColor"/>
 

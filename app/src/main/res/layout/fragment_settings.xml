@@ -2,6 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_margin="5dp">
 <LinearLayout
     android:layout_width="match_parent"
@@ -245,50 +246,43 @@
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="0"
-                android:text="@string/Username_point"/>
-
-            <EditText
-                android:id="@+id/securonUsername"
+            <android.support.design.widget.TextInputLayout
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="right"
-                android:hint="@string/username"
-                android:inputType="text"
-                android:theme="@style/ThemeEditText"
-                />
+                app:passwordToggleEnabled="true">
+
+                <EditText
+                    android:id="@+id/securonUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:hint="@string/username"
+                    android:inputType="text"
+                    android:theme="@style/ThemeEditText" />
+
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:layout_weight="0"
-                android:text="@string/password_point"/>
-
-            <EditText
-                android:id="@+id/securonPassword"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/etPasswordLayout"
+                android:layout_gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="5dp"
-                android:layout_weight="1"
-                android:ems="10"
-                android:gravity="right"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:theme="@style/ThemeEditText"
-                />
+                app:passwordToggleEnabled="true">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/securonPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/ThemeEditText"
+                    android:hint="@string/password"
+                    android:inputType="textPassword"/>
+            </android.support.design.widget.TextInputLayout>
         </LinearLayout>
 
     </LinearLayout>

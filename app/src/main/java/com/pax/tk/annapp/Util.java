@@ -429,7 +429,7 @@ public class Util {
      */
     public static void createPushNotification(Context context, int ID, String Description, String subject, int smallIcon/*, Bitmap largeIcon*/) {
 
-        final String CHANNEL_1_ID = "channel1";
+        final String CHANNEL_1_ID = "channel_1";
 
         // Create the NotificationChannel, but only on API 26+ because
         // the NotificationChannel class is new and not in the support library

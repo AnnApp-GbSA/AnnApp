@@ -296,8 +296,13 @@
     <style name="TimePickerDialogTheme" parent="@style/Theme.AppCompat.Dialog">
         <item name="android:timePickerStyle">@style/TimePickerStyle</item>
         <item name="android:timePickerMode">clock</item>
+
         <item name="android:textColor">?android:headerBackground</item>
         <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:editTextColor">?android:calendarTextColor</item>
+
+        <item name="colorControlHighlight">?android:textColor</item>
+        <item name="colorControlNormal">?android:headerBackground</item>
         <item name="android:popupBackground">@android:color/transparent</item>
         <item name="colorControlActivated">?android:headerBackground</item>
     </style>
@@ -306,7 +311,7 @@
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:headerBackground">?android:headerBackground</item>
-        <item name="android:background">@color/dark_background_color</item>
+        <item name="android:background">?colorBackground</item>
 
         <item name="android:numbersTextColor">?android:calendarTextColor</item>
         <item name="android:numbersInnerTextColor">?android:calendarTextColor</item>
@@ -315,7 +320,6 @@
         <item name="android:timePickerMode">clock</item>
 
         <item name="android:numbersBackgroundColor">?android:numbersBackgroundColor</item>
-        <item name="android:textColor">?android:textColor</item>
     </style>
 
 
