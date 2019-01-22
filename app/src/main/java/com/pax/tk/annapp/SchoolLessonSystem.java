@@ -2,10 +2,6 @@ package com.pax.tk.annapp;
 
 import java.util.Set;
 
-/**
- * Created by Petrus on 26.03.2018.
- */
-
 public class SchoolLessonSystem {
     private int schoolstart; //Minutes after midnight
     private int lessonLenght;

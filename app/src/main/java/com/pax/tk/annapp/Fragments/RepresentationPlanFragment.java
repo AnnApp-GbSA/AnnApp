@@ -2,12 +2,16 @@ package com.pax.tk.annapp.Fragments;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.Context;
 import android.graphics.Color;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.RenderProcessGoneDetail;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
@@ -18,16 +22,18 @@ import android.widget.Toast;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
 import com.pax.tk.annapp.R;
+import com.pax.tk.annapp.Util;
 
 /**
  * Created by Tobi on 20.09.2017.
  */
 
-public class RepresentationPlan extends Fragment {
+public class RepresentationPlanFragment extends Fragment {
     View root;
     WebView webView;
     WebView webView2;
     int color;
+    private SwipeRefreshLayout mSwipeLayout;
 
 
     public static final String TAG = "RepresentationPlanFragment";
@@ -57,32 +63,57 @@ public class RepresentationPlan extends Fragment {
         webView = root.findViewById(R.id.webView);
         webView2 = root.findViewById(R.id.webView2);
 
+        mSwipeLayout = root.findViewById(R.id.swipeRefreshLayout);
+        TypedValue b = new TypedValue();
+        getContext().getTheme().resolveAttribute(R.attr.colorBackground, b, true);
+        mSwipeLayout.setProgressBackgroundColorSchemeColor(b.data);
+
+        mSwipeLayout.setColorSchemeColors(Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000));
+
+        mSwipeLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                setWebView(webView, "http://gym-anna.de/vplan_annapp/subst_001.htm");
+                setWebView(webView2, "http://gym-anna.de/vplan_annapp/subst_002.htm");
+            }
+        });
+
         setWebView(webView, "http://gym-anna.de/vplan_annapp/subst_001.htm");
         setWebView(webView2, "http://gym-anna.de/vplan_annapp/subst_002.htm");
+
+
 
 
         return root;
     }
 
+    public boolean checkInternetConnection() {
+        Context context = getContext();
+        ConnectivityManager con_manager = (ConnectivityManager)
+                context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        return (con_manager.getActiveNetworkInfo() != null
+                && con_manager.getActiveNetworkInfo().isAvailable()
+                && con_manager.getActiveNetworkInfo().isConnected());
+    }
+
 
     void setWebView(WebView webView, String url){
+
+        if (!checkInternetConnection()){
+            webView.setVisibility(View.GONE);
+            root.findViewById(R.id.noInternetConnection).setVisibility(View.VISIBLE);
+        }
+
         webView.getSettings().setJavaScriptEnabled(false);
+        mSwipeLayout.setRefreshing(true);
 
-        webView.setWebViewClient(new WebViewClient() {
-            @SuppressWarnings("deprecation")
+        webView.setWebChromeClient(new WebChromeClient() {
+
             @Override
-            public void onReceivedError(WebView view, int errorCode, String description, String failingUrl) {
-                webView.setVisibility(View.GONE);
-                root.findViewById(R.id.noInternetConnection).setVisibility(View.VISIBLE);
-            }
-
-            @TargetApi(android.os.Build.VERSION_CODES.M)
-            @Override
-            public void onReceivedError(WebView view, WebResourceRequest req, WebResourceError rerr) {
-                // Redirect to deprecated method, so you can use it in all SDK versions
-                webView.setVisibility(View.GONE);
-                root.findViewById(R.id.noInternetConnection).setVisibility(View.VISIBLE);
-
+            public void onProgressChanged(WebView view, int newProgress) {
+                super.onProgressChanged(view, newProgress);
+                mSwipeLayout.setRefreshing(false);
             }
         });
 

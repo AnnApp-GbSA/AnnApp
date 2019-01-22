@@ -163,7 +163,7 @@
     <string name="name_warning_empty">Der Name darf nicht leer sein</string>
     <string name="name_warning_dup">Es existiert bereits ein Fach mit dem Namen \"</string>
     <string name="delete_warning_1">Wollen Sie diese Stunde wirklich löschen?</string>
-    <string name="delete_warning_2_1">Wollen Sie wirklich alle</string>
+    <string name="delete_warning_2_1">Wollen Sie wirklich alle </string>
     <string name="delete_warning_2_2">stunden löschen?</string>
     <string name="delete_warning_3">Wollen Sie wirklich das gesamte Fach löschen? Dies inkludiert sowohl alle Stunden, als auch sämtliche Noten und Aufgaben!</string>
     <string name="nextLesson">Nächste Stunde</string>

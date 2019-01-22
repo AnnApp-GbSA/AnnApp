@@ -298,6 +298,10 @@ public class TasksFragment extends Fragment {
                     setAlarm(getContext(), eventText, subject.getName(), id, notidate);
                     (new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate));
                 }
+                /*if(!notidate.before(Calendar.getInstance())) {
+                    (new Util()).setAlarm(getContext(), eventText, subject.getName(), id, notidate);
+                    //(new NotificationStorage(getContext())).saveNotification(new Notification(eventText, subject.getName(), id, notidate.getTimeInMillis()));
+                }*/
                 event = new Event(Util.getSubjectColor(getContext(), subject), due.getTimeInMillis(),  due.getTimeInMillis() + "°°" + "°°" + eventText + "°°" + String.valueOf(id));
                 manager.addPrivateEvent(event);
 

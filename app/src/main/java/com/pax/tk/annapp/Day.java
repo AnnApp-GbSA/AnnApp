@@ -66,7 +66,8 @@ public class Day implements Serializable {
                 result += "\n        lesson " + l.getTime() +
                         "{\n            subject: {\n                " + "name: " + l.getSubject().getName() +
                         "\n                room: " + l.getSubject().getRoom() +
-                        "\n                teacher: " + l.getSubject().getTeacher();
+                        "\n                teacher: " + l.getSubject().getTeacher() +
+                        "\n                rating: " + l.getSubject().getRatingSub();
 
                 result += "\n            }";
 

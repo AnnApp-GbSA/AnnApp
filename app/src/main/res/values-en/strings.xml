@@ -22,8 +22,8 @@
     <string name="next2Lesson">The lesson after next</string>
     <string name="nextLesson">Next lesson</string>
     <string name="delete_warning_3">Do you really want to delete the entire subject? This includes all lessons as well as all notes and tasks!</string>
-    <string name="delete_warning_2_2">delete every lesson?</string>
-    <string name="delete_warning_2_1">Do you really want to</string>
+    <string name="delete_warning_2_2">-lessons?</string>
+    <string name="delete_warning_2_1">Do you really want to delete all </string>
     <string name="delete_warning_1">Do you really want to delete this lesson?</string>
     <string name="name_warning_dup">A subject already exists with that name.</string>
     <string name="name_warning_empty">The name must not be empty</string>

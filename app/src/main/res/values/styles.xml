@@ -300,29 +300,31 @@
         <item name="android:textColorPrimary">@android:color/white</item>
         <item name="android:popupBackground">@android:color/transparent</item>
         <item name="colorControlActivated">?android:headerBackground</item>
-
     </style>
 
     <style name="TimePickerStyle" parent="@android:style/Widget.Material.TimePicker">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:headerBackground">?android:headerBackground</item>
-        <item name="android:background">?colorBackground</item>
+        <item name="android:background">@color/dark_background_color</item>
 
         <item name="android:numbersTextColor">?android:calendarTextColor</item>
         <item name="android:numbersInnerTextColor">?android:calendarTextColor</item>
         <item name="android:numbersSelectorColor">?android:headerBackground</item>
 
+        <item name="android:timePickerMode">clock</item>
+
         <item name="android:numbersBackgroundColor">?android:numbersBackgroundColor</item>
+        <item name="android:textColor">?android:textColor</item>
     </style>
 
 
     <style name="DatePickerStyle" parent="@android:style/Widget.Material.DatePicker">
         <item name="android:headerBackground">?android:headerBackground</item>
         <item name="android:textColor">?android:calendarTextColor</item>
-        <item name="android:textColorPrimary">?android:calendarTextColor</item>
+        <item name="android:textColorPrimary">?android:textColor</item>
         <item name="android:colorAccent">?colorAccent</item>
-        <item name="android:textColorSecondary">?android:calendarTextColor</item>
+        <item name="android:textColorSecondary">?android:textColor</item>
         <item name="android:background">?colorBackground</item>
     </style>
 

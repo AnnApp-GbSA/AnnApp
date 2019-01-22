@@ -23,14 +23,12 @@ import com.pax.tk.annapp.Fragments.FeedbackFragment;
 import com.pax.tk.annapp.Fragments.GradeChildFragment;
 import com.pax.tk.annapp.Fragments.GradesFragment;
 import com.pax.tk.annapp.Fragments.HomeFragment;
-import com.pax.tk.annapp.Fragments.RepresentationPlan;
+import com.pax.tk.annapp.Fragments.RepresentationPlanFragment;
 import com.pax.tk.annapp.Fragments.SecuronFragment;
 import com.pax.tk.annapp.Fragments.SettingsFragment;
 import com.pax.tk.annapp.Fragments.TasksFragment;
 import com.pax.tk.annapp.Fragments.TimetableFragment;
 import com.pax.tk.annapp.Fragments.TutorialFragment;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -222,7 +220,7 @@ public class MainActivity extends AppCompatActivity
         }  else if (id == R.id.nav_securon) {
             setFragment(SecuronFragment.TAG);
         } else if (id == R.id.nav_representationplan) {
-            setFragment(RepresentationPlan.TAG);
+            setFragment(RepresentationPlanFragment.TAG);
         } else if (id == R.id.nav_annanews) {
             setFragment(AnnanewsFragment.TAG);
         } else if (id == R.id.nav_settings) {
@@ -289,8 +287,8 @@ public class MainActivity extends AppCompatActivity
             case SecuronFragment.TAG:
                 fragment = new SecuronFragment();
                 break;
-            case RepresentationPlan.TAG:
-                fragment = new RepresentationPlan();
+            case RepresentationPlanFragment.TAG:
+                fragment = new RepresentationPlanFragment();
                 break;
             case AnnanewsFragment.TAG:
                 fragment = new AnnanewsFragment();
@@ -377,7 +375,7 @@ public class MainActivity extends AppCompatActivity
             case GradeChildFragment.TAG:
                 navigationView.getMenu().getItem(2).setChecked(true);
                 break;
-            case RepresentationPlan.TAG:
+            case RepresentationPlanFragment.TAG:
                 navigationView.getMenu().getItem(6).setChecked(true);
                 break;
         }

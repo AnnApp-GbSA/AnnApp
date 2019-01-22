@@ -8,7 +8,9 @@ import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -41,6 +43,8 @@ import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.SchoolLessonSystem;
 import com.pax.tk.annapp.Manager;
+import com.pax.tk.annapp.Subject;
+import com.pax.tk.annapp.Util;
 import com.pax.tk.annapp.Util;
 
 import static android.content.Context.MODE_PRIVATE;
@@ -82,7 +86,6 @@ public class SettingsFragment extends Fragment {
                 new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Toast.makeText(getContext(), "Open App Information", Toast.LENGTH_LONG).show();
                         ((MainActivity) getContext()).setFragment(AppInformationFragment.TAG);
                     }
                 }
@@ -176,7 +179,7 @@ public class SettingsFragment extends Fragment {
         try {
             int notiTime = getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480);
             notificationTimeBtn.setText(String.valueOf((int) Math.floor(notiTime / 60)) + ":" + String.format("%02d", notiTime % 60));
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -198,7 +201,7 @@ public class SettingsFragment extends Fragment {
                 System.out.println(minute);
                 int hourOfDay = (int) Math.floor(getActivity().getPreferences(MODE_PRIVATE).getInt(getString(R.string.key_notificationTime), 480) / 60);
 
-                TimePickerDialog tpd = new TimePickerDialog(getContext(),R.style.TimePickerDialogTheme, onTimeSetListener, hourOfDay, minute, true);
+                TimePickerDialog tpd = new TimePickerDialog(getContext(), R.style.TimePickerDialogTheme, onTimeSetListener, hourOfDay, minute, true);
 
                 tpd.show();
 
@@ -383,7 +386,6 @@ public class SettingsFragment extends Fragment {
             public void onClick(View v) {
 
 
-
                 new FileChooser(getActivity()).setFileListener(new FileChooser.FileSelectedListener() {
                     @Override
                     public void fileSelected(File file) {
@@ -425,10 +427,9 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().equals("")){
+                if (!s.toString().equals("")) {
                     getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), s.toString()).commit();
-                }
-                else
+                } else
                     getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), "").commit();
             }
         });
@@ -445,14 +446,12 @@ public class SettingsFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (!s.toString().isEmpty()){
+                if (!s.toString().isEmpty()) {
                     getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), s.toString()).commit();
-                }
-                else
+                } else
                     getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), "").commit();
             }
         });
-
 
 
         return root;
@@ -465,53 +464,114 @@ public class SettingsFragment extends Fragment {
         int lesson = 0;
         int stage = 0;
 
-        Lesson newLesson = new Lesson(null, null, 0, 0);
+        Lesson newLesson = null;
+        Subject newSubject = null;
 
         String subjectName = "";
         String subjectRoom = "";
+        String lessonRoom = null;
+        String subjectTeacher = "";
+        int subjectRating = 1;
+        int addedLessons = 0;
+        int lessonCount = 0;
 
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
+            int currentStage = 0;
 
             while ((line = br.readLine()) != null) {
                 text.append(line);
                 text.append('\n');
 
-                int currentStage = 0;
-                while(line.startsWith(" ")){
-                    line = line.substring(1);
-                    currentStage++;
-                }
-                currentStage /= 4;
-                System.out.println("stage: "+currentStage);
+                if (line.contains("lesson"))
+                    lesson++;
 
-                if (line.startsWith("day")){
-                    day=Integer.valueOf(line.replace("day", "").replace("{", "").replace(" ", ""));
+                currentStage += Util.occurancesOfCharInString(line, '{');
+                currentStage -= Util.occurancesOfCharInString(line, '}');
+                //System.out.println("stage: "+currentStage);
+
+                if (line.startsWith("day")) {
+                    day = Integer.valueOf(line.replace("day", "").replace("{", "").replace(" ", ""));
                     System.out.println("day: " + day);
                 }
-                if (line.contains("lesson") && !line.contains("lessons")){
-                    lesson= Integer.valueOf(line.replace(" ","").replace("lesson", "").replace("{", ""));
+                if (line.contains("lesson") && !line.contains("lessons")) {
+                    lesson = Integer.valueOf(line.replace(" ", "").replace("lesson", "").replace("{", ""));
                     System.out.println("lesson: " + lesson);
                 }
-                if (currentStage == 4){
-                    if (line.replace(" ","").startsWith("name:")){
-                        subjectName = line.replace("name:", "").replace(" ","");
-                        System.out.println("name: "+subjectName);
-                    } else if (line.replace(" ","").startsWith("room")){
-                        subjectRoom = line.replace("room:", "").replace(" ","");
-                        System.out.println("room: "+subjectRoom);
+                if (currentStage == 4) {
+                    if (line.replace(" ", "").startsWith("name:")) {
+                        subjectName = Util.cutEdgingSpaces(line.replace("name:", ""));
+                        System.out.println("name: " + subjectName);
+                    } else if (line.replace(" ", "").startsWith("room")) {
+                        subjectRoom = Util.cutEdgingSpaces(line.replace("room:", ""));
+                        System.out.println("room: " + subjectRoom);
+                    } else if (line.replace(" ", "").startsWith("teacher")) {
+                        //TODO keep spaces in the middle of a name
+                        subjectTeacher = Util.cutEdgingSpaces(line.replace("teacher:", ""));
+                        System.out.println("teacher: " + subjectTeacher);
+                    } else if (line.replace(" ", "").startsWith("rating")) {
+                        System.out.println("rating: " + line.substring(line.length() - 1));
+                        subjectRating = Integer.valueOf(line.substring(line.length() - 1));
                     }
 
+                }
+
+                if (currentStage == 3) {
+
+                    if (line.replace(" ", "").startsWith("room:")) {
+                        System.out.println("missing room");
+                        lessonRoom = line.replace("            room: ", "");
+                        System.out.println("lessonRoom: " + line.replace("            room: ", ""));
+                    }
+                }
+
+                if (currentStage == 2 && stage == 3) {
+                    System.out.println("create subject");
+                    for (Subject s :
+                            manager.getSubjects()) {
+                        if (s.getName().toLowerCase().equals(subjectName.toLowerCase())) {
+                            newSubject = s;
+                        }
+                    }
+
+                    if (!subjectName.equals("")) {
+                        if (newSubject == null) {
+                            newSubject = new Subject(subjectName, subjectRating, subjectTeacher, subjectRoom);
+                            manager.addSubject(newSubject);
+
+                        }
+
+                        newLesson = new Lesson(newSubject, lessonRoom, day, lesson);
+                        newSubject.addLesson(newLesson);
+                        manager.setLesson(newLesson);
+                        addedLessons++;
+                    } else {
+                        lessonCount--;
+                    }
+
+
+                    newLesson = null;
+                    newSubject = null;
+
+                    subjectName = "";
+                    subjectRoom = "";
+                    lessonRoom = null;
+                    subjectTeacher = "";
+                    subjectRating = 1;
                 }
 
                 stage = currentStage;
             }
             br.close();
-        }
-        catch (IOException e) {
+            if (lessonCount==addedLessons)
+                Util.createSnackbar(getContext(), "Stundenplan erfolgreich importiert", Snackbar.LENGTH_LONG, Color.WHITE);
+            else
+                Util.createSnackbar(getContext(), "Stundenplan konnte leider nicht importiert werden", Snackbar.LENGTH_LONG, Color.rgb(234, 82, 65));
+        } catch (Exception e) {
             //You'll need to add proper error handling here
+            Util.createSnackbar(getContext(), "Stundenplan konnte leider nicht importiert werden", Snackbar.LENGTH_LONG, Color.RED);
         }
 
         //text.toString gives you the result
@@ -540,9 +600,10 @@ public class SettingsFragment extends Fragment {
             writer.append(body);
             writer.flush();
             writer.close();
-            Toast.makeText(context, "Saved", Toast.LENGTH_SHORT).show();
+            Util.createSnackbar(context, "Saved", Snackbar.LENGTH_LONG, Color.WHITE);
         } catch (IOException e) {
             e.printStackTrace();
+            Util.createSnackbar(context, "Saving failed", Snackbar.LENGTH_LONG, Color.rgb(234, 82, 65));
         }
     }
 
@@ -566,7 +627,7 @@ public class SettingsFragment extends Fragment {
 
     public class ViewDialog {
 
-        public void showDialog(Activity activity){
+        public void showDialog(Activity activity) {
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), MainActivity.colorScheme);
             // Get the layout inflater
             LayoutInflater inflater = getActivity().getLayoutInflater();
@@ -633,12 +694,11 @@ public class SettingsFragment extends Fragment {
 
                     System.out.println("isChecked: " + isChecked);
 
-                    if(!isChecked) {
+                    if (!isChecked) {
                         Util.cancelAllAlarms(getContext());
                     }
                 }
             });
-
 
 
             alertDialog.getWindow().setLayout(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -649,13 +709,13 @@ public class SettingsFragment extends Fragment {
         }
     }
 
-    private void setSpecificSwitchChecked(Switch sw, boolean state, String key){
+    private void setSpecificSwitchChecked(Switch sw, boolean state, String key) {
         sw.setChecked(state);
         getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(key, state).commit();
     }
 
-    private void setAllSwitches(boolean state, Switch[] switches){
-        for (Switch sw: switches) {
+    private void setAllSwitches(boolean state, Switch[] switches) {
+        for (Switch sw : switches) {
             sw.setChecked(state);
         }
 
@@ -665,4 +725,3 @@ public class SettingsFragment extends Fragment {
         getActivity().getPreferences(MODE_PRIVATE).edit().putBoolean(getString(R.string.key_not_note), state).commit();
     }
 }
-

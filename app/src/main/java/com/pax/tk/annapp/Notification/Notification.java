@@ -53,6 +53,7 @@ public class Notification implements Serializable {
         return date;
     }
 
+        //this.date = date;
     public void setDate(long date){
         Calendar now = Calendar.getInstance();
         now.setTime(new Date(date));

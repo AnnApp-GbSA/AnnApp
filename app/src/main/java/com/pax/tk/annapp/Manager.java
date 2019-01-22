@@ -112,6 +112,16 @@ public class Manager {
         //save();
     }
 
+    public Subject getSubjectByName(String subjectName) {
+        for (Subject subject :
+                subjects) {
+            if (subject.getName().equals(subjectName)) {
+                return subject;
+            }
+        }
+        return null;
+    }
+
     /**
      * get news
      *
@@ -121,7 +131,7 @@ public class Manager {
         return news;
     }
 
-    public void addNews(News news){
+    public void addNews(News news) {
         this.news.add(news);
     }
 
@@ -297,6 +307,8 @@ public class Manager {
         int time = lesson.getTime() - 1;
         System.out.println(lesson.getTime());
         System.out.println("Lesson: " + lesson.toString());
+        if (time == -1)
+            return;
         if (lesson.getSubject() == null) {
             days[day].getLesson(time).getSubject().removeLesson(days[day].getLesson(time));
         } else if (days[day].getLesson(time) == null) {

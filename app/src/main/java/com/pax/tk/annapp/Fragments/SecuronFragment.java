@@ -85,7 +85,7 @@ public class SecuronFragment extends Fragment implements onBackPressed {
     private void init() {
 
         TypedValue a = new TypedValue();
-        getContext().getTheme().resolveAttribute(android.R.attr.backgroundTint, a, true);
+        getContext().getTheme().resolveAttribute(android.R.attr.colorBackground, a, true);
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(a.data);
 
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
@@ -120,7 +120,7 @@ public class SecuronFragment extends Fragment implements onBackPressed {
 
         path = basePath.replace("/dav", "") + parentPath;
         System.out.println("path: " + path);
-        Toast.makeText(getContext(), parentPath, Toast.LENGTH_SHORT).show();
+        ((TextView) root.findViewById(R.id.pathTextView)).setText(parentPath);
         init();
     }
 

@@ -71,7 +71,7 @@ public class AnnanewsFragment extends Fragment {
         rvAdapterNews.update();
 
         TypedValue a = new TypedValue();
-        getContext().getTheme().resolveAttribute(R.attr.backgroundTint, a, true);
+        getContext().getTheme().resolveAttribute(R.attr.colorBackground, a, true);
         mSwipeLayout.setProgressBackgroundColorSchemeColor(a.data);
 
         mSwipeLayout.setColorSchemeColors(Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000), Util.randomNumberGenerator(0, 1000000000));

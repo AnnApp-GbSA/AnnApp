@@ -20,12 +20,14 @@ import android.os.Build;
 import android.provider.Settings;
 import android.support.design.widget.BottomSheetDialog;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
 import android.view.ContextThemeWrapper;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -50,6 +52,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.Array;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -286,7 +289,7 @@ public class Util {
             ois.close();
             return o;
         } catch (Exception e) {
-            System.out.println("loading failed ----------------------------------------------------"+" "+ key +" "+"-----------------------------------------------------");
+            System.out.println("loading failed ----------------------------------------------------" + " " + key + " " + "-----------------------------------------------------");
             e.printStackTrace();
             return null;
         }
@@ -318,7 +321,7 @@ public class Util {
      * @param ic alert icon
      * @param context ...
      */
-    public static  void createAlertDialog(String title, String text, int ic, Context context) {
+    public static void createAlertDialog(String title, String text, int ic, Context context) {
         AlertDialog.Builder builder;
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -359,11 +362,10 @@ public class Util {
      * @param rangeMax biggest possible number
      * @return random number between rangeMin and rangeMax
      */
-    public static int randomNumberGenerator(int rangeMin, int rangeMax)
-    {
+    public static int randomNumberGenerator(int rangeMin, int rangeMax) {
         Random r = new Random();
         int createdRanNum = (int) Math.round(rangeMin + (rangeMax - rangeMin) * r.nextDouble());
-        return(createdRanNum);
+        return (createdRanNum);
     }
 
     /**
@@ -381,7 +383,7 @@ public class Util {
         int hourofDay = (int) Math.floor(notiTime / 60);
 
         notidate.set(Calendar.HOUR_OF_DAY, hourofDay);
-        notidate.set(Calendar.MINUTE,  notiTime % 60);
+        notidate.set(Calendar.MINUTE, notiTime % 60);
         notidate.set(Calendar.SECOND, 0);
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
@@ -470,7 +472,6 @@ public class Util {
             mNotificationManager.notify(ID /* Request Code */, mBuilder.build());
 
 
-
         } else {
             NotificationCompat.Builder notif = new NotificationCompat.Builder(context)
                     .setDefaults(NotificationCompat.DEFAULT_ALL)
@@ -494,11 +495,9 @@ public class Util {
     public void createInputDialog(Context context, Activity activity, RecyclerView recyclerView, Integer position) {
 
         //AlertDialog.Builder ad = new  AlertDialog.Builder(this.context);
-        final BottomSheetDialog bsd = new BottomSheetDialog(context,R.style.NewDialog);
+        final BottomSheetDialog bsd = new BottomSheetDialog(context, R.style.NewDialog);
 
         Manager manager = Manager.getInstance();
-
-
 
 
         View mView = View.inflate(context, R.layout.dialog_new_grade, null);
@@ -558,7 +557,7 @@ public class Util {
 
         subjectSelection.setAdapter(adapter);
 
-        if (position!=null)
+        if (position != null)
             subjectSelection.setSelection(position);
 
 
@@ -577,25 +576,28 @@ public class Util {
                 float rating = 1;
 
                 //testing which button is active for decision whether your Grade is written or whether it's not
-                if(isWritten.isChecked())
+                if (isWritten.isChecked())
                     isWrittenBool[0] = true;
-                else if(isNotWritten.isChecked())
+                else if (isNotWritten.isChecked())
                     isWrittenBool[0] = false;
 
-                if(gradeInput.getText().toString().isEmpty()){
+                if (gradeInput.getText().toString().isEmpty()) {
                     Util.createAlertDialog(context.getString(R.string.warning), context.getString(R.string.warningMessage), 0, context);
                     return;
                 }
 
-                if(!ratingInput.getText().toString().isEmpty())
+                if (!ratingInput.getText().toString().isEmpty())
                     rating = Float.parseFloat(ratingInput.getText().toString());
 
 
                 Subject subject = (Subject) subjectSelection.getSelectedItem();
-                Grade newGrade =new Grade(subject, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool[0], rating, note.getText().toString());
+                Grade newGrade = new Grade(subject, Integer.valueOf(gradeInput.getText().toString()), isWrittenBool[0], rating, note.getText().toString());
                 subject.addGrade(newGrade);
                 recyclerView.getAdapter().notifyItemChanged(manager.getSubjects().indexOf(subject));
-                ((TextView)activity.findViewById(R.id.grade)).setText(String.valueOf(manager.getWholeGradeAverage()));
+                if (position == null)
+                    ((TextView) activity.findViewById(R.id.grade)).setText(String.valueOf(manager.getWholeGradeAverage()));
+                else
+                    ((TextView) activity.findViewById(R.id.grade)).setText(String.valueOf(subject.getGradePointAverage()));
                 //((RVAdapterSubjectList)recyclerView.getAdapter()).addGrade(newGrade);
                 bsd.cancel();
             }
@@ -624,7 +626,7 @@ public class Util {
      */
     private static void askforPermission(Activity activity, String permission){
         //if(ActivityCompat.shouldShowRequestPermissionRationale(activity, permission)) {
-            //optional Dialog to explain why the permission is necessary
+        //optional Dialog to explain why the permission is necessary
         //}
         ActivityCompat.requestPermissions(activity, new String[]{permission}, STORAGE_PERMISSION_CODE);
     }
@@ -671,9 +673,45 @@ public class Util {
     public static void cancelAllAlarms(Context context){
         NotificationStorage notificationStorage = new NotificationStorage(context);
 
-        for (Notification notification : notificationStorage.getNotifications()){
+        for (Notification notification : notificationStorage.getNotifications()) {
             cancelAlarm(context, notification.getEventText(), notification.getSubjectName(), notification.getID());
         }
 
+    }
+
+    public static int occurancesOfCharInString(String input, char regex) {
+        char[] chars = input.toCharArray();
+
+        int count = 0;
+
+        for (char character :
+                chars) {
+            if (character == regex) {
+                count++;
+            }
+        }
+
+        //System.out.println("'" + regex + "' " + count + " times found in: " + input);
+
+        return count;
+    }
+
+    public static String cutEdgingSpaces(String string){
+        while (string.startsWith(" ")){
+            string = string.substring(1);
+        }
+
+        while (string.endsWith(" ")){
+            string = string.substring(0, string.length()-1);
+        }
+        return string;
+    }
+
+    public static void createSnackbar(Context context, String text, int duration, int textColor){
+        Snackbar mySnackbar = Snackbar.make(((Activity) context).getCurrentFocus(), text, duration);
+        View snackbarView = mySnackbar.getView();
+        TextView textView = (TextView) snackbarView.findViewById(android.support.design.R.id.snackbar_text);
+        textView.setTextColor(textColor);
+        mySnackbar.show();
     }
 }
