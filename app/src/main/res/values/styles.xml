@@ -302,7 +302,7 @@
         <item name="android:editTextColor">?android:calendarTextColor</item>
 
         <item name="colorControlHighlight">?android:textColor</item>
-        <item name="colorControlNormal">?android:headerBackground</item>
+        <item name="colorControlNormal">@android:color/darker_gray</item>
         <item name="android:popupBackground">@android:color/transparent</item>
         <item name="colorControlActivated">?android:headerBackground</item>
     </style>

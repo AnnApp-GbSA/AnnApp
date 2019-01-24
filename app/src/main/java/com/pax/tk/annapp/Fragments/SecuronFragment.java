@@ -7,13 +7,19 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
 import android.support.v4.content.FileProvider;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +28,7 @@ import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
 import com.github.sardine.SardineFactory;*/
 import com.pax.tk.annapp.BuildConfig;
+import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.R;
 import com.pax.tk.annapp.Util;
 import com.pax.tk.annapp.onBackPressed;
@@ -37,6 +44,8 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 public class SecuronFragment extends Fragment implements onBackPressed {
 
@@ -49,10 +58,19 @@ public class SecuronFragment extends Fragment implements onBackPressed {
     String path = basePath;
     File file;
     String inputStream;
-    Sardine sardine;
+    OkHttpSardine sardine;
     SwipeRefreshLayout swipeRefreshLayout;
     AsyncTask<Void, Void, Void> startFTPConnection = null;
     public Boolean isCancelled = false;
+
+    private String username;
+    private String password;
+    private LinearLayout loginLayout;
+    private Button loginBtn;
+    private TextView pathTextView;
+    private EditText usernameEditText;
+    private TextInputEditText passwordEditText;
+    private String outputPath;
 
     public static final String TAG = "SecuronFragment";
 
@@ -72,12 +90,88 @@ public class SecuronFragment extends Fragment implements onBackPressed {
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
         getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
+        username = getActivity().getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.key_username), "°°°");
+        password = getActivity().getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.key_password), "°°°");
+
         getActivity().setTitle("Securon");
         root = inflater.inflate(R.layout.fragment_securon, container, false);
         linearLayout = root.findViewById(R.id.linearLayout);
         swipeRefreshLayout = root.findViewById(R.id.swipeRefreshLayout);
+        loginLayout = root.findViewById(R.id.loginLayout);
+        loginBtn = root.findViewById(R.id.btn_LoginSecuron);
+        pathTextView = root.findViewById(R.id.pathTextView);
+        usernameEditText = root.findViewById(R.id.usernameEditText);
+        passwordEditText = root.findViewById(R.id.passwordEditText);
 
-        init();
+        usernameEditText.setText(username);
+        passwordEditText.setText(password);
+
+        usernameEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().equals("")) {
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), s.toString()).commit();
+                } else
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), "").commit();
+            }
+        });
+
+        passwordEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                if (!s.toString().isEmpty()) {
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), s.toString()).commit();
+                } else
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), "").commit();
+            }
+        });
+
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!usernameEditText.getText().toString().isEmpty() && !passwordEditText.getText().toString().isEmpty()){
+                    loginLayout.setVisibility(View.GONE);
+                    swipeRefreshLayout.setVisibility(View.VISIBLE);
+                    pathTextView.setVisibility(View.VISIBLE);
+
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_password), passwordEditText.getText().toString()).commit();
+                    getActivity().getPreferences(MODE_PRIVATE).edit().putString(getString(R.string.key_username), usernameEditText.getText().toString()).commit();
+
+                    init();
+
+                    Util.closeKeyboard(loginLayout, getContext());
+                }else {
+                    Util.createSnackbar(getContext(), "Benutzerdaten eingeben", Snackbar.LENGTH_SHORT, getContext().getColor(R.color.colorWhite));
+                    Util.closeKeyboard(loginLayout, getContext());
+                }
+            }
+        });
+
+        if (username.isEmpty() || password.isEmpty()){
+            //Util.createSnackbar(getContext(), "Kein Benutzername oder Passwort eingegeben", Snackbar.LENGTH_LONG, getContext().getColor(R.color.colorWhite));
+            createLoginMenu();
+        }else {
+            init();
+        }
+
 
         return root;
     }
@@ -96,6 +190,12 @@ public class SecuronFragment extends Fragment implements onBackPressed {
         });
 
         startFTPConnection = new startFTPConnection().execute((Void) null);
+    }
+
+    public void createLoginMenu(){
+        loginLayout.setVisibility(View.VISIBLE);
+        swipeRefreshLayout.setVisibility(View.GONE);
+        pathTextView.setVisibility(View.GONE);
     }
 
     @Override
@@ -120,7 +220,8 @@ public class SecuronFragment extends Fragment implements onBackPressed {
 
         path = basePath.replace("/dav", "") + parentPath;
         System.out.println("path: " + path);
-        ((TextView) root.findViewById(R.id.pathTextView)).setText(parentPath);
+        outputPath = parentPath.replace("/dav", "Home").replace("/", " > ");
+        ((TextView) root.findViewById(R.id.pathTextView)).setText(outputPath);
         init();
     }
 
@@ -148,21 +249,32 @@ public class SecuronFragment extends Fragment implements onBackPressed {
                 final String username = getActivity().getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.key_username), "°°°");
                 final String password = getActivity().getPreferences(Context.MODE_PRIVATE).getString(getString(R.string.key_password), "°°°");
 
-                if (username.equals("°°°") || password.equals("°°°")) {
-                    Toast.makeText(getContext(), R.string.set_username_and_password, Toast.LENGTH_SHORT).show();
-                    return null;
-                }
-
-
                 sardine.setCredentials(username, password, true);
+
+
                 System.out.println(username);
 
 
-                resources = sardine.list(path);
+                try {
+                    resources = sardine.list(path);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    path = basePath;
+                    Util.createSnackbar(getContext(), "Connection Failed", Snackbar.LENGTH_SHORT, getContext().getColor(R.color.colorWhite));
+                    ((MainActivity) getContext()).runOnUiThread(new Runnable() {
+
+                        @Override
+                        public void run() {
+                            createLoginMenu();
+                        }
+                    });
+                }
+
+
 
                 System.out.println("resources: " + resources);
 
-                InputStream inputStream = sardine.get("https://deby0002.securon.eu/dav/Austauschlaufwerk/12_d3/Peter Stamm_Agnes_S-Version.pptx");
+                //InputStream inputStream = sardine.get("https://deby0002.securon.eu/dav/Austauschlaufwerk/12_d3/Peter Stamm_Agnes_S-Version.pptx");
 
                 //views = new ArrayList<>();
 
@@ -198,7 +310,8 @@ public class SecuronFragment extends Fragment implements onBackPressed {
                 synchronized (resources) {
 
                     if (resources != null) {
-                        ((TextView) root.findViewById(R.id.pathTextView)).setText(resources.get(0).toString());
+                        outputPath = resources.get(0).toString().replace("/dav", "Home").replace("/", " > ");
+                        ((TextView) root.findViewById(R.id.pathTextView)).setText(outputPath.substring(0, outputPath.length() - 3));
 
                         File f2 = new File(resources.get(0).getPath());
                         f2 = f2.getParentFile();

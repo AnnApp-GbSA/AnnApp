@@ -59,7 +59,7 @@ public class TimetableFragment extends Fragment {
     boolean dividers;
 
     Subject lastSubject;
-    Subject uglyAsHellWayToCreateAOtherCoiseOption = new Subject("-", 0, null, null);
+    Subject newSubjectPattern = new Subject("-", 0, null, null);
 
     //private AbstractTableAdapter mTableViewAdapter;
     //private TableView mTableView;
@@ -84,7 +84,7 @@ public class TimetableFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        uglyAsHellWayToCreateAOtherCoiseOption.setName(getString(R.string.newSubject));
+        newSubjectPattern.setName(getString(R.string.newSubject));
         //setRowSize();
         //initData();
     }
@@ -113,7 +113,7 @@ public class TimetableFragment extends Fragment {
         if (!manager.getSubjects().isEmpty())
             lastSubject = manager.getSubjects().get(0);
         else
-            lastSubject = uglyAsHellWayToCreateAOtherCoiseOption;
+            lastSubject = newSubjectPattern;
         //RelativeLayout fragment_container = root.findViewById(R.id.fragment_container);
 
         tableLayout = root.findViewById(R.id.tableLayout);
@@ -484,7 +484,7 @@ public class TimetableFragment extends Fragment {
             roomInput.setText(subject.getRoom());
         }
         ArrayList<Subject> spinnerlist = (ArrayList<Subject>) manager.getSubjects().clone();
-        spinnerlist.add(uglyAsHellWayToCreateAOtherCoiseOption);
+        spinnerlist.add(newSubjectPattern);
 
 
 
