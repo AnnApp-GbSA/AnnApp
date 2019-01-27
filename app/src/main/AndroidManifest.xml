@@ -79,6 +79,12 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".Game.GameActivity"></activity>
+
+        <activity android:name=".FlappyBird.GameActivity"></activity>
+
+        <activity android:name=".Game.StartGame"></activity>
+
         <receiver android:name=".Notification.AlertReceiver"></receiver>
 
         <receiver

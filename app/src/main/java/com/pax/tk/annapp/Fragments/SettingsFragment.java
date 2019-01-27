@@ -392,7 +392,7 @@ public class SettingsFragment extends Fragment {
                 new FileChooser(getActivity()).setFileListener(new FileChooser.FileSelectedListener() {
                     @Override
                     public void fileSelected(File file) {
-                        parseFileToTimetable(file);
+                        Util.parseFileToTimetable(file, getContext(), manager);
                     }
                 }).showDialog();
 
@@ -458,126 +458,6 @@ public class SettingsFragment extends Fragment {
 
 
         return root;
-    }
-
-    private void parseFileToTimetable(File file) {
-        StringBuilder text = new StringBuilder();
-
-        int day = 0;
-        int lesson = 0;
-        int stage = 0;
-
-        Lesson newLesson = null;
-        Subject newSubject = null;
-
-        String subjectName = "";
-        String subjectRoom = "";
-        String lessonRoom = null;
-        String subjectTeacher = "";
-        int subjectRating = 1;
-        int addedLessons = 0;
-        int lessonCount = 0;
-
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line;
-            int currentStage = 0;
-
-            while ((line = br.readLine()) != null) {
-                text.append(line);
-                text.append('\n');
-
-                if (line.contains("lesson"))
-                    lesson++;
-
-                currentStage += Util.occurancesOfCharInString(line, '{');
-                currentStage -= Util.occurancesOfCharInString(line, '}');
-                //System.out.println("stage: "+currentStage);
-
-                if (line.startsWith("day")) {
-                    day = Integer.valueOf(line.replace("day", "").replace("{", "").replace(" ", ""));
-                    System.out.println("day: " + day);
-                }
-                if (line.contains("lesson") && !line.contains("lessons")) {
-                    lesson = Integer.valueOf(line.replace(" ", "").replace("lesson", "").replace("{", ""));
-                    System.out.println("lesson: " + lesson);
-                }
-                if (currentStage == 4) {
-                    if (line.replace(" ", "").startsWith("name:")) {
-                        subjectName = Util.cutEdgingSpaces(line.replace("name:", ""));
-                        System.out.println("name: " + subjectName);
-                    } else if (line.replace(" ", "").startsWith("room")) {
-                        subjectRoom = Util.cutEdgingSpaces(line.replace("room:", ""));
-                        System.out.println("room: " + subjectRoom);
-                    } else if (line.replace(" ", "").startsWith("teacher")) {
-                        //TODO keep spaces in the middle of a name
-                        subjectTeacher = Util.cutEdgingSpaces(line.replace("teacher:", ""));
-                        System.out.println("teacher: " + subjectTeacher);
-                    } else if (line.replace(" ", "").startsWith("rating")) {
-                        System.out.println("rating: " + line.substring(line.length() - 1));
-                        subjectRating = Integer.valueOf(line.substring(line.length() - 1));
-                    }
-
-                }
-
-                if (currentStage == 3) {
-
-                    if (line.replace(" ", "").startsWith("room:")) {
-                        System.out.println("missing room");
-                        lessonRoom = line.replace("            room: ", "");
-                        System.out.println("lessonRoom: " + line.replace("            room: ", ""));
-                    }
-                }
-
-                if (currentStage == 2 && stage == 3) {
-                    System.out.println("create subject");
-                    for (Subject s :
-                            manager.getSubjects()) {
-                        if (s.getName().toLowerCase().equals(subjectName.toLowerCase())) {
-                            newSubject = s;
-                        }
-                    }
-
-                    if (!subjectName.equals("")) {
-                        if (newSubject == null) {
-                            newSubject = new Subject(subjectName, subjectRating, subjectTeacher, subjectRoom);
-                            manager.addSubject(newSubject);
-
-                        }
-
-                        newLesson = new Lesson(newSubject, lessonRoom, day, lesson);
-                        newSubject.addLesson(newLesson);
-                        manager.setLesson(newLesson);
-                        addedLessons++;
-                    } else {
-                        lessonCount--;
-                    }
-
-
-                    newLesson = null;
-                    newSubject = null;
-
-                    subjectName = "";
-                    subjectRoom = "";
-                    lessonRoom = null;
-                    subjectTeacher = "";
-                    subjectRating = 1;
-                }
-
-                stage = currentStage;
-            }
-            br.close();
-            if (lessonCount == addedLessons)
-                Util.createSnackbar(getContext(), "Stundenplan erfolgreich importiert", Snackbar.LENGTH_LONG, Color.WHITE);
-            else
-                Util.createSnackbar(getContext(), "Stundenplan konnte leider nicht importiert werden", Snackbar.LENGTH_LONG, Color.rgb(234, 82, 65));
-        } catch (Exception e) {
-            //You'll need to add proper error handling here
-            Util.createSnackbar(getContext(), "Stundenplan konnte leider nicht importiert werden", Snackbar.LENGTH_LONG, Color.RED);
-        }
-
-        //text.toString gives you the result
     }
 
     /**

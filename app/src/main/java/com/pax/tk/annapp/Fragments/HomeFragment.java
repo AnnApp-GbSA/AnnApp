@@ -1,6 +1,9 @@
 package com.pax.tk.annapp.Fragments;
 
+import android.app.Activity;
 import android.app.Fragment;
+import android.app.FragmentManager;
+import android.content.Intent;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -13,9 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.Space;
 import android.widget.TextView;
 
+import java.io.File;
+import java.sql.SQLOutput;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
+import com.pax.tk.annapp.Day;
+import com.pax.tk.annapp.FileChooser;
 import com.pax.tk.annapp.Lesson;
 import com.pax.tk.annapp.MainActivity;
 import com.pax.tk.annapp.Manager;
@@ -34,6 +41,8 @@ public class HomeFragment extends Fragment {
     Manager manager;
     View divider;
     View fragment;
+    Button newTimeTable;
+    Button importTimeTable;
 
     public static final String TAG = "HomeFragment";
 
@@ -47,13 +56,17 @@ public class HomeFragment extends Fragment {
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         getActivity().findViewById(R.id.grade).setVisibility(View.GONE);
         getActivity().findViewById(R.id.syncWithCalendar).setVisibility(View.GONE);
         getActivity().findViewById(R.id.appInformationBtn).setVisibility(View.GONE);
 
         getActivity().setTitle(getString(R.string.Home));
         //root = inflater.inflate(R.layout.fragment_home, container, false);
+
+
+        /*Intent intent = new Intent(getContext(), com.pax.tk.annapp.FlappyBird.GameActivity.class);
+        getContext().startActivity(intent);*/
+
 
         if (root != null) {
             ViewGroup parent = (ViewGroup) root.getParent();
@@ -69,14 +82,35 @@ public class HomeFragment extends Fragment {
         manager = Manager.getInstance();
 
         timeTable = root.findViewById(R.id.timeTable);
-
         divider = root.findViewById(R.id.divider);
-
         fragment = root.findViewById(R.id.fragment);
+        newTimeTable = root.findViewById(R.id.newTimeTable);
+        importTimeTable = root.findViewById(R.id.importTimeTable);
+        newTimeTable.setText(R.string.newTimeTable);
+        importTimeTable.setText(R.string.importTimeTable);
 
+        int i = 0;
+        for (Day d:
+             manager.getDays()) {
+            boolean subject = false;
+            for (Lesson l:
+                 d.getLessons()) {
+                try {
+                    if (l.getSubject() != null) {
+                        subject = true;
+                    }
+                }catch (Exception e){e.printStackTrace();}
+            }
+            if(d.getLessons().isEmpty() || !subject){
+                i++;
+            }
+        }
+        if(i >= manager.getDays().length){
+            setTimeTableEmpty();
+        }else{
+            setTimeTable();
+        }
 
-
-        setTimeTable();
         System.out.println("HomeCreated");
         //Util.createPushNotification(this.getContext(), 0, "AnnApp", "Du hast die AnnApp\ngestartet!", R.drawable.ic_add/*, BitmapFactory.decodeResource(getResources(), R.drawable.ic_add)*/);
 
@@ -87,12 +121,55 @@ public class HomeFragment extends Fragment {
     }
 
     /**
+     * initializing buttons for an empty timetable
+     */
+    private void setTimeTableEmpty(){
+        timeTable.setVisibility(View.GONE);
+        divider.setVisibility(View.GONE);
+        fragment.setVisibility(View.GONE);
+        newTimeTable.setVisibility(View.VISIBLE);
+        importTimeTable.setVisibility(View.VISIBLE);
+
+        newTimeTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Fragment newFragment = new TimetableFragment();
+                Bundle bundle = new Bundle();
+                newFragment.setArguments(bundle);
+
+                FragmentManager fragmentManager = getFragmentManager();
+                fragmentManager.beginTransaction()
+                        .replace(R.id.content_frame, newFragment)
+                        .addToBackStack(TimetableFragment.TAG)
+                        .commit();
+            }
+        });
+
+        importTimeTable.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new FileChooser(getActivity()).setFileListener(new FileChooser.FileSelectedListener() {
+                    @Override
+                    public void fileSelected(File file) {
+                        Util.parseFileToTimetable(file, getContext(), manager);
+                    }
+                }).showDialog();
+            }
+        });
+    }
+
+    /**
      * initializing the timetable
      */
     void setTimeTable() {
+        timeTable.setVisibility(View.VISIBLE);
+        divider.setVisibility(View.VISIBLE);
+        fragment.setVisibility(View.VISIBLE);
+        newTimeTable.setVisibility(View.GONE);
+        importTimeTable.setVisibility(View.GONE);
         GregorianCalendar gc = new GregorianCalendar();
         int i = gc.get(Calendar.DAY_OF_WEEK);
-        int dayOfWeek = -1;
+        int dayOfWeek = 0;
         switch (i) {
             case 2:
                 dayOfWeek = 0;
@@ -110,65 +187,58 @@ public class HomeFragment extends Fragment {
                 dayOfWeek = 4;
                 break;
             case 7:
-                dayOfWeek = -1;
+                dayOfWeek = 0;
                 break;
             case 8:
-                dayOfWeek = -1;
+                dayOfWeek = 0;
                 break;
         }
 
-
-        if (dayOfWeek != -1) {
-
-            for (Lesson l :
-                    manager.getDays()[dayOfWeek].getLessons()) {
-
-                /*Button btn;
-
-                System.out.println(manager.getDays()[dayOfWeek].getLessons());
-
-                timeTable.setShowDividers(View.VISIBLE);
-
-                if (l == null || l.getSubject() == null)
-
-                    btn = getEmptyCellButton("");
-                else {
-                    btn = getCellButton(l.getSubject(), "");
-                    btn.setText(l.getSubject().getName());
-                }*/
-
-                View btn;
-
-                System.out.println(manager.getDays()[dayOfWeek].getLessons());
-
-                timeTable.setShowDividers(View.VISIBLE);
-
-                if (l == null || l.getSubject() == null)
-                    btn = getEmptyCellButton("");
-                else {
-                    btn = getCellCardView(l.getSubject(), "");
-                }
-
-                timeTable.addView(btn);
-                Space space = new Space(getContext());
-                space.setMinimumHeight(8);
-                timeTable.addView(space);
+        while(manager.getDays()[dayOfWeek].getLessons().isEmpty() || checkDayEmpty(dayOfWeek)){
+            dayOfWeek++;
+            if(dayOfWeek > 4){
+                dayOfWeek = 0;
             }
-
-            try {
-                timeTable.removeViewAt(0);
-            } catch (NullPointerException npe) {
-                divider.setVisibility(View.GONE);
-            }
-        } else {
-
-            TextView tv = new TextView(this.getContext());
-            tv.setText(R.string.noSchoolToday);
-            tv.setPadding(0, 50, 0, 0);
-            tv.setGravity(View.TEXT_ALIGNMENT_CENTER);
-            tv.setTextColor(getResources().getColor(R.color.colorAccent));
-            timeTable.addView(tv);
         }
+        for (Lesson l :
+                manager.getDays()[dayOfWeek].getLessons()) {
+
+            View btn;
+
+            System.out.println(manager.getDays()[dayOfWeek].getLessons());
+
+            timeTable.setShowDividers(View.VISIBLE);
+
+            if (l == null || l.getSubject() == null)
+                btn = getEmptyCellButton("");
+            else {
+                btn = getCellCardView(l.getSubject(), "");
+            }
+
+            timeTable.addView(btn);
+            Space space = new Space(getContext());
+            space.setMinimumHeight(8);
+            timeTable.addView(space);
+        }
+
+        try {
+            timeTable.removeViewAt(0);
+        } catch (NullPointerException npe) {
+            divider.setVisibility(View.GONE);
+        }
+    }
+
+    private boolean checkDayEmpty(int dayOfWeek){
+        boolean empty = true;
+        for (Lesson l:
+                manager.getDays()[dayOfWeek].getLessons()) {
+            try {
+                if (l.getSubject() != null) {
+                    empty = false;
+                }
+            }catch (Exception e){e.printStackTrace();}
+        }
+        return empty;
     }
 
     /**

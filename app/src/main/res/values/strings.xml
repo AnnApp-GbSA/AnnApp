@@ -97,6 +97,8 @@
     </string-array>
 
     <string name="key_schoolstart" translatable="false">schoolstart</string>
+    <string name="newTimeTable">Stundenplan erstellen</string>
+    <string name="importTimeTable">Stundenplan importieren</string>
     <string name="key_notificationTime" translatable="false">notificationTime</string>
     <string name="schoolCalendar">Schulkalender</string>
     <string name="AnnaNews">AnnaNews</string>
