@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
@@ -18,7 +19,9 @@ import android.widget.TextView;
 
 import java.io.File;
 import java.sql.SQLOutput;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 import com.pax.tk.annapp.Day;
@@ -170,27 +173,35 @@ public class HomeFragment extends Fragment {
         GregorianCalendar gc = new GregorianCalendar();
         int i = gc.get(Calendar.DAY_OF_WEEK);
         int dayOfWeek = 0;
+        int realDayOfWeek = 0;
         switch (i) {
             case 2:
                 dayOfWeek = 0;
+                realDayOfWeek = 0;
                 break;
             case 3:
                 dayOfWeek = 1;
+                realDayOfWeek = 1;
                 break;
             case 4:
                 dayOfWeek = 2;
+                realDayOfWeek = 2;
                 break;
             case 5:
                 dayOfWeek = 3;
+                realDayOfWeek = 3;
                 break;
             case 6:
                 dayOfWeek = 4;
+                realDayOfWeek = 4;
                 break;
             case 7:
                 dayOfWeek = 0;
+                realDayOfWeek = 0;
                 break;
             case 8:
                 dayOfWeek = 0;
+                realDayOfWeek = 0;
                 break;
         }
 
@@ -200,9 +211,77 @@ public class HomeFragment extends Fragment {
                 dayOfWeek = 0;
             }
         }
+        int bla = -1;
+        int x = manager.getDays()[dayOfWeek].getLessons().size() - 1;
+        while(bla == -1){
+            try {
+                bla = manager.getDays()[dayOfWeek].getLessons().get(x).getTime();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            x--;
+        }
+        int time = timeInHour();
+        if(time > bla){
+            dayOfWeek++;
+            if(dayOfWeek > 4){
+                dayOfWeek = 0;
+            }
+        }
+        System.out.println("blaaaaaaa:            " + bla);
+
+        while(manager.getDays()[dayOfWeek].getLessons().isEmpty() || checkDayEmpty(dayOfWeek)){
+            dayOfWeek++;
+            if(dayOfWeek > 4){
+                dayOfWeek = 0;
+            }
+        }
+
+        String txt = "";
+        switch (dayOfWeek){
+            case 0:
+                txt = "Mo";
+                break;
+            case 1:
+                txt = "Di";
+                break;
+            case 2:
+                txt = "Mi";
+                break;
+            case 3:
+                txt = "Do";
+                break;
+            case 4:
+                txt = "Fr";
+                break;
+        }
+        View button;
+        timeTable.setShowDividers(View.VISIBLE);
+        button = getCellCardViewDay(txt, "");
+        timeTable.addView(button);
+        Space spc = new Space(getContext());
+        spc.setMinimumHeight(8);
+        timeTable.addView(spc);
         for (Lesson l :
                 manager.getDays()[dayOfWeek].getLessons()) {
-
+            boolean color = false;
+            if(realDayOfWeek != dayOfWeek){
+                try {
+                    if (l.getTime() == 1) {
+                        color = true;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }else{
+                try {
+                    if (l.getTime() == time) {
+                        color = true;
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
             View btn;
 
             System.out.println(manager.getDays()[dayOfWeek].getLessons());
@@ -210,19 +289,18 @@ public class HomeFragment extends Fragment {
             timeTable.setShowDividers(View.VISIBLE);
 
             if (l == null || l.getSubject() == null)
-                btn = getEmptyCellButton("");
+                btn = getEmptyCellButton("", color);
             else {
-                btn = getCellCardView(l.getSubject(), "");
+                btn = getCellCardView(l.getSubject(), "", color);
             }
-
-            timeTable.addView(btn);
             Space space = new Space(getContext());
             space.setMinimumHeight(8);
+            timeTable.addView(btn);
             timeTable.addView(space);
         }
 
         try {
-            timeTable.removeViewAt(0);
+            timeTable.removeViewAt(1);
         } catch (NullPointerException npe) {
             divider.setVisibility(View.GONE);
         }
@@ -248,30 +326,18 @@ public class HomeFragment extends Fragment {
      * @param position ...
      * @return cardView with the subject in it
      */
-    CardView getCellCardView(Subject subject, String position) {
+    CardView getCellCardView(Subject subject, String position, boolean clr) {
         CardView cardView = new CardView(this.getContext());
         cardView.setRadius(20);
 
-        //general Settings for Cells
-        //cardView.setTextColor(getResources().getColor(R.color.default_background_color));
-
         int color = 0;
-
-        int index = manager.getSubjects().indexOf(subject);
-        for (int i; index > 14; index = index - 14) {
+        color = new Util().getSubjectColor(getContext(), subject);
+        if(clr){
+            color = getResources().getColor(R.color.colorPrimary);
         }
 
-        color = new Util().getSubjectColor(getContext(), subject);
-
-        /*GradientDrawable shape =  new GradientDrawable();
-        shape.setCornerRadius( 24 );
-        shape.setColor(color);
-
-        cardView.setBackground(shape);*/
-
-        cardView.setCardBackgroundColor(color);
         cardView.setCardElevation(3f);
-
+        cardView.setCardBackgroundColor(color);
         cardView.setTag(position);
 
         TextView txt = new TextView(getContext());
@@ -300,13 +366,13 @@ public class HomeFragment extends Fragment {
      * @param position ...
      * @return empty cardView
      */
-    CardView getEmptyCellButton(String position) {
+    CardView getEmptyCellButton(String position, boolean clr) {
         CardView btn = new CardView(this.getContext());
 
-
-        //general Settings for empty cells
-
         btn.setBackgroundColor(getResources().getColor(android.R.color.transparent));
+        if(clr){
+            btn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
         btn.addView(new TextView(this.getContext()));
 
         btn.setTag(position);
@@ -319,6 +385,70 @@ public class HomeFragment extends Fragment {
             }
         });
         return btn;
+    }
+
+    CardView getCellCardViewDay(String text, String position) {
+        CardView cardView = new CardView(this.getContext());
+        cardView.setRadius(20);
+
+        cardView.setCardElevation(3f);
+        cardView.setCardBackgroundColor(getResources().getColor(R.color.colorPrimaryDark));
+        cardView.setTag(position);
+
+        TextView txt = new TextView(getContext());
+        txt.setText(text);
+        txt.setTextColor(getContext().getColor(android.R.color.white));
+        txt.setTextSize(20);
+        txt.setPadding(8, 8, 16, 8);
+
+
+        cardView.addView(txt);
+
+
+        cardView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                ((MainActivity) getContext()).setFragment(TimetableFragment.TAG);
+            }
+        });
+
+        return cardView;
+    }
+
+    int timeInHour(){
+        SimpleDateFormat hourFormat = new SimpleDateFormat("HH");
+        SimpleDateFormat minuteFormat = new SimpleDateFormat("mm");
+        String time = hourFormat.format(System.currentTimeMillis()) + minuteFormat.format(System.currentTimeMillis());
+        int timeInt = Integer.valueOf(time);
+        int count = 0;
+        if(timeInt < 845){
+            count = 1;
+        }else if(timeInt < 930){
+            count = 2;
+        }else if(timeInt < 1030){
+            count = 3;
+        }else if(timeInt < 1115){
+            count = 4;
+        }else if(timeInt < 1215){
+            count = 5;
+        }else if(timeInt < 1300){
+            count = 6;
+        }else if(timeInt < 1345){
+            count = 7;
+        }else if(timeInt < 1430){
+            count = 8;
+        }else if(timeInt < 1515){
+            count = 9;
+        }else if(timeInt < 1610){
+            count = 10;
+        }else if(timeInt < 1655) {
+            count = 11;
+        }else if(timeInt < 1750) {
+            count = 12;
+        }else{
+            count = 20;
+        }
+        return count;
     }
 
 }
